@@ -4,10 +4,24 @@ import { deleteSession } from '@/lib/session'
 
 export async function POST(request) {
   try {
-    // TODO: Get session token from cookies
-    // TODO: Delete session using deleteSession function
-    // TODO: Return success response
+    // Get session token from cookies
+    const sessionToken = request.cookies.get('session')?.value
+
+    if (sessionToken) {
+      // Delete session using deleteSession function
+      await deleteSession(sessionToken)
+    }
+
+    // Return success response
+    return NextResponse.json(
+      { message: 'Logout successful' },
+      { status: 200 }
+    )
   } catch (error) {
-    // TODO: Handle errors and return 500 response
+    console.error('Logout error:', error)
+    return NextResponse.json(
+      { error: 'An error occurred during logout' },
+      { status: 500 }
+    )
   }
 }

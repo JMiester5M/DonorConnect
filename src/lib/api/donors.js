@@ -1,53 +1,148 @@
 // Business logic for donor operations
 import { prisma } from '../db'
 
-/**
- * TODO: Get a single donor by ID
- * @param {Object} params - Query parameters
- * @returns {Promise<Object|null>} Donor object or null
- */
-export async function getDonor(params) {
-  // TODO: Query single donor with related data (donations, interactions, tasks)
-  // TODO: Calculate donor metrics (totalAmount, totalGifts, avgGift, lastGiftDate)
-  // TODO: Return donor object or null
+const msPerDay = 1000 * 60 * 60 * 24
+
+const sanitizeDonorInput = (input = {}, isUpdate = false) => {
+  const allowed = isUpdate 
+    ? ['firstName', 'lastName', 'email', 'phone', 'address', 'city', 'state', 'zipCode', 'status']
+    : ['organizationId', 'firstName', 'lastName', 'email', 'phone', 'address', 'city', 'state', 'zipCode', 'status', 'retentionRisk']
+  return allowed.reduce((acc, key) => {
+    if (input[key] !== undefined) {
+      const value = typeof input[key] === 'string' ? input[key].trim() : input[key]
+      acc[key] = value === '' ? null : value
+    }
+    return acc
+  }, {})
+}
+
+const calculateRetentionRisk = (lastGiftDate, totalGifts) => {
+  if (!totalGifts || !lastGiftDate) return 'UNKNOWN'
+  const daysSinceLast = (Date.now() - lastGiftDate.getTime()) / msPerDay
+  if (daysSinceLast <= 90) return 'LOW'
+  if (daysSinceLast <= 180) return 'MEDIUM'
+  if (daysSinceLast <= 365) return 'HIGH'
+  return 'CRITICAL'
+}
+
+const calculateDonorMetrics = async (donorId) => {
+  const aggregates = await prisma.donation.aggregate({
+    where: { donorId },
+    _count: { _all: true },
+    _sum: { amount: true },
+    _min: { date: true },
+    _max: { date: true },
+  })
+
+  const totalGifts = aggregates._count._all || 0
+  const totalAmount = aggregates._sum.amount || 0
+  const firstGiftDate = aggregates._min.date || null
+  const lastGiftDate = aggregates._max.date || null
+  const avgGift = totalGifts > 0 ? totalAmount / totalGifts : 0
+  const retentionRisk = calculateRetentionRisk(lastGiftDate, totalGifts)
+
+  return { totalGifts, totalAmount, firstGiftDate, lastGiftDate, avgGift, retentionRisk }
 }
 
 /**
- * TODO: Create a new donor
- * @param {Object} donorData - Donor data to create
+ * Get a single donor by ID
+ * @param {Object} params - Query parameters { id, organizationId }
+ * @returns {Promise<Object|null>} Donor object or null
+ */
+export async function getDonor({ id, organizationId }) {
+  if (!id || !organizationId) {
+    throw new Error('id and organizationId are required')
+  }
+
+  const donor = await prisma.donor.findFirst({
+    where: { id, organizationId },
+    include: {
+      donations: { orderBy: { date: 'desc' } },
+      interactions: { orderBy: { date: 'desc' } },
+      tasks: { orderBy: { dueDate: 'asc' } },
+    },
+  })
+
+  if (!donor) return null
+
+  const metrics = await calculateDonorMetrics(donor.id)
+
+  return { ...donor, ...metrics }
+}
+
+/**
+ * Create a new donor
+ * @param {Object} donorData - Donor data to create (must include organizationId)
  * @returns {Promise<Object>} Created donor object
  */
 export async function createDonor(donorData) {
-  // TODO: Create donor in database
-  // TODO: Return created donor with calculated fields
+  if (!donorData?.organizationId) {
+    throw new Error('organizationId is required to create a donor')
+  }
+
+  const data = sanitizeDonorInput(donorData)
+  const donor = await prisma.donor.create({ data })
+  const metrics = await updateDonorMetrics(donor.id)
+
+  return { ...donor, ...metrics }
 }
 
 /**
- * TODO: Update an existing donor
+ * Update an existing donor
  * @param {Object} params - Update parameters (id, organizationId, data)
- * @returns {Promise<Object>} Updated donor object
+ * @returns {Promise<Object|null>} Updated donor object or null if not found
  */
-export async function updateDonor(params) {
-  // TODO: Update donor in database
-  // TODO: Recalculate metrics if needed
-  // TODO: Return updated donor
+export async function updateDonor({ id, organizationId, data }) {
+  if (!id || !organizationId) {
+    throw new Error('id and organizationId are required to update a donor')
+  }
+
+  const existing = await prisma.donor.findFirst({ where: { id, organizationId } })
+  if (!existing) return null
+
+  const sanitized = sanitizeDonorInput(data, true)
+  const updated = await prisma.donor.update({ where: { id }, data: sanitized })
+  const metrics = await updateDonorMetrics(id)
+
+  return { ...updated, ...metrics }
 }
 
 /**
- * TODO: Delete a donor
+ * Delete a donor
  * @param {Object} params - Delete parameters (id, organizationId)
+ * @returns {Promise<boolean>} True if a donor was deleted
  */
-export async function deleteDonor(params) {
-  // TODO: Delete donor and related data
-  // TODO: Handle cascade deletes appropriately
+export async function deleteDonor({ id, organizationId }) {
+  if (!id || !organizationId) {
+    throw new Error('id and organizationId are required to delete a donor')
+  }
+
+  const result = await prisma.donor.deleteMany({ where: { id, organizationId } })
+  return result.count > 0
 }
 
 /**
- * TODO: Update donor metrics after donation changes
+ * Update donor metrics after donation changes
  * @param {string} donorId - Donor ID to update metrics for
+ * @returns {Promise<Object>} Updated donor with metrics and avgGift
  */
 export async function updateDonorMetrics(donorId) {
-  // TODO: Calculate total amount, gift count, average gift, last gift date
-  // TODO: Update retention risk based on giving patterns
-  // TODO: Update donor record with calculated metrics
+  if (!donorId) {
+    throw new Error('donorId is required to update metrics')
+  }
+
+  const metrics = await calculateDonorMetrics(donorId)
+
+  const donor = await prisma.donor.update({
+    where: { id: donorId },
+    data: {
+      totalGifts: metrics.totalGifts,
+      totalAmount: metrics.totalAmount,
+      firstGiftDate: metrics.firstGiftDate,
+      lastGiftDate: metrics.lastGiftDate,
+      retentionRisk: metrics.retentionRisk,
+    },
+  })
+
+  return { ...donor, avgGift: metrics.avgGift }
 }

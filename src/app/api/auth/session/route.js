@@ -4,11 +4,36 @@ import { getSession } from '@/lib/session'
 
 export async function GET(request) {
   try {
-    // TODO: Get session token from cookies
-    // TODO: Validate session using getSession function
-    // TODO: Return user data if valid session
-    // TODO: Return 401 if invalid session
+    // Get session token from cookies
+    const sessionToken = request.cookies.get('session')?.value
+
+    if (!sessionToken) {
+      return NextResponse.json(
+        { error: 'No session found' },
+        { status: 401 }
+      )
+    }
+
+    // Validate session using getSession function
+    const session = await getSession(sessionToken)
+
+    if (!session) {
+      return NextResponse.json(
+        { error: 'Invalid or expired session' },
+        { status: 401 }
+      )
+    }
+
+    // Return user data if valid session
+    return NextResponse.json(
+      { user: session.user },
+      { status: 200 }
+    )
   } catch (error) {
-    // TODO: Handle errors and return 500 response
+    console.error('Session check error:', error)
+    return NextResponse.json(
+      { error: 'An error occurred checking session' },
+      { status: 500 }
+    )
   }
 }

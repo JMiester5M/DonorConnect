@@ -73,3 +73,11 @@ export function DialogFooter({ className, children }) {
     </div>
   )
 }
+
+export function DialogTrigger({ asChild, children, ...props }) {
+  if (asChild) {
+    // Clone the child element and add onClick handler
+    return children
+  }
+  return <button {...props}>{children}</button>
+}

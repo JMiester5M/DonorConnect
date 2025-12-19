@@ -1,33 +1,65 @@
+"use client"
+
 /**
  * Confirm Dialog Component - Reusable confirmation dialog
- * TODO: Implement confirmation dialog for destructive actions
  */
 
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
 
-export function ConfirmDialog({ 
-  isOpen, 
-  onClose, 
-  onConfirm, 
-  title, 
-  description, 
-  confirmText = "Confirm", 
-  cancelText = "Cancel",
-  variant = "destructive" 
+export function ConfirmDialog({
+  isOpen,
+  onClose,
+  onConfirm,
+  title,
+  description,
+  confirmText = 'Confirm',
+  cancelText = 'Cancel',
+  variant = 'destructive',
 }) {
-  // TODO: Implement dialog state management
-  // TODO: Handle confirm action with proper callback
-  // TODO: Style confirm button based on variant prop
-  // TODO: Add loading state during confirmation
-  
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (!isOpen) return
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        onClose?.()
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isOpen, onClose])
+
+  const handleConfirm = async () => {
+    if (loading) return
+    setLoading(true)
+    try {
+      await onConfirm?.()
+      onClose?.()
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
-    <>
-      {/* TODO: Implement Dialog component */}
-      {/* TODO: Add DialogHeader with title and description */}
-      {/* TODO: Add DialogFooter with cancel and confirm buttons */}
-      {/* TODO: Handle escape key and backdrop click to close */}
-    </>
+    <Dialog open={isOpen} onOpenChange={(open) => { if (!open) onClose?.() }}>
+      <DialogContent onClose={onClose}>
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+          {description ? <DialogDescription>{description}</DialogDescription> : null}
+        </DialogHeader>
+
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose} disabled={loading}>
+            {cancelText}
+          </Button>
+          <Button variant={variant} onClick={handleConfirm} disabled={loading}>
+            {loading ? 'Working...' : confirmText}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
 

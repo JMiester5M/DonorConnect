@@ -1,6 +1,5 @@
 // Next.js Middleware - Route protection and authentication
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 
 // Routes that require authentication
 const protectedRoutes = ['/dashboard', '/donors', '/campaigns', '/donations', '/segments', '/workflows', '/tasks']
@@ -9,19 +8,56 @@ const protectedRoutes = ['/dashboard', '/donors', '/campaigns', '/donations', '/
 const authRoutes = ['/login', '/register']
 
 export async function proxy(request) {
-  // TODO: Get session token from cookies
-  // TODO: Check if current path requires authentication
-  // TODO: Validate session by calling session API
-  // TODO: Redirect unauthenticated users to login
-  // TODO: Redirect authenticated users away from auth pages
-  // TODO: Preserve intended destination after login
+  // Get session token from cookies
+  const sessionToken = request.cookies.get('session')?.value
+  const pathname = request.nextUrl.pathname
+
+  // Check if current path requires authentication
+  const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route))
+  const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route))
+
+  // If route is protected and no session token, redirect to login
+  if (isProtectedRoute && !sessionToken) {
+    const loginUrl = new URL('/login', request.url)
+    loginUrl.searchParams.set('from', pathname) // Preserve intended destination
+    return NextResponse.redirect(loginUrl)
+  }
+
+  // If route is protected, validate session by calling session API
+  if (isProtectedRoute && sessionToken) {
+    try {
+      const response = await fetch(`${request.nextUrl.origin}/api/auth/session`, {
+        method: 'GET',
+        headers: {
+          'Cookie': `session=${sessionToken}`,
+        },
+      })
+
+      // If session is invalid or expired, redirect to login
+      if (!response.ok) {
+        const loginUrl = new URL('/login', request.url)
+        loginUrl.searchParams.set('from', pathname)
+        return NextResponse.redirect(loginUrl)
+      }
+    } catch (error) {
+      console.error('Session validation error:', error)
+      // On error, allow access
+    }
+  }
+
+  // If authenticated user tries to access auth pages, redirect to dashboard
+  if (isAuthRoute && sessionToken) {
+    return NextResponse.redirect(new URL('/dashboard', request.url))
+  }
+
+  return NextResponse.next()
 }
 
 export const config = {
   matcher: [
     /*
      * Match all request paths except:
-     * - api routes (except auth check)
+     * - api routes
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)

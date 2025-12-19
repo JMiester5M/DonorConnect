@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { Controller } from 'react-hook-form'
 import { cn } from '@/lib/utils'
 import { Label } from '@/components/ui/label'
 
@@ -8,8 +9,14 @@ const Form = ({ children, ...props }) => {
   return <form {...props}>{children}</form>
 }
 
-const FormField = ({ name, children }) => {
-  return <div className="space-y-2">{children}</div>
+const FormField = ({ control, name, render }) => {
+  return (
+    <Controller
+      control={control}
+      name={name}
+      render={render}
+    />
+  )
 }
 
 const FormItem = React.forwardRef(({ className, ...props }, ref) => {

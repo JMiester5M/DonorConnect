@@ -1,3 +1,5 @@
+"use client"
+
 // React hook for donor data management
 import { useState, useEffect } from 'react'
 
@@ -9,10 +11,57 @@ import { useState, useEffect } from 'react'
  * @returns {Object} { donors, loading, error, refetch }
  */
 export function useDonors(page = 1, limit = 20, filters = {}) {
-  // TODO: Implement state for donors, loading, error
-  // TODO: Implement fetchDonors function with API call
-  // TODO: Implement useEffect to fetch data when params change
-  // TODO: Return state and refetch function
+  const [donors, setDonors] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [pagination, setPagination] = useState({ page, limit, total: 0, totalPages: 0 })
+  const [internalPage, setInternalPage] = useState(page)
+  const [internalFilters, setInternalFilters] = useState(filters)
+
+  const fetchDonors = async (p = internalPage, f = internalFilters) => {
+    setLoading(true)
+    setError('')
+    try {
+      const params = new URLSearchParams({
+        page: String(p),
+        limit: String(limit),
+      })
+      if (f?.search) params.set('search', f.search)
+
+      const res = await fetch(`/api/donors?${params.toString()}`)
+      const data = await res.json()
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to load donors')
+      }
+
+      setDonors(data.data || [])
+      setPagination(data.pagination || { page: p, limit, total: 0, totalPages: 0 })
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchDonors(internalPage, internalFilters)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [internalPage, internalFilters, limit])
+
+  const refetch = () => fetchDonors(internalPage, internalFilters)
+
+  return {
+    donors,
+    loading,
+    error,
+    pagination,
+    page: internalPage,
+    setPage: setInternalPage,
+    filters: internalFilters,
+    setFilters: setInternalFilters,
+    refetch,
+  }
 }
 
 /**
@@ -21,5 +70,32 @@ export function useDonors(page = 1, limit = 20, filters = {}) {
  * @returns {Object} { donor, loading, error, refetch }
  */
 export function useDonor(donorId) {
-  // TODO: Implement single donor fetching
+  const [donor, setDonor] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  const fetchDonor = async () => {
+    if (!donorId) return
+    setLoading(true)
+    setError('')
+    try {
+      const res = await fetch(`/api/donors/${donorId}`)
+      const data = await res.json()
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to load donor')
+      }
+      setDonor(data)
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchDonor()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [donorId])
+
+  return { donor, loading, error, refetch: fetchDonor }
 }

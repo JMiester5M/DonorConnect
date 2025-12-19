@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import { PrismaPg } from '@prisma/adapter-pg'
 import { Pool } from 'pg'
-import { PrismaClient } from '../generated/client.js'
+import { PrismaClient } from './generated/client.js'
 
 // Parse connection string and create pool with SSL configuration
 const connectionString = process.env.DATABASE_URL

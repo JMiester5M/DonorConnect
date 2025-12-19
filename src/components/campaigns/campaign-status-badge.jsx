@@ -1,34 +1,31 @@
 /**
  * Campaign Status Badge Component
- * TODO: Implement status badge for campaign states
+ * Displays campaign status with appropriate color coding
  */
 
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 
 export function CampaignStatusBadge({ status, className }) {
-  // TODO: Define status variants and their styling
   const statusVariants = {
-    // TODO: Add status mappings:
-    // - draft: gray
-    // - active: green
-    // - paused: yellow
-    // - completed: blue
-    // - cancelled: red
+    DRAFT: 'bg-gray-100 text-gray-800 border-gray-300',
+    ACTIVE: 'bg-green-100 text-green-800 border-green-300',
+    COMPLETED: 'bg-blue-100 text-blue-800 border-blue-300',
+    ARCHIVED: 'bg-red-100 text-red-800 border-red-300',
   }
 
-  // TODO: Get variant based on status
-  const variant = 'default' // TODO: Replace with statusVariants[status] || 'default'
+  const variant = statusVariants[status] || 'bg-gray-100 text-gray-800 border-gray-300'
+
+  const statusLabels = {
+    DRAFT: 'Draft',
+    ACTIVE: 'Active',
+    COMPLETED: 'Completed',
+    ARCHIVED: 'Archived',
+  }
 
   return (
-    <>
-      {/* TODO: Implement Badge component with proper variant */}
-      {/* TODO: Apply custom className if provided */}
-      {/* TODO: Display formatted status text */}
-    </>
+    <Badge className={cn(variant, 'border', className)}>
+      {statusLabels[status] || status}
+    </Badge>
   )
 }
-
-// TODO: Example usage:
-// <CampaignStatusBadge status="active" />
-// <CampaignStatusBadge status="draft" className="ml-2" />

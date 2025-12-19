@@ -1,54 +1,209 @@
+'use client'
+
 /**
- * Donor Form Component 
- * TODO: Implement form for creating/editing donors
+ * Donor Form Component
  */
 
-import { useState } from 'react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { createDonorSchema } from '@/lib/validation/donor-schema'
 
 export function DonorForm({ donor, onSubmit, onCancel }) {
-  // TODO: Import and use donor validation schema
-  // const schema = createDonorSchema // TODO: Import from validation
-  
-  // TODO: Initialize form with react-hook-form and zod resolver
-  const form = {
-    // TODO: Implement useForm with:
-    // - resolver: zodResolver(schema)
-    // - defaultValues for edit mode
+  const form = useForm({
+    resolver: zodResolver(createDonorSchema),
+    defaultValues: {
+      firstName: donor?.firstName || '',
+      lastName: donor?.lastName || '',
+      email: donor?.email || '',
+      phone: donor?.phone || '',
+      address: donor?.address || '',
+      city: donor?.city || '',
+      state: donor?.state || '',
+      zipCode: donor?.zipCode || '',
+      status: donor?.status || 'ACTIVE',
+    },
+  })
+
+  // Reset form when donor data changes
+  useEffect(() => {
+    if (donor) {
+      form.reset({
+        firstName: donor.firstName || '',
+        lastName: donor.lastName || '',
+        email: donor.email || '',
+        phone: donor.phone || '',
+        address: donor.address || '',
+        city: donor.city || '',
+        state: donor.state || '',
+        zipCode: donor.zipCode || '',
+        status: donor.status || 'ACTIVE',
+      })
+    }
+  }, [donor, form])
+
+  const handleSubmit = async (data) => {
+    try {
+      await onSubmit?.(data)
+    } catch (error) {
+      form.setError('root', { message: error?.message || 'Failed to save donor' })
+    }
   }
 
-  // TODO: Implement form submission handler
-  const handleSubmit = async (data) => {
-    // TODO: Call onSubmit prop with form data
-    // TODO: Handle form errors
-  }
+  const inputLikeClasses = 'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
 
   return (
-    <>
-      {/* TODO: Implement donor form with fields:
-          - firstName (required)
-          - lastName (required)  
-          - email (required, email validation)
-          - phone (optional, phone validation)
-          - address (optional)
-          - city (optional)
-          - state (optional)
-          - zipCode (optional)
-          - donorStatus (select: active, inactive, lapsed)
-          - retentionRisk (select: low, medium, high)
-          - preferredContactMethod (select: email, phone, mail)
-          - tags (optional, comma-separated or tag input)
-          - notes (optional, textarea)
-      */}
-      
-      {/* TODO: Add form validation and error handling */}
-      {/* TODO: Add submit and cancel buttons */}
-      {/* TODO: Handle loading state during submission */}
-    </>
+    <Form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="firstName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>First Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Jane" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="lastName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Last Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Doe" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input type="email" placeholder="jane@example.org" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Phone</FormLabel>
+                <FormControl>
+                  <Input placeholder="(555) 123-4567" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="address"
+            render={({ field }) => (
+              <FormItem className="md:col-span-2">
+                <FormLabel>Address</FormLabel>
+                <FormControl>
+                  <Input placeholder="123 Main St" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="city"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>City</FormLabel>
+                <FormControl>
+                  <Input placeholder="Springfield" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="state"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>State</FormLabel>
+                <FormControl>
+                  <Input placeholder="IL" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="zipCode"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>ZIP Code</FormLabel>
+                <FormControl>
+                  <Input placeholder="12345" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="status"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Status</FormLabel>
+                <select className={inputLikeClasses} {...field}>
+                  <option value="ACTIVE">Active</option>
+                  <option value="LAPSED">Lapsed</option>
+                  <option value="INACTIVE">Inactive</option>
+                  <option value="DO_NOT_CONTACT">Do Not Contact</option>
+                </select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+        </div>
+
+        {form.formState.errors.root?.message && (
+          <p className="text-sm text-destructive">{form.formState.errors.root.message}</p>
+        )}
+
+        <div className="flex items-center gap-3">
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? 'Saving...' : donor ? 'Update Donor' : 'Create Donor'}
+          </Button>
+          {onCancel && (
+            <Button type="button" variant="outline" onClick={onCancel} disabled={form.formState.isSubmitting}>
+              Cancel
+            </Button>
+          )}
+        </div>
+    </Form>
   )
 }
 
