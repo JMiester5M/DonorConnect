@@ -50,14 +50,6 @@ export function LoginForm() {
     <Card>
       <CardHeader>
         <CardTitle>Sign In</CardTitle>
-        <p></p>
-        <CardDescription>
-          Your job is to redesign this page to use the proper login page!
-          Use the BUILDD Framework or Mental models to help you design this page. 
-          You role and goal is to pass all test for the api endpoints. 
-        <div></div>
-          <p>Once you've successfully seeded the database, you should be able to login using the below credential. </p> 
-        </CardDescription>
       </CardHeader>
       <CardContent>
         {error && (

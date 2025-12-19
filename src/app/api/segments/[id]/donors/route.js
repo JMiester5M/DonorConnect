@@ -1,4 +1,7 @@
-// Helper function to build Prisma where clause from segment rules
+// Helper: build Prisma where clause from segment rules
+// Supports both formats:
+// 1) Seed-style single rule: { field, operator, value }
+// 2) UI-style multi-key rules: { donorStatus?, retentionRisk?, giftCountRange?, totalGiftAmountRange?, lastGiftDateRange?, hasRecurring? }
 function buildWhereClause(rules, organizationId) {
   const where = { organizationId }
 
@@ -36,6 +39,8 @@ function buildWhereClause(rules, organizationId) {
           else if (value === false) where.donations = { none: { type: 'RECURRING' } }
         }
         break
+      default:
+        break
     }
     return where
   }
@@ -44,9 +49,11 @@ function buildWhereClause(rules, organizationId) {
   if (rules.donorStatus && Array.isArray(rules.donorStatus) && rules.donorStatus.length > 0) {
     where.status = { in: rules.donorStatus }
   }
+
   if (rules.retentionRisk && Array.isArray(rules.retentionRisk) && rules.retentionRisk.length > 0) {
     where.retentionRisk = { in: rules.retentionRisk }
   }
+
   if (rules.giftCountRange && typeof rules.giftCountRange === 'object') {
     const { min, max } = rules.giftCountRange
     if (min !== undefined || max !== undefined) {
@@ -55,6 +62,7 @@ function buildWhereClause(rules, organizationId) {
       if (max !== undefined && max !== null) where.totalGifts.lte = max
     }
   }
+
   if (rules.totalGiftAmountRange && typeof rules.totalGiftAmountRange === 'object') {
     const { min, max } = rules.totalGiftAmountRange
     if (min !== undefined || max !== undefined) {
@@ -63,6 +71,7 @@ function buildWhereClause(rules, organizationId) {
       if (max !== undefined && max !== null) where.totalAmount.lte = max
     }
   }
+
   if (rules.lastGiftDateRange && typeof rules.lastGiftDateRange === 'object') {
     const { from, to } = rules.lastGiftDateRange
     if (from || to) {
@@ -71,6 +80,7 @@ function buildWhereClause(rules, organizationId) {
       if (to) where.lastGiftDate.lte = new Date(to)
     }
   }
+
   if (rules.hasRecurring !== undefined) {
     const val = rules.hasRecurring
     if (val === true) where.donations = { some: { type: 'RECURRING' } }
@@ -80,13 +90,12 @@ function buildWhereClause(rules, organizationId) {
   return where
 }
 
-// Segments API - List and Create
+// Segment Donors API - Get donors matching segment criteria
 import { NextResponse } from 'next/server'
 import { getSession } from '@/lib/session'
 import { prisma } from '@/lib/db'
-import { createSegmentSchema, segmentListQuerySchema } from '@/lib/validation/segment-schema'
 
-export async function GET(request) {
+export async function GET(request, context) {
   try {
     const sessionToken = request.cookies.get('session')?.value
     const session = await getSession(sessionToken)
@@ -95,109 +104,52 @@ export async function GET(request) {
     const organizationId = session.user.organization?.id
     if (!organizationId) return NextResponse.json({ error: 'Organization not found' }, { status: 400 })
 
-    const parsed = segmentListQuerySchema.safeParse(Object.fromEntries(new URL(request.url).searchParams))
-    if (!parsed.success) {
-      const message = parsed.error.errors?.[0]?.message || 'Invalid query'
-      return NextResponse.json({ error: message }, { status: 400 })
+    const p = await context.params
+    const url = new URL(request.url)
+    const idFromPath = url.pathname.split('/')[3]
+    const id = p?.id ?? idFromPath
+    console.log('DEBUG: Donors route id:', id)
+
+    // Get the segment
+    const segment = await prisma.segment.findUnique({
+      where: { id },
+    })
+
+    if (!segment || segment.organizationId !== organizationId) {
+      return NextResponse.json({ error: 'Segment not found' }, { status: 404 })
     }
 
-    const { page, limit, search } = parsed.data
-    const where = {
-      organizationId,
-      ...(search
-        ? {
-            name: { contains: search, mode: 'insensitive' },
-          }
-        : {}),
-    }
+    console.log('DEBUG: Segment rules:', JSON.stringify(segment.rules, null, 2))
 
-    const [total, segments] = await Promise.all([
-      prisma.segment.count({ where }),
-      prisma.segment.findMany({
-        where,
-        orderBy: { updatedAt: 'desc' },
-        skip: (page - 1) * limit,
-        take: limit,
-        select: {
-          id: true,
-          name: true,
-          description: true,
-          lastCalculated: true,
-          updatedAt: true,
-          rules: true,
-        },
-      }),
-    ])
+    // Build where clause from rules
+    const where = buildWhereClause(segment.rules, organizationId)
+    console.log('DEBUG: Built where clause:', JSON.stringify(where, null, 2))
 
-    const segmentsWithCounts = await Promise.all(
-      segments.map(async (segment) => {
-        const where = buildWhereClause(segment.rules, organizationId)
-        const count = await prisma.donor.count({ where })
-        // Update segment with new count and timestamp
-        const updated = await prisma.segment.update({
-          where: { id: segment.id },
-          data: {
-            memberCount: count,
-            lastCalculated: new Date(),
-          },
-        })
-        return {
-          ...updated,
-          memberCount: count,
-        }
-      })
-    )
+    // Fetch matching donors
+    const donors = await prisma.donor.findMany({
+      where,
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        status: true,
+        retentionRisk: true,
+        totalGifts: true,
+        totalAmount: true,
+      },
+      orderBy: { lastName: 'asc' },
+      take: 1000,
+    })
 
-    const totalPages = Math.max(1, Math.ceil(total / limit))
+    console.log(`DEBUG: Found ${donors.length} donors matching segment rules`)
 
     return NextResponse.json({
-      data: segmentsWithCounts,
-      pagination: { page, limit, total, totalPages },
+      data: donors,
+      count: donors.length,
     })
   } catch (error) {
-    console.error('Segments GET error:', error)
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
-  }
-}
-
-export async function POST(request) {
-  try {
-    const sessionToken = request.cookies.get('session')?.value
-    const session = await getSession(sessionToken)
-    if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-
-    if (!['ADMIN', 'STAFF'].includes(session.user.role)) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-    }
-
-    const organizationId = session.user.organizationId || session.user.organization?.id
-    if (!organizationId) return NextResponse.json({ error: 'Organization not found' }, { status: 400 })
-
-    let body
-    try {
-      body = await request.json()
-    } catch (err) {
-      return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
-    }
-
-    const parsed = createSegmentSchema.safeParse(body)
-    if (!parsed.success) {
-      const message = parsed.error.errors?.[0]?.message || 'Invalid payload'
-      return NextResponse.json({ error: message }, { status: 400 })
-    }
-
-    const created = await prisma.segment.create({
-      data: {
-        organizationId,
-        name: parsed.data.name,
-        description: parsed.data.description || null,
-        rules: parsed.data.rules || {},
-      },
-    })
-
-    return NextResponse.json(created, { status: 201 })
-  } catch (error) {
-    console.error('Segments POST error:', error)
+    console.error('Segment Donors GET error:', error)
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
   }
 }

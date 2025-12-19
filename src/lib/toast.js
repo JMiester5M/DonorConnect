@@ -135,3 +135,11 @@ export function useToastNotification() {
 //    toast.error('Failed to save donor')
 //    toast.info('Processing donation...')
 //    toast.warning('Duplicate email detected')
+
+// Simple client-side toast for use outside of React context
+export const toast = {
+  success: (message) => console.log('[SUCCESS]', message),
+  error: (message) => console.error('[ERROR]', message),
+  info: (message) => console.info('[INFO]', message),
+  warning: (message) => console.warn('[WARNING]', message)
+}

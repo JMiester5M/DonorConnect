@@ -92,10 +92,12 @@ export default function CampaignsPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Campaigns</h1>
+        <Button onClick={() => setIsNewDialogOpen(true)}>New Campaign</Button>
+      </div>
+
+      {/* Create Campaign Dialog */}
+      {isNewDialogOpen && (
         <Dialog open={isNewDialogOpen} onOpenChange={setIsNewDialogOpen}>
-          <DialogTrigger asChild>
-            <Button>New Campaign</Button>
-          </DialogTrigger>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Create New Campaign</DialogTitle>
@@ -103,7 +105,7 @@ export default function CampaignsPage() {
             <CampaignForm onSubmit={handleCreate} />
           </DialogContent>
         </Dialog>
-      </div>
+      )}
 
       {/* Filters */}
       <div className="flex gap-4 items-end">

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 
 /**
  * Hook to fetch campaigns list with filtering and pagination
@@ -11,7 +11,7 @@ export function useCampaigns({
   sortBy = 'createdAt',
   sortOrder = 'desc',
   page = 1,
-  limit = 20,
+  limit = 50,
 } = {}) {
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(false)

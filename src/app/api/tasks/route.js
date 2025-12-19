@@ -1,8 +1,8 @@
-// Workflows API - List and Create
+// Tasks API - List and Create
 import { NextResponse } from 'next/server'
 import { getSession } from '@/lib/session'
 import { prisma } from '@/lib/db'
-import { createWorkflowSchema, workflowListQuerySchema } from '@/lib/validation/workflow-schema'
+import { createTaskSchema, taskListQuerySchema } from '@/lib/validation/task-schema'
 
 export async function GET(request) {
   try {
@@ -10,30 +10,28 @@ export async function GET(request) {
     const session = await getSession(sessionToken)
     if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-    const organizationId = session.user.organization?.id
-    if (!organizationId) return NextResponse.json({ error: 'Organization not found' }, { status: 400 })
-
-    const parsed = workflowListQuerySchema.safeParse(Object.fromEntries(new URL(request.url).searchParams))
+    const parsed = taskListQuerySchema.safeParse(Object.fromEntries(new URL(request.url).searchParams))
     if (!parsed.success) {
       const message = parsed.error.errors?.[0]?.message || 'Invalid query'
       return NextResponse.json({ error: message }, { status: 400 })
     }
 
-    const { page, limit, search } = parsed.data
+    const { page, limit, search, status, priority } = parsed.data
     const where = {
-      organizationId,
-      ...(search ? { name: { contains: search, mode: 'insensitive' } } : {}),
+      ...(search ? { title: { contains: search, mode: 'insensitive' } } : {}),
+      ...(status ? { status } : {}),
+      ...(priority ? { priority } : {}),
     }
 
-    const [total, workflows] = await Promise.all([
-      prisma.workflow.count({ where }),
-      prisma.workflow.findMany({
+    const [total, tasks] = await Promise.all([
+      prisma.task.count({ where }),
+      prisma.task.findMany({
         where,
         include: {
-          segment: { select: { id: true, name: true } },
-          executions: { select: { id: true, status: true, completedAt: true } },
+          donor: { select: { id: true, firstName: true, lastName: true, email: true } },
+          assignedUser: { select: { id: true, firstName: true, lastName: true } },
         },
-        orderBy: { updatedAt: 'desc' },
+        orderBy: { dueDate: 'asc' },
         skip: (page - 1) * limit,
         take: limit,
       }),
@@ -42,11 +40,11 @@ export async function GET(request) {
     const totalPages = Math.max(1, Math.ceil(total / limit))
 
     return NextResponse.json({
-      data: workflows,
+      data: tasks,
       pagination: { page, limit, total, totalPages },
     })
   } catch (error) {
-    console.error('Workflows GET error:', error)
+    console.error('Tasks GET error:', error)
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
   }
 }
@@ -61,9 +59,6 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
-    const organizationId = session.user.organization?.id
-    if (!organizationId) return NextResponse.json({ error: 'Organization not found' }, { status: 400 })
-
     let body
     try {
       body = await request.json()
@@ -71,29 +66,31 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
     }
 
-    const parsed = createWorkflowSchema.safeParse(body)
+    const parsed = createTaskSchema.safeParse(body)
     if (!parsed.success) {
       const message = parsed.error.errors?.[0]?.message || 'Invalid payload'
       return NextResponse.json({ error: message }, { status: 400 })
     }
 
-    const workflow = await prisma.workflow.create({
+    const task = await prisma.task.create({
       data: {
-        name: parsed.data.name,
+        title: parsed.data.title,
         description: parsed.data.description || null,
-        trigger: parsed.data.trigger,
-        steps: parsed.data.steps || [],
-        segmentId: parsed.data.segmentId || null,
-        isActive: parsed.data.isActive ?? false,
-        organizationId,
+        status: parsed.data.status || 'TODO',
+        priority: parsed.data.priority || 'MEDIUM',
+        dueDate: parsed.data.dueDate ? new Date(parsed.data.dueDate) : null,
+        donorId: parsed.data.donorId || null,
+        assignedTo: parsed.data.assignedTo || null,
       },
       include: {
-        segment: { select: { id: true, name: true } },
+        donor: { select: { id: true, firstName: true, lastName: true, email: true } },
+        assignedUser: { select: { id: true, firstName: true, lastName: true } },
       },
     })
 
-    return NextResponse.json(workflow, { status: 201 })
+    return NextResponse.json(task, { status: 201 })
   } catch (error) {
-    console.error('Workflow POST error:', error)
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })  }
+    console.error('Task POST error:', error)
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
+  }
 }

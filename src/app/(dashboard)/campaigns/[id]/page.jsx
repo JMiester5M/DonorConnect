@@ -19,6 +19,7 @@ export default function CampaignDetailPage({ params }) {
   const [editing, setEditing] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const [actionError, setActionError] = useState('')
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const { toast } = useToast()
 
   useEffect(() => {
@@ -63,6 +64,7 @@ export default function CampaignDetailPage({ params }) {
       if (!res.ok) throw new Error(data.error || 'Failed to delete campaign')
       
       toast.success('Campaign deleted successfully')
+      setShowDeleteConfirm(false)
       router.push('/campaigns')
     } catch (err) {
       setActionError(err.message)
@@ -108,13 +110,43 @@ export default function CampaignDetailPage({ params }) {
           <Button onClick={() => setEditing(true)}>Edit</Button>
           <Button 
             variant="destructive" 
-            onClick={handleDelete}
+            onClick={() => setShowDeleteConfirm(true)}
             disabled={deleting}
           >
-            {deleting ? 'Deleting...' : 'Delete'}
+            Delete
           </Button>
         </div>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      {showDeleteConfirm && (
+        <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Delete Campaign</DialogTitle>
+            </DialogHeader>
+            <p className="text-gray-600 mb-6">
+              Are you sure you want to delete "{campaign.name}"? This action cannot be undone.
+            </p>
+            <div className="flex gap-2 justify-end">
+              <Button 
+                variant="outline"
+                onClick={() => setShowDeleteConfirm(false)}
+                disabled={deleting}
+              >
+                Cancel
+              </Button>
+              <Button 
+                variant="destructive"
+                onClick={handleDelete}
+                disabled={deleting}
+              >
+                {deleting ? 'Deleting...' : 'Delete Campaign'}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
 
       {actionError && (
         <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded">
@@ -213,7 +245,7 @@ export default function CampaignDetailPage({ params }) {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Date</TableHead>
-                      <TableHead>Donor ID</TableHead>
+                      <TableHead>Donor</TableHead>
                       <TableHead className="text-right">Amount</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -226,7 +258,7 @@ export default function CampaignDetailPage({ params }) {
                             href={`/donors/${donation.donorId}`}
                             className="text-blue-600 hover:underline"
                           >
-                            {donation.donorId}
+                            {donation.donor?.firstName} {donation.donor?.lastName}
                           </a>
                         </TableCell>
                         <TableCell className="text-right">{formatCurrency(donation.amount)}</TableCell>

@@ -2,7 +2,8 @@
 import { getSessionUser } from '@/lib/session'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { Home, Users, Gift, TrendingUp, CheckSquare, FolderTree, Workflow, LogOut } from 'lucide-react'
+import { LogoutButton } from '@/components/logout-button'
+import { Home, Users, Gift, TrendingUp, CheckSquare, FolderTree, Workflow } from 'lucide-react'
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: Home },
@@ -56,16 +57,7 @@ export default async function DashboardLayout({ children }) {
                 </p>
                 <p className="text-xs text-gray-500">{user.organization?.name || 'Organization'}</p>
               </div>
-              <form action="/api/auth/logout" method="POST" className="inline">
-                <button
-                  type="submit"
-                  className="inline-flex items-center gap-2 rounded-md bg-red-50 px-3 py-2 text-sm font-medium text-red-700 hover:bg-red-100 transition-colors"
-                  title="Logout"
-                >
-                  <LogOut className="h-4 w-4" />
-                  <span className="hidden sm:inline">Logout</span>
-                </button>
-              </form>
+              <LogoutButton />
             </div>
           </div>
 

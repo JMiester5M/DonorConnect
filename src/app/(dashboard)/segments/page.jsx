@@ -1,13 +1,16 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { SegmentForm } from '@/components/segments/segment-form'
 import { useSegments } from '@/hooks/use-segments'
 
 export default function SegmentsPage() {
+  const router = useRouter()
   const [showForm, setShowForm] = useState(false)
   const [search, setSearch] = useState('')
   const { segments, loading, error, page, setPage, pagination, setFilters, refetch } = useSegments(1, 20, {})
@@ -76,7 +79,11 @@ export default function SegmentsPage() {
               </TableRow>
             )}
             {segments.map((segment) => (
-              <TableRow key={segment.id}>
+              <TableRow 
+                key={segment.id}
+                className="cursor-pointer hover:bg-gray-50"
+                onClick={() => router.push(`/segments/${segment.id}`)}
+              >
                 <TableCell className="font-medium">{segment.name}</TableCell>
                 <TableCell className="max-w-xl truncate text-muted-foreground">{segment.description || '—'}</TableCell>
                 <TableCell>{segment.memberCount ?? 0}</TableCell>
@@ -102,20 +109,14 @@ export default function SegmentsPage() {
 
       {error && <p className="text-sm text-destructive">{error}</p>}
 
-      {showForm && (
-        <div className="rounded-lg border p-4 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h2 className="text-lg font-semibold">Create Segment</h2>
-              <p className="text-sm text-muted-foreground">Define filters and rules for this segment.</p>
-            </div>
-            <Button variant="ghost" onClick={() => setShowForm(false)}>
-              Close
-            </Button>
-          </div>
+      <Dialog open={showForm} onOpenChange={setShowForm}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto" onClose={() => setShowForm(false)}>
+          <DialogHeader>
+            <DialogTitle>Create Segment</DialogTitle>
+          </DialogHeader>
           <SegmentForm onSubmit={handleSave} onCancel={() => setShowForm(false)} />
-        </div>
-      )}
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

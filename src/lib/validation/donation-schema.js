@@ -21,7 +21,7 @@ export const updateDonationSchema = createDonationSchema.partial()
 // Query schema for list endpoints
 export const donationListQuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
-  limit: z.coerce.number().int().min(1).max(100).default(20),
+  limit: z.coerce.number().int().min(1).max(100).default(50),
   search: z.string().optional(),
   donorId: z.string().optional(),
   campaignId: z.string().optional(),

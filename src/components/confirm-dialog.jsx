@@ -11,51 +11,56 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 export function ConfirmDialog({
   isOpen,
   onClose,
+  open,
   onConfirm,
+  onCancel,
   title,
   description,
-  confirmText = 'Confirm',
+  confirmText = 'Delete',
   cancelText = 'Cancel',
   variant = 'destructive',
 }) {
   const [loading, setLoading] = useState(false)
+  // Support both prop patterns
+  const isDialogOpen = isOpen !== undefined ? isOpen : open !== undefined ? open : false
+  const handleClose = onClose || onCancel
 
   useEffect(() => {
-    if (!isOpen) return
+    if (!isDialogOpen) return
     const handleKeyDown = (event) => {
       if (event.key === 'Escape') {
-        onClose?.()
+        handleClose?.()
       }
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen, onClose])
+  }, [isDialogOpen, handleClose])
 
   const handleConfirm = async () => {
     if (loading) return
     setLoading(true)
     try {
       await onConfirm?.()
-      onClose?.()
+      handleClose?.()
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => { if (!open) onClose?.() }}>
-      <DialogContent onClose={onClose}>
+    <Dialog open={isDialogOpen} onOpenChange={(open) => { if (!open) handleClose?.() }}>
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           {description ? <DialogDescription>{description}</DialogDescription> : null}
         </DialogHeader>
 
         <DialogFooter>
-          <Button variant="outline" onClick={onClose} disabled={loading}>
+          <Button variant="outline" onClick={handleClose} disabled={loading}>
             {cancelText}
           </Button>
           <Button variant={variant} onClick={handleConfirm} disabled={loading}>
-            {loading ? 'Working...' : confirmText}
+            {loading ? 'Deleting...' : confirmText}
           </Button>
         </DialogFooter>
       </DialogContent>

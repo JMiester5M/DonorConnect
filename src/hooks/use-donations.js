@@ -1,7 +1,7 @@
 "use client"
 
 // React hook for donation data management
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 
 /**
  * Hook to fetch and manage donations list
@@ -10,7 +10,7 @@ import { useState, useEffect } from 'react'
  * @param {Object} filters - Search and filter options
  * @returns {Object} { donations, loading, error, pagination, refetch }
  */
-export function useDonations(page = 1, limit = 20, filters = {}) {
+export function useDonations(page = 1, limit = 50, filters = {}) {
   const [donations, setDonations] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -18,7 +18,7 @@ export function useDonations(page = 1, limit = 20, filters = {}) {
   const [internalPage, setInternalPage] = useState(page)
   const [internalFilters, setInternalFilters] = useState(filters)
 
-  const fetchDonations = async (p = internalPage, f = internalFilters) => {
+  const fetchDonations = useCallback(async (p = internalPage, f = internalFilters) => {
     setLoading(true)
     setError('')
     try {
@@ -51,12 +51,11 @@ export function useDonations(page = 1, limit = 20, filters = {}) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [internalPage, internalFilters, limit])
 
   useEffect(() => {
     fetchDonations(internalPage, internalFilters)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [internalPage, internalFilters, limit])
+  }, [fetchDonations, internalPage, internalFilters])
 
   const refetch = () => fetchDonations(internalPage, internalFilters)
 

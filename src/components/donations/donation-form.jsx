@@ -67,9 +67,15 @@ export function DonationForm({ donation, donors = [], campaigns = [], onSubmit, 
   useEffect(() => {
     if (campaignList.length === 0) {
       setLoadingCampaigns(true)
-      fetch('/api/campaigns?limit=1000')
+      fetch('/api/campaigns?limit=100')
         .then(res => res.json())
-        .then(data => setCampaignList(data.data || []))
+        .then(data => {
+          // Filter for only ACTIVE campaigns
+          const activeCampaigns = (data.data || []).filter(campaign => campaign.status === 'ACTIVE')
+          // Sort by name in ascending order
+          activeCampaigns.sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+          setCampaignList(activeCampaigns)
+        })
         .catch(err => console.error('Failed to load campaigns:', err))
         .finally(() => setLoadingCampaigns(false))
     }

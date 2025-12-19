@@ -7,11 +7,14 @@ import { Button } from '@/components/ui/button'
 import { CampaignStatusBadge } from './campaign-status-badge'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { CampaignForm } from './campaign-form'
+import { ConfirmDialog } from '@/components/confirm-dialog'
+import { Edit2, Trash2 } from 'lucide-react'
 
 export function CampaignList({ campaigns, onEdit, onDelete }) {
   const router = useRouter()
   const [editingCampaign, setEditingCampaign] = useState(null)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [deleteConfirm, setDeleteConfirm] = useState(null)
 
   const formatCurrency = (amount) => {
     if (!amount) return '-'
@@ -74,26 +77,25 @@ export function CampaignList({ campaigns, onEdit, onDelete }) {
               <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
                 <div className="flex gap-2 justify-end">
                   <Button 
-                    variant="outline" 
+                    variant="ghost" 
                     size="sm"
                     onClick={(e) => {
                       e.stopPropagation()
                       handleEdit(campaign)
                     }}
                   >
-                    Edit
+                    <Edit2 className="h-4 w-4" />
                   </Button>
                   <Button 
-                    variant="destructive" 
+                    variant="ghost" 
                     size="sm"
+                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
                     onClick={(e) => {
                       e.stopPropagation()
-                      if (window.confirm(`Delete campaign "${campaign.name}"?`)) {
-                        onDelete(campaign.id)
-                      }
+                      setDeleteConfirm(campaign)
                     }}
                   >
-                    Delete
+                    <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
               </TableCell>
@@ -102,7 +104,7 @@ export function CampaignList({ campaigns, onEdit, onDelete }) {
         </TableBody>
       </Table>
 
-      {/* Edit Campaign Dialog */}
+      {/* Edit Campaign Dialog - Rendered outside table */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
@@ -114,6 +116,18 @@ export function CampaignList({ campaigns, onEdit, onDelete }) {
           />
         </DialogContent>
       </Dialog>
+
+      {/* Delete Confirmation */}
+      <ConfirmDialog
+        open={deleteConfirm !== null}
+        title="Delete Campaign"
+        description={`Are you sure you want to delete "${deleteConfirm?.name}"? This action cannot be undone.`}
+        onConfirm={() => {
+          onDelete(deleteConfirm.id)
+          setDeleteConfirm(null)
+        }}
+        onCancel={() => setDeleteConfirm(null)}
+      />
     </>
   )
 }

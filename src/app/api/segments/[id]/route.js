@@ -4,13 +4,89 @@ import { getSession } from '@/lib/session'
 import { prisma } from '@/lib/db'
 import { updateSegmentSchema } from '@/lib/validation/segment-schema'
 
+// Helper: build Prisma where clause from segment rules (supports seed + UI formats)
+function buildWhereClause(rules, organizationId) {
+  const where = { organizationId }
+  if (!rules || typeof rules !== 'object') return where
+  if (rules.field) {
+    const { field, operator, value } = rules
+    switch (field) {
+      case 'totalGifts':
+        if (operator === 'equals') where.totalGifts = value
+        else if (operator === 'greaterThan') where.totalGifts = { gt: value }
+        else if (operator === 'lessThan') where.totalGifts = { lt: value }
+        else if (operator === 'greaterThanOrEqual') where.totalGifts = { gte: value }
+        else if (operator === 'lessThanOrEqual') where.totalGifts = { lte: value }
+        break
+      case 'totalAmount':
+        if (operator === 'equals') where.totalAmount = value
+        else if (operator === 'greaterThan') where.totalAmount = { gt: value }
+        else if (operator === 'lessThan') where.totalAmount = { lt: value }
+        else if (operator === 'greaterThanOrEqual') where.totalAmount = { gte: value }
+        else if (operator === 'lessThanOrEqual') where.totalAmount = { lte: value }
+        break
+      case 'status':
+        if (operator === 'equals') where.status = value
+        else if (operator === 'in' && Array.isArray(value)) where.status = { in: value }
+        break
+      case 'retentionRisk':
+        if (operator === 'equals') where.retentionRisk = value
+        else if (operator === 'in' && Array.isArray(value)) where.retentionRisk = { in: value }
+        break
+      case 'hasRecurring':
+        if (operator === 'equals') {
+          if (value === true) where.donations = { some: { type: 'RECURRING' } }
+          else if (value === false) where.donations = { none: { type: 'RECURRING' } }
+        }
+        break
+    }
+    return where
+  }
+  if (rules.donorStatus && Array.isArray(rules.donorStatus) && rules.donorStatus.length > 0) {
+    where.status = { in: rules.donorStatus }
+  }
+  if (rules.retentionRisk && Array.isArray(rules.retentionRisk) && rules.retentionRisk.length > 0) {
+    where.retentionRisk = { in: rules.retentionRisk }
+  }
+  if (rules.giftCountRange && typeof rules.giftCountRange === 'object') {
+    const { min, max } = rules.giftCountRange
+    if (min !== undefined || max !== undefined) {
+      where.totalGifts = {}
+      if (min !== undefined && min !== null) where.totalGifts.gte = min
+      if (max !== undefined && max !== null) where.totalGifts.lte = max
+    }
+  }
+  if (rules.totalGiftAmountRange && typeof rules.totalGiftAmountRange === 'object') {
+    const { min, max } = rules.totalGiftAmountRange
+    if (min !== undefined || max !== undefined) {
+      where.totalAmount = {}
+      if (min !== undefined && min !== null) where.totalAmount.gte = min
+      if (max !== undefined && max !== null) where.totalAmount.lte = max
+    }
+  }
+  if (rules.lastGiftDateRange && typeof rules.lastGiftDateRange === 'object') {
+    const { from, to } = rules.lastGiftDateRange
+    if (from || to) {
+      where.lastGiftDate = {}
+      if (from) where.lastGiftDate.gte = new Date(from)
+      if (to) where.lastGiftDate.lte = new Date(to)
+    }
+  }
+  if (rules.hasRecurring !== undefined) {
+    const val = rules.hasRecurring
+    if (val === true) where.donations = { some: { type: 'RECURRING' } }
+    else if (val === false) where.donations = { none: { type: 'RECURRING' } }
+  }
+  return where
+}
+
 export async function GET(request, { params }) {
   try {
     const sessionToken = request.cookies.get('session')?.value
     const session = await getSession(sessionToken)
     if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-    const organizationId = session.user.organizationId || session.user.organization?.id
+    const organizationId = session.user.organization?.id
     if (!organizationId) return NextResponse.json({ error: 'Organization not found' }, { status: 400 })
 
     const id = (await params).id
@@ -29,7 +105,17 @@ export async function GET(request, { params }) {
 
     if (!segment) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
-    return NextResponse.json(segment)
+    // Recalculate memberCount dynamically and update lastCalculated
+    const whereClause = buildWhereClause(segment.rules, organizationId)
+    const count = await prisma.donor.count({ where: whereClause })
+    const updated = await prisma.segment.update({
+      where: { id },
+      data: {
+        memberCount: count,
+        lastCalculated: new Date(),
+      },
+    })
+    return NextResponse.json(updated)
   } catch (error) {
     console.error('Segment GET error:', error)
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
@@ -46,7 +132,7 @@ export async function PATCH(request, { params }) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
-    const organizationId = session.user.organizationId || session.user.organization?.id
+    const organizationId = session.user.organization?.id
     if (!organizationId) return NextResponse.json({ error: 'Organization not found' }, { status: 400 })
 
     const id = (await params).id
@@ -93,7 +179,7 @@ export async function DELETE(request, { params }) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
-    const organizationId = session.user.organizationId || session.user.organization?.id
+    const organizationId = session.user.organization?.id
     if (!organizationId) return NextResponse.json({ error: 'Organization not found' }, { status: 400 })
 
     const id = (await params).id

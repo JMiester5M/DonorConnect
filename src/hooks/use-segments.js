@@ -1,9 +1,9 @@
 "use client"
 
 // React hook for segment data management
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 
-export function useSegments(page = 1, limit = 20, filters = {}) {
+export function useSegments(page = 1, limit = 50, filters = {}) {
 	const [segments, setSegments] = useState([])
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState('')
@@ -11,7 +11,7 @@ export function useSegments(page = 1, limit = 20, filters = {}) {
 	const [internalPage, setInternalPage] = useState(page)
 	const [internalFilters, setInternalFilters] = useState(filters)
 
-	const fetchSegments = async (p = internalPage, f = internalFilters) => {
+	const fetchSegments = useCallback(async (p = internalPage, f = internalFilters) => {
 		setLoading(true)
 		setError('')
 		try {
@@ -29,12 +29,11 @@ export function useSegments(page = 1, limit = 20, filters = {}) {
 		} finally {
 			setLoading(false)
 		}
-	}
+	}, [internalPage, internalFilters, limit])
 
 	useEffect(() => {
 		fetchSegments(internalPage, internalFilters)
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [internalPage, internalFilters, limit])
+	}, [fetchSegments, internalPage, internalFilters])
 
 	const refetch = () => fetchSegments(internalPage, internalFilters)
 

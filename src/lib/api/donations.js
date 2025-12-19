@@ -45,7 +45,7 @@ export async function getDonation({ id, organizationId }) {
 export async function getDonations({
   organizationId,
   page = 1,
-  limit = 20,
+  limit = 50,
   search,
   donorId,
   campaignId,

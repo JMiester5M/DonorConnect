@@ -5,8 +5,10 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Plus } from 'lucide-react'
+import { Plus, Edit2, Trash2 } from 'lucide-react'
 import { useDonors } from '@/hooks/use-donors'
+import { ConfirmDialog } from '@/components/confirm-dialog'
+import { useRouter } from 'next/navigation'
 import {
   Table,
   TableBody,
@@ -19,8 +21,22 @@ import { DonorStatusBadge } from '@/components/donors/donor-status-badge'
 import { RetentionRiskBadge } from '@/components/donors/retention-risk-badge'
 
 export default function DonorsPage() {
+  const router = useRouter()
   const { donors, loading, error, pagination, page, setPage, filters, setFilters } = useDonors(1, 10)
   const [search, setSearch] = useState(filters.search || '')
+  const [deleteConfirm, setDeleteConfirm] = useState(null)
+
+  const handleDelete = async () => {
+    if (!deleteConfirm) return
+    try {
+      const res = await fetch(`/api/donors/${deleteConfirm.id}`, { method: 'DELETE' })
+      if (!res.ok) throw new Error('Failed to delete donor')
+      setDeleteConfirm(null)
+      window.location.reload()
+    } catch (err) {
+      console.error(err)
+    }
+  }
 
   useEffect(() => {
     const handle = setTimeout(() => {
@@ -77,7 +93,7 @@ export default function DonorsPage() {
               <TableHead>Gifts</TableHead>
               <TableHead>Total</TableHead>
               <TableHead>Last Gift</TableHead>
-              <TableHead></TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -115,9 +131,23 @@ export default function DonorsPage() {
                   {donor.lastGiftDate ? new Date(donor.lastGiftDate).toLocaleDateString() : 'N/A'}
                 </TableCell>
                 <TableCell className="text-right">
-                  <Link href={`/donors/${donor.id}/edit`} className="text-blue-600 hover:underline text-sm">
-                    Edit
-                  </Link>
+                  <div className="flex gap-2 justify-end">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => router.push(`/donors/${donor.id}/edit`)}
+                    >
+                      <Edit2 className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                      onClick={() => setDeleteConfirm(donor)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
@@ -146,6 +176,14 @@ export default function DonorsPage() {
           </Button>
         </div>
       </div>
+
+      <ConfirmDialog
+        open={deleteConfirm !== null}
+        title="Delete Donor"
+        description={`Are you sure you want to delete ${deleteConfirm?.firstName} ${deleteConfirm?.lastName}? This action cannot be undone.`}
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteConfirm(null)}
+      />
     </div>
   )
 }

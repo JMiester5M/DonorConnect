@@ -1,13 +1,13 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createCampaignSchema } from '@/lib/validation/campaign-schema'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { Form, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 
 export function CampaignForm({ campaign, onSubmit, isLoading = false }) {
   const form = useForm({
@@ -48,8 +48,7 @@ export function CampaignForm({ campaign, onSubmit, isLoading = false }) {
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+    <div className="space-y-4">
         <FormField
           control={form.control}
           name="name"
@@ -146,10 +145,14 @@ export function CampaignForm({ campaign, onSubmit, isLoading = false }) {
           )}
         />
 
-        <Button type="submit" disabled={isLoading} className="w-full">
+        <Button 
+          type="button"
+          disabled={isLoading} 
+          className="w-full"
+          onClick={form.handleSubmit(handleSubmit)}
+        >
           {isLoading ? 'Saving...' : 'Save Campaign'}
         </Button>
-      </form>
-    </Form>
+    </div>
   )
 }

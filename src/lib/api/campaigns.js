@@ -4,7 +4,7 @@ import { prisma } from '@/lib/db'
 /**
  * Get campaigns for an organization with filtering and pagination
  */
-export async function getCampaigns({ organizationId, search, status, sortBy = 'createdAt', sortOrder = 'desc', page = 1, limit = 20 }) {
+export async function getCampaigns({ organizationId, search, status, sortBy = 'createdAt', sortOrder = 'desc', page = 1, limit = 50 }) {
   const skip = (page - 1) * limit
 
   // Build where clause
@@ -60,11 +60,14 @@ export async function getCampaign(id, organizationId) {
     where: { id },
     include: {
       donations: {
-        select: {
-          id: true,
-          amount: true,
-          date: true,
-          donorId: true,
+        include: {
+          donor: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
         },
       },
     },

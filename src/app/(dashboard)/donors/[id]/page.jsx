@@ -11,6 +11,8 @@ import { DonorForm } from '@/components/donors/donor-form'
 import { useDonor } from '@/hooks/use-donors'
 import { DonorStatusBadge } from '@/components/donors/donor-status-badge'
 import { RetentionRiskBadge } from '@/components/donors/retention-risk-badge'
+import { ConfirmDialog } from '@/components/confirm-dialog'
+import { Edit2, Trash2 } from 'lucide-react'
 
 // Donor detail page
 export default function DonorDetailPage({ params }) {
@@ -20,6 +22,7 @@ export default function DonorDetailPage({ params }) {
   const [editing, setEditing] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const [actionError, setActionError] = useState('')
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [donations, setDonations] = useState([])
   const [loadingDonations, setLoadingDonations] = useState(false)
 
@@ -87,6 +90,7 @@ export default function DonorDetailPage({ params }) {
       const res = await fetch(`/api/donors/${id}`, { method: 'DELETE' })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Failed to delete donor')
+      setShowDeleteConfirm(false)
       router.push('/donors')
     } catch (err) {
       setActionError(err.message)
@@ -123,16 +127,27 @@ export default function DonorDetailPage({ params }) {
           </div>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => setEditing((v) => !v)}>
-            {editing ? 'Close Editor' : 'Edit'}
+          <Button variant="ghost" size="sm" onClick={() => setEditing((v) => !v)}>
+            <Edit2 className="h-4 w-4 mr-2" />
+            {editing ? 'Close' : 'Edit'}
           </Button>
-          <Button variant="destructive" onClick={handleDelete} disabled={deleting}>
-            {deleting ? 'Deleting...' : 'Delete'}
+          <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700 hover:bg-red-50" onClick={() => setShowDeleteConfirm(true)} disabled={deleting}>
+            <Trash2 className="h-4 w-4 mr-2" />
+            Delete
           </Button>
         </div>
       </div>
 
       {actionError && <p className="text-sm text-destructive">{actionError}</p>}
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        open={showDeleteConfirm}
+        title="Delete Donor"
+        description={`Are you sure you want to delete ${donor.firstName} ${donor.lastName}? This action cannot be undone.`}
+        onConfirm={handleDelete}
+        onCancel={() => setShowDeleteConfirm(false)}
+      />
 
       <div className="grid gap-4 md:grid-cols-2">
         <Card>
