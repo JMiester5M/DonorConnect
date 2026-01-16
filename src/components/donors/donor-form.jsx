@@ -170,18 +170,16 @@ export function DonorForm({ donor, onSubmit, onCancel }) {
             )}
           />
 
+          {/* Password field for admin to set user password */}
           <FormField
             control={form.control}
-            name="status"
+            name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Status</FormLabel>
-                <select className={inputLikeClasses} {...field}>
-                  <option value="ACTIVE">Active</option>
-                  <option value="LAPSED">Lapsed</option>
-                  <option value="INACTIVE">Inactive</option>
-                  <option value="DO_NOT_CONTACT">Do Not Contact</option>
-                </select>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input type="password" placeholder="Set user password" {...field} />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}

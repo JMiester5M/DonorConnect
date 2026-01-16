@@ -263,12 +263,26 @@ async function main() {
   const cities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix', 'Philadelphia', 'San Antonio', 'San Diego']
   const states = ['NY', 'CA', 'IL', 'TX', 'AZ', 'PA']
 
+  function randomPassword(length = 12) {
+    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  }
+
   const donors = []
   for (let i = 0; i < 75; i++) {
     const firstName = randomItem(firstNames)
     const lastName = randomItem(lastNames)
     const org = i < 40 ? org1 : org2 // 40 for org1, 35 for org2
 
+    // Generate random password for donor
+    const plainPassword = randomPassword(14)
+    const hashedPassword = await bcrypt.hash(plainPassword, 12)
+
+    // Create donor with donorPassword field
     const donor = await prisma.donor.create({
       data: {
         firstName,
@@ -281,10 +295,23 @@ async function main() {
         zipCode: String(Math.floor(Math.random() * 90000) + 10000),
         status: 'ACTIVE',
         retentionRisk: 'UNKNOWN', // Will be updated based on donations
-        organizationId: org.id
+        organizationId: org.id,
+        donorPassword: plainPassword
       }
     })
     donors.push(donor)
+
+    // Create a DONOR user for this donor
+    await prisma.user.create({
+      data: {
+        email: donor.email,
+        password: hashedPassword,
+        firstName: donor.firstName,
+        lastName: donor.lastName,
+        role: 'DONOR',
+        organizationId: donor.organizationId
+      }
+    })
   }
 
   console.log(`✅ Created ${donors.length} donors`)

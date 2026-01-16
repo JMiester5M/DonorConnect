@@ -14,10 +14,35 @@ export async function GET(request, { params }) {
     if (!organizationId) return NextResponse.json({ error: 'Organization not found' }, { status: 400 })
 
     const donorId = (await params).id
-    const donor = await getDonor({ id: donorId, organizationId })
+
+
+    let donor = null
+    if (session.user.role === 'DONOR') {
+      const { prisma } = await import('@/lib/db')
+      // Find donor record by email (should match user email)
+      const userDonor = await prisma.donor.findUnique({ where: { email: session.user.email } })
+      if (userDonor && userDonor.id === donorId) {
+        const { getDonor } = await import('@/lib/api/donors')
+        donor = await getDonor({ id: donorId })
+      }
+    } else {
+      donor = await getDonor({ id: donorId, organizationId })
+    }
+
     if (!donor) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
-    return NextResponse.json(donor)
+    // Only include donorPassword for admins
+    let result = { ...donor }
+    if (session.user.role === 'ADMIN') {
+      // Fetch donorPassword from the donor record
+      const { prisma } = await import('@/lib/db')
+      const donorRecord = await prisma.donor.findUnique({ where: { id: donorId } })
+      if (donorRecord && donorRecord.donorPassword) {
+        result.password = donorRecord.donorPassword
+      }
+    }
+
+    return NextResponse.json(result)
   } catch (error) {
     console.error('Donor GET error:', error)
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })

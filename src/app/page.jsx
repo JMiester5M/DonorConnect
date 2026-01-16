@@ -9,7 +9,11 @@ export default async function HomePage() {
   const user = await getSessionUser()
 
   if (user) {
-    redirect('/dashboard')
+    if (user.role === 'DONOR') {
+      redirect('/profile')
+    } else {
+      redirect('/dashboard')
+    }
   } else {
     redirect('/login')
   }

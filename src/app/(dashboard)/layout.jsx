@@ -5,24 +5,31 @@ import Link from 'next/link'
 import { LogoutButton } from '@/components/logout-button'
 import { Home, Users, Gift, TrendingUp, CheckSquare, FolderTree, Workflow } from 'lucide-react'
 
-const navigation = [
-  { name: 'Dashboard', href: '/dashboard', icon: Home },
-  { name: 'Donors', href: '/donors', icon: Users },
-  { name: 'Donations', href: '/donations', icon: Gift },
-  { name: 'Campaigns', href: '/campaigns', icon: TrendingUp },
-  { name: 'Segments', href: '/segments', icon: FolderTree },
-  { name: 'Workflows', href: '/workflows', icon: Workflow },
-  { name: 'Tasks', href: '/tasks', icon: CheckSquare },
-]
+function getNavigation(user) {
+  if (user.role === 'DONOR') {
+    return [
+      { name: 'My Profile', href: `/profile`, icon: Users },
+      { name: 'Campaigns', href: '/donorcampaigns', icon: TrendingUp },
+    ]
+  }
+  return [
+    { name: 'Dashboard', href: '/dashboard', icon: Home },
+    { name: 'Donors', href: '/donors', icon: Users },
+    { name: 'Donations', href: '/donations', icon: Gift },
+    { name: 'Campaigns', href: '/campaigns', icon: TrendingUp },
+    { name: 'Segments', href: '/segments', icon: FolderTree },
+    { name: 'Workflows', href: '/workflows', icon: Workflow },
+    { name: 'Tasks', href: '/tasks', icon: CheckSquare },
+  ]
+}
 
 export default async function DashboardLayout({ children }) {
   // Get session user and redirect if not authenticated
   const user = await getSessionUser()
-  
   if (!user) {
     redirect('/login')
   }
-  
+  const navigation = getNavigation(user)
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navigation header */}

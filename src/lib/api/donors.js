@@ -50,12 +50,14 @@ const calculateDonorMetrics = async (donorId) => {
  * @returns {Promise<Object|null>} Donor object or null
  */
 export async function getDonor({ id, organizationId }) {
-  if (!id || !organizationId) {
-    throw new Error('id and organizationId are required')
+  if (!id) {
+    throw new Error('id is required')
   }
+  let where = { id }
+  if (organizationId) where.organizationId = organizationId
 
   const donor = await prisma.donor.findFirst({
-    where: { id, organizationId },
+    where,
     include: {
       donations: { orderBy: { date: 'desc' } },
       interactions: { orderBy: { date: 'desc' } },

@@ -87,7 +87,8 @@ export namespace $Enums {
   ADMIN: 'ADMIN',
   STAFF: 'STAFF',
   MARKETING: 'MARKETING',
-  READONLY: 'READONLY'
+  READONLY: 'READONLY',
+  DONOR: 'DONOR'
 };
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
@@ -2088,18 +2089,18 @@ export namespace Prisma {
    */
 
   export type OrganizationCountOutputType = {
-    users: number
-    donors: number
     campaigns: number
+    donors: number
     segments: number
+    users: number
     workflows: number
   }
 
   export type OrganizationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    users?: boolean | OrganizationCountOutputTypeCountUsersArgs
-    donors?: boolean | OrganizationCountOutputTypeCountDonorsArgs
     campaigns?: boolean | OrganizationCountOutputTypeCountCampaignsArgs
+    donors?: boolean | OrganizationCountOutputTypeCountDonorsArgs
     segments?: boolean | OrganizationCountOutputTypeCountSegmentsArgs
+    users?: boolean | OrganizationCountOutputTypeCountUsersArgs
     workflows?: boolean | OrganizationCountOutputTypeCountWorkflowsArgs
   }
 
@@ -2117,8 +2118,8 @@ export namespace Prisma {
   /**
    * OrganizationCountOutputType without action
    */
-  export type OrganizationCountOutputTypeCountUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: UserWhereInput
+  export type OrganizationCountOutputTypeCountCampaignsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CampaignWhereInput
   }
 
   /**
@@ -2131,15 +2132,15 @@ export namespace Prisma {
   /**
    * OrganizationCountOutputType without action
    */
-  export type OrganizationCountOutputTypeCountCampaignsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: CampaignWhereInput
+  export type OrganizationCountOutputTypeCountSegmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SegmentWhereInput
   }
 
   /**
    * OrganizationCountOutputType without action
    */
-  export type OrganizationCountOutputTypeCountSegmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SegmentWhereInput
+  export type OrganizationCountOutputTypeCountUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserWhereInput
   }
 
   /**
@@ -2155,16 +2156,16 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
+    activityLogs: number
     sessions: number
     assignedTasks: number
-    activityLogs: number
     workflowExecutions: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    activityLogs?: boolean | UserCountOutputTypeCountActivityLogsArgs
     sessions?: boolean | UserCountOutputTypeCountSessionsArgs
     assignedTasks?: boolean | UserCountOutputTypeCountAssignedTasksArgs
-    activityLogs?: boolean | UserCountOutputTypeCountActivityLogsArgs
     workflowExecutions?: boolean | UserCountOutputTypeCountWorkflowExecutionsArgs
   }
 
@@ -2177,6 +2178,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the UserCountOutputType
      */
     select?: UserCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountActivityLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ActivityLogWhereInput
   }
 
   /**
@@ -2196,13 +2204,6 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountActivityLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ActivityLogWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
   export type UserCountOutputTypeCountWorkflowExecutionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: WorkflowExecutionWhereInput
   }
@@ -2215,15 +2216,15 @@ export namespace Prisma {
   export type DonorCountOutputType = {
     donations: number
     interactions: number
-    tasks: number
     segmentMembers: number
+    tasks: number
   }
 
   export type DonorCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     donations?: boolean | DonorCountOutputTypeCountDonationsArgs
     interactions?: boolean | DonorCountOutputTypeCountInteractionsArgs
-    tasks?: boolean | DonorCountOutputTypeCountTasksArgs
     segmentMembers?: boolean | DonorCountOutputTypeCountSegmentMembersArgs
+    tasks?: boolean | DonorCountOutputTypeCountTasksArgs
   }
 
   // Custom InputTypes
@@ -2254,15 +2255,15 @@ export namespace Prisma {
   /**
    * DonorCountOutputType without action
    */
-  export type DonorCountOutputTypeCountTasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: TaskWhereInput
+  export type DonorCountOutputTypeCountSegmentMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SegmentMemberWhereInput
   }
 
   /**
    * DonorCountOutputType without action
    */
-  export type DonorCountOutputTypeCountSegmentMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SegmentMemberWhereInput
+  export type DonorCountOutputTypeCountTasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TaskWhereInput
   }
 
 
@@ -2528,10 +2529,10 @@ export namespace Prisma {
     name?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    users?: boolean | Organization$usersArgs<ExtArgs>
-    donors?: boolean | Organization$donorsArgs<ExtArgs>
     campaigns?: boolean | Organization$campaignsArgs<ExtArgs>
+    donors?: boolean | Organization$donorsArgs<ExtArgs>
     segments?: boolean | Organization$segmentsArgs<ExtArgs>
+    users?: boolean | Organization$usersArgs<ExtArgs>
     workflows?: boolean | Organization$workflowsArgs<ExtArgs>
     _count?: boolean | OrganizationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["organization"]>
@@ -2559,10 +2560,10 @@ export namespace Prisma {
 
   export type OrganizationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["organization"]>
   export type OrganizationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    users?: boolean | Organization$usersArgs<ExtArgs>
-    donors?: boolean | Organization$donorsArgs<ExtArgs>
     campaigns?: boolean | Organization$campaignsArgs<ExtArgs>
+    donors?: boolean | Organization$donorsArgs<ExtArgs>
     segments?: boolean | Organization$segmentsArgs<ExtArgs>
+    users?: boolean | Organization$usersArgs<ExtArgs>
     workflows?: boolean | Organization$workflowsArgs<ExtArgs>
     _count?: boolean | OrganizationCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -2572,10 +2573,10 @@ export namespace Prisma {
   export type $OrganizationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Organization"
     objects: {
-      users: Prisma.$UserPayload<ExtArgs>[]
-      donors: Prisma.$DonorPayload<ExtArgs>[]
       campaigns: Prisma.$CampaignPayload<ExtArgs>[]
+      donors: Prisma.$DonorPayload<ExtArgs>[]
       segments: Prisma.$SegmentPayload<ExtArgs>[]
+      users: Prisma.$UserPayload<ExtArgs>[]
       workflows: Prisma.$WorkflowPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -2977,10 +2978,10 @@ export namespace Prisma {
    */
   export interface Prisma__OrganizationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    users<T extends Organization$usersArgs<ExtArgs> = {}>(args?: Subset<T, Organization$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    donors<T extends Organization$donorsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$donorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DonorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     campaigns<T extends Organization$campaignsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$campaignsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    donors<T extends Organization$donorsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$donorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DonorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     segments<T extends Organization$segmentsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$segmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SegmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    users<T extends Organization$usersArgs<ExtArgs> = {}>(args?: Subset<T, Organization$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     workflows<T extends Organization$workflowsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$workflowsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkflowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -3403,27 +3404,27 @@ export namespace Prisma {
   }
 
   /**
-   * Organization.users
+   * Organization.campaigns
    */
-  export type Organization$usersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Organization$campaignsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the User
+     * Select specific fields to fetch from the Campaign
      */
-    select?: UserSelect<ExtArgs> | null
+    select?: CampaignSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the User
+     * Omit specific fields from the Campaign
      */
-    omit?: UserOmit<ExtArgs> | null
+    omit?: CampaignOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserInclude<ExtArgs> | null
-    where?: UserWhereInput
-    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
-    cursor?: UserWhereUniqueInput
+    include?: CampaignInclude<ExtArgs> | null
+    where?: CampaignWhereInput
+    orderBy?: CampaignOrderByWithRelationInput | CampaignOrderByWithRelationInput[]
+    cursor?: CampaignWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
+    distinct?: CampaignScalarFieldEnum | CampaignScalarFieldEnum[]
   }
 
   /**
@@ -3451,30 +3452,6 @@ export namespace Prisma {
   }
 
   /**
-   * Organization.campaigns
-   */
-  export type Organization$campaignsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Campaign
-     */
-    select?: CampaignSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Campaign
-     */
-    omit?: CampaignOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CampaignInclude<ExtArgs> | null
-    where?: CampaignWhereInput
-    orderBy?: CampaignOrderByWithRelationInput | CampaignOrderByWithRelationInput[]
-    cursor?: CampaignWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: CampaignScalarFieldEnum | CampaignScalarFieldEnum[]
-  }
-
-  /**
    * Organization.segments
    */
   export type Organization$segmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3496,6 +3473,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SegmentScalarFieldEnum | SegmentScalarFieldEnum[]
+  }
+
+  /**
+   * Organization.users
+   */
+  export type Organization$usersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
+    cursor?: UserWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
   }
 
   /**
@@ -3737,10 +3738,10 @@ export namespace Prisma {
     organizationId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    activityLogs?: boolean | User$activityLogsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     assignedTasks?: boolean | User$assignedTasksArgs<ExtArgs>
-    activityLogs?: boolean | User$activityLogsArgs<ExtArgs>
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     workflowExecutions?: boolean | User$workflowExecutionsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
@@ -3785,10 +3786,10 @@ export namespace Prisma {
 
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "password" | "firstName" | "lastName" | "role" | "organizationId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    activityLogs?: boolean | User$activityLogsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     assignedTasks?: boolean | User$assignedTasksArgs<ExtArgs>
-    activityLogs?: boolean | User$activityLogsArgs<ExtArgs>
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     workflowExecutions?: boolean | User$workflowExecutionsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -3802,10 +3803,10 @@ export namespace Prisma {
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
-      organization: Prisma.$OrganizationPayload<ExtArgs>
+      activityLogs: Prisma.$ActivityLogPayload<ExtArgs>[]
       sessions: Prisma.$SessionPayload<ExtArgs>[]
       assignedTasks: Prisma.$TaskPayload<ExtArgs>[]
-      activityLogs: Prisma.$ActivityLogPayload<ExtArgs>[]
+      organization: Prisma.$OrganizationPayload<ExtArgs>
       workflowExecutions: Prisma.$WorkflowExecutionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -4212,10 +4213,10 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    activityLogs<T extends User$activityLogsArgs<ExtArgs> = {}>(args?: Subset<T, User$activityLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     assignedTasks<T extends User$assignedTasksArgs<ExtArgs> = {}>(args?: Subset<T, User$assignedTasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    activityLogs<T extends User$activityLogsArgs<ExtArgs> = {}>(args?: Subset<T, User$activityLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     workflowExecutions<T extends User$workflowExecutionsArgs<ExtArgs> = {}>(args?: Subset<T, User$workflowExecutionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkflowExecutionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -4651,6 +4652,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.activityLogs
+   */
+  export type User$activityLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivityLog
+     */
+    select?: ActivityLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivityLog
+     */
+    omit?: ActivityLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivityLogInclude<ExtArgs> | null
+    where?: ActivityLogWhereInput
+    orderBy?: ActivityLogOrderByWithRelationInput | ActivityLogOrderByWithRelationInput[]
+    cursor?: ActivityLogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ActivityLogScalarFieldEnum | ActivityLogScalarFieldEnum[]
+  }
+
+  /**
    * User.sessions
    */
   export type User$sessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4696,30 +4721,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: TaskScalarFieldEnum | TaskScalarFieldEnum[]
-  }
-
-  /**
-   * User.activityLogs
-   */
-  export type User$activityLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ActivityLog
-     */
-    select?: ActivityLogSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ActivityLog
-     */
-    omit?: ActivityLogOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityLogInclude<ExtArgs> | null
-    where?: ActivityLogWhereInput
-    orderBy?: ActivityLogOrderByWithRelationInput | ActivityLogOrderByWithRelationInput[]
-    cursor?: ActivityLogWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ActivityLogScalarFieldEnum | ActivityLogScalarFieldEnum[]
   }
 
   /**
@@ -5856,6 +5857,7 @@ export namespace Prisma {
     city: string | null
     state: string | null
     zipCode: string | null
+    donorPassword: string | null
     status: $Enums.DonorStatus | null
     retentionRisk: $Enums.RetentionRisk | null
     totalGifts: number | null
@@ -5877,6 +5879,7 @@ export namespace Prisma {
     city: string | null
     state: string | null
     zipCode: string | null
+    donorPassword: string | null
     status: $Enums.DonorStatus | null
     retentionRisk: $Enums.RetentionRisk | null
     totalGifts: number | null
@@ -5898,6 +5901,7 @@ export namespace Prisma {
     city: number
     state: number
     zipCode: number
+    donorPassword: number
     status: number
     retentionRisk: number
     totalGifts: number
@@ -5931,6 +5935,7 @@ export namespace Prisma {
     city?: true
     state?: true
     zipCode?: true
+    donorPassword?: true
     status?: true
     retentionRisk?: true
     totalGifts?: true
@@ -5952,6 +5957,7 @@ export namespace Prisma {
     city?: true
     state?: true
     zipCode?: true
+    donorPassword?: true
     status?: true
     retentionRisk?: true
     totalGifts?: true
@@ -5973,6 +5979,7 @@ export namespace Prisma {
     city?: true
     state?: true
     zipCode?: true
+    donorPassword?: true
     status?: true
     retentionRisk?: true
     totalGifts?: true
@@ -6081,6 +6088,7 @@ export namespace Prisma {
     city: string | null
     state: string | null
     zipCode: string | null
+    donorPassword: string | null
     status: $Enums.DonorStatus
     retentionRisk: $Enums.RetentionRisk
     totalGifts: number
@@ -6121,6 +6129,7 @@ export namespace Prisma {
     city?: boolean
     state?: boolean
     zipCode?: boolean
+    donorPassword?: boolean
     status?: boolean
     retentionRisk?: boolean
     totalGifts?: boolean
@@ -6129,11 +6138,11 @@ export namespace Prisma {
     lastGiftDate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     donations?: boolean | Donor$donationsArgs<ExtArgs>
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     interactions?: boolean | Donor$interactionsArgs<ExtArgs>
-    tasks?: boolean | Donor$tasksArgs<ExtArgs>
     segmentMembers?: boolean | Donor$segmentMembersArgs<ExtArgs>
+    tasks?: boolean | Donor$tasksArgs<ExtArgs>
     _count?: boolean | DonorCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["donor"]>
 
@@ -6148,6 +6157,7 @@ export namespace Prisma {
     city?: boolean
     state?: boolean
     zipCode?: boolean
+    donorPassword?: boolean
     status?: boolean
     retentionRisk?: boolean
     totalGifts?: boolean
@@ -6170,6 +6180,7 @@ export namespace Prisma {
     city?: boolean
     state?: boolean
     zipCode?: boolean
+    donorPassword?: boolean
     status?: boolean
     retentionRisk?: boolean
     totalGifts?: boolean
@@ -6192,6 +6203,7 @@ export namespace Prisma {
     city?: boolean
     state?: boolean
     zipCode?: boolean
+    donorPassword?: boolean
     status?: boolean
     retentionRisk?: boolean
     totalGifts?: boolean
@@ -6202,13 +6214,13 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type DonorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "firstName" | "lastName" | "email" | "phone" | "address" | "city" | "state" | "zipCode" | "status" | "retentionRisk" | "totalGifts" | "totalAmount" | "firstGiftDate" | "lastGiftDate" | "createdAt" | "updatedAt", ExtArgs["result"]["donor"]>
+  export type DonorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "firstName" | "lastName" | "email" | "phone" | "address" | "city" | "state" | "zipCode" | "donorPassword" | "status" | "retentionRisk" | "totalGifts" | "totalAmount" | "firstGiftDate" | "lastGiftDate" | "createdAt" | "updatedAt", ExtArgs["result"]["donor"]>
   export type DonorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     donations?: boolean | Donor$donationsArgs<ExtArgs>
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     interactions?: boolean | Donor$interactionsArgs<ExtArgs>
-    tasks?: boolean | Donor$tasksArgs<ExtArgs>
     segmentMembers?: boolean | Donor$segmentMembersArgs<ExtArgs>
+    tasks?: boolean | Donor$tasksArgs<ExtArgs>
     _count?: boolean | DonorCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type DonorIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6221,11 +6233,11 @@ export namespace Prisma {
   export type $DonorPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Donor"
     objects: {
-      organization: Prisma.$OrganizationPayload<ExtArgs>
       donations: Prisma.$DonationPayload<ExtArgs>[]
+      organization: Prisma.$OrganizationPayload<ExtArgs>
       interactions: Prisma.$InteractionPayload<ExtArgs>[]
-      tasks: Prisma.$TaskPayload<ExtArgs>[]
       segmentMembers: Prisma.$SegmentMemberPayload<ExtArgs>[]
+      tasks: Prisma.$TaskPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6238,6 +6250,7 @@ export namespace Prisma {
       city: string | null
       state: string | null
       zipCode: string | null
+      donorPassword: string | null
       status: $Enums.DonorStatus
       retentionRisk: $Enums.RetentionRisk
       totalGifts: number
@@ -6640,11 +6653,11 @@ export namespace Prisma {
    */
   export interface Prisma__DonorClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     donations<T extends Donor$donationsArgs<ExtArgs> = {}>(args?: Subset<T, Donor$donationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DonationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     interactions<T extends Donor$interactionsArgs<ExtArgs> = {}>(args?: Subset<T, Donor$interactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InteractionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    tasks<T extends Donor$tasksArgs<ExtArgs> = {}>(args?: Subset<T, Donor$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     segmentMembers<T extends Donor$segmentMembersArgs<ExtArgs> = {}>(args?: Subset<T, Donor$segmentMembersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SegmentMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    tasks<T extends Donor$tasksArgs<ExtArgs> = {}>(args?: Subset<T, Donor$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6684,6 +6697,7 @@ export namespace Prisma {
     readonly city: FieldRef<"Donor", 'String'>
     readonly state: FieldRef<"Donor", 'String'>
     readonly zipCode: FieldRef<"Donor", 'String'>
+    readonly donorPassword: FieldRef<"Donor", 'String'>
     readonly status: FieldRef<"Donor", 'DonorStatus'>
     readonly retentionRisk: FieldRef<"Donor", 'RetentionRisk'>
     readonly totalGifts: FieldRef<"Donor", 'Int'>
@@ -7136,30 +7150,6 @@ export namespace Prisma {
   }
 
   /**
-   * Donor.tasks
-   */
-  export type Donor$tasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Task
-     */
-    select?: TaskSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Task
-     */
-    omit?: TaskOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInclude<ExtArgs> | null
-    where?: TaskWhereInput
-    orderBy?: TaskOrderByWithRelationInput | TaskOrderByWithRelationInput[]
-    cursor?: TaskWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: TaskScalarFieldEnum | TaskScalarFieldEnum[]
-  }
-
-  /**
    * Donor.segmentMembers
    */
   export type Donor$segmentMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7181,6 +7171,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SegmentMemberScalarFieldEnum | SegmentMemberScalarFieldEnum[]
+  }
+
+  /**
+   * Donor.tasks
+   */
+  export type Donor$tasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    where?: TaskWhereInput
+    orderBy?: TaskOrderByWithRelationInput | TaskOrderByWithRelationInput[]
+    cursor?: TaskWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TaskScalarFieldEnum | TaskScalarFieldEnum[]
   }
 
   /**
@@ -8640,8 +8654,8 @@ export namespace Prisma {
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    donor?: boolean | DonorDefaultArgs<ExtArgs>
     campaign?: boolean | Donation$campaignArgs<ExtArgs>
+    donor?: boolean | DonorDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["donation"]>
 
   export type DonationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -8655,8 +8669,8 @@ export namespace Prisma {
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    donor?: boolean | DonorDefaultArgs<ExtArgs>
     campaign?: boolean | Donation$campaignArgs<ExtArgs>
+    donor?: boolean | DonorDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["donation"]>
 
   export type DonationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -8670,8 +8684,8 @@ export namespace Prisma {
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    donor?: boolean | DonorDefaultArgs<ExtArgs>
     campaign?: boolean | Donation$campaignArgs<ExtArgs>
+    donor?: boolean | DonorDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["donation"]>
 
   export type DonationSelectScalar = {
@@ -8689,23 +8703,23 @@ export namespace Prisma {
 
   export type DonationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "donorId" | "campaignId" | "amount" | "date" | "type" | "method" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["donation"]>
   export type DonationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    donor?: boolean | DonorDefaultArgs<ExtArgs>
     campaign?: boolean | Donation$campaignArgs<ExtArgs>
+    donor?: boolean | DonorDefaultArgs<ExtArgs>
   }
   export type DonationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    donor?: boolean | DonorDefaultArgs<ExtArgs>
     campaign?: boolean | Donation$campaignArgs<ExtArgs>
+    donor?: boolean | DonorDefaultArgs<ExtArgs>
   }
   export type DonationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    donor?: boolean | DonorDefaultArgs<ExtArgs>
     campaign?: boolean | Donation$campaignArgs<ExtArgs>
+    donor?: boolean | DonorDefaultArgs<ExtArgs>
   }
 
   export type $DonationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Donation"
     objects: {
-      donor: Prisma.$DonorPayload<ExtArgs>
       campaign: Prisma.$CampaignPayload<ExtArgs> | null
+      donor: Prisma.$DonorPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -9112,8 +9126,8 @@ export namespace Prisma {
    */
   export interface Prisma__DonationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    donor<T extends DonorDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DonorDefaultArgs<ExtArgs>>): Prisma__DonorClient<$Result.GetResult<Prisma.$DonorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     campaign<T extends Donation$campaignArgs<ExtArgs> = {}>(args?: Subset<T, Donation$campaignArgs<ExtArgs>>): Prisma__CampaignClient<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    donor<T extends DonorDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DonorDefaultArgs<ExtArgs>>): Prisma__DonorClient<$Result.GetResult<Prisma.$DonorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10908,8 +10922,8 @@ export namespace Prisma {
     completedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    donor?: boolean | Task$donorArgs<ExtArgs>
     assignedUser?: boolean | Task$assignedUserArgs<ExtArgs>
+    donor?: boolean | Task$donorArgs<ExtArgs>
   }, ExtArgs["result"]["task"]>
 
   export type TaskSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -10924,8 +10938,8 @@ export namespace Prisma {
     completedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    donor?: boolean | Task$donorArgs<ExtArgs>
     assignedUser?: boolean | Task$assignedUserArgs<ExtArgs>
+    donor?: boolean | Task$donorArgs<ExtArgs>
   }, ExtArgs["result"]["task"]>
 
   export type TaskSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -10940,8 +10954,8 @@ export namespace Prisma {
     completedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    donor?: boolean | Task$donorArgs<ExtArgs>
     assignedUser?: boolean | Task$assignedUserArgs<ExtArgs>
+    donor?: boolean | Task$donorArgs<ExtArgs>
   }, ExtArgs["result"]["task"]>
 
   export type TaskSelectScalar = {
@@ -10960,23 +10974,23 @@ export namespace Prisma {
 
   export type TaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "donorId" | "assignedTo" | "title" | "description" | "status" | "priority" | "dueDate" | "completedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["task"]>
   export type TaskInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    donor?: boolean | Task$donorArgs<ExtArgs>
     assignedUser?: boolean | Task$assignedUserArgs<ExtArgs>
+    donor?: boolean | Task$donorArgs<ExtArgs>
   }
   export type TaskIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    donor?: boolean | Task$donorArgs<ExtArgs>
     assignedUser?: boolean | Task$assignedUserArgs<ExtArgs>
+    donor?: boolean | Task$donorArgs<ExtArgs>
   }
   export type TaskIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    donor?: boolean | Task$donorArgs<ExtArgs>
     assignedUser?: boolean | Task$assignedUserArgs<ExtArgs>
+    donor?: boolean | Task$donorArgs<ExtArgs>
   }
 
   export type $TaskPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Task"
     objects: {
-      donor: Prisma.$DonorPayload<ExtArgs> | null
       assignedUser: Prisma.$UserPayload<ExtArgs> | null
+      donor: Prisma.$DonorPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -11384,8 +11398,8 @@ export namespace Prisma {
    */
   export interface Prisma__TaskClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    donor<T extends Task$donorArgs<ExtArgs> = {}>(args?: Subset<T, Task$donorArgs<ExtArgs>>): Prisma__DonorClient<$Result.GetResult<Prisma.$DonorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     assignedUser<T extends Task$assignedUserArgs<ExtArgs> = {}>(args?: Subset<T, Task$assignedUserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    donor<T extends Task$donorArgs<ExtArgs> = {}>(args?: Subset<T, Task$donorArgs<ExtArgs>>): Prisma__DonorClient<$Result.GetResult<Prisma.$DonorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11822,25 +11836,6 @@ export namespace Prisma {
   }
 
   /**
-   * Task.donor
-   */
-  export type Task$donorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Donor
-     */
-    select?: DonorSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Donor
-     */
-    omit?: DonorOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DonorInclude<ExtArgs> | null
-    where?: DonorWhereInput
-  }
-
-  /**
    * Task.assignedUser
    */
   export type Task$assignedUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11857,6 +11852,25 @@ export namespace Prisma {
      */
     include?: UserInclude<ExtArgs> | null
     where?: UserWhereInput
+  }
+
+  /**
+   * Task.donor
+   */
+  export type Task$donorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Donor
+     */
+    select?: DonorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Donor
+     */
+    omit?: DonorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DonorInclude<ExtArgs> | null
+    where?: DonorWhereInput
   }
 
   /**
@@ -12104,8 +12118,8 @@ export namespace Prisma {
     lastCalculated?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     members?: boolean | Segment$membersArgs<ExtArgs>
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     workflows?: boolean | Segment$workflowsArgs<ExtArgs>
     _count?: boolean | SegmentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["segment"]>
@@ -12150,8 +12164,8 @@ export namespace Prisma {
 
   export type SegmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "name" | "description" | "rules" | "memberCount" | "lastCalculated" | "createdAt" | "updatedAt", ExtArgs["result"]["segment"]>
   export type SegmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     members?: boolean | Segment$membersArgs<ExtArgs>
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     workflows?: boolean | Segment$workflowsArgs<ExtArgs>
     _count?: boolean | SegmentCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -12165,8 +12179,8 @@ export namespace Prisma {
   export type $SegmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Segment"
     objects: {
-      organization: Prisma.$OrganizationPayload<ExtArgs>
       members: Prisma.$SegmentMemberPayload<ExtArgs>[]
+      organization: Prisma.$OrganizationPayload<ExtArgs>
       workflows: Prisma.$WorkflowPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -12573,8 +12587,8 @@ export namespace Prisma {
    */
   export interface Prisma__SegmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     members<T extends Segment$membersArgs<ExtArgs> = {}>(args?: Subset<T, Segment$membersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SegmentMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     workflows<T extends Segment$workflowsArgs<ExtArgs> = {}>(args?: Subset<T, Segment$workflowsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkflowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -13232,8 +13246,8 @@ export namespace Prisma {
     segmentId?: boolean
     donorId?: boolean
     createdAt?: boolean
-    segment?: boolean | SegmentDefaultArgs<ExtArgs>
     donor?: boolean | DonorDefaultArgs<ExtArgs>
+    segment?: boolean | SegmentDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["segmentMember"]>
 
   export type SegmentMemberSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -13241,8 +13255,8 @@ export namespace Prisma {
     segmentId?: boolean
     donorId?: boolean
     createdAt?: boolean
-    segment?: boolean | SegmentDefaultArgs<ExtArgs>
     donor?: boolean | DonorDefaultArgs<ExtArgs>
+    segment?: boolean | SegmentDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["segmentMember"]>
 
   export type SegmentMemberSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -13250,8 +13264,8 @@ export namespace Prisma {
     segmentId?: boolean
     donorId?: boolean
     createdAt?: boolean
-    segment?: boolean | SegmentDefaultArgs<ExtArgs>
     donor?: boolean | DonorDefaultArgs<ExtArgs>
+    segment?: boolean | SegmentDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["segmentMember"]>
 
   export type SegmentMemberSelectScalar = {
@@ -13263,23 +13277,23 @@ export namespace Prisma {
 
   export type SegmentMemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "segmentId" | "donorId" | "createdAt", ExtArgs["result"]["segmentMember"]>
   export type SegmentMemberInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    segment?: boolean | SegmentDefaultArgs<ExtArgs>
     donor?: boolean | DonorDefaultArgs<ExtArgs>
+    segment?: boolean | SegmentDefaultArgs<ExtArgs>
   }
   export type SegmentMemberIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    segment?: boolean | SegmentDefaultArgs<ExtArgs>
     donor?: boolean | DonorDefaultArgs<ExtArgs>
+    segment?: boolean | SegmentDefaultArgs<ExtArgs>
   }
   export type SegmentMemberIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    segment?: boolean | SegmentDefaultArgs<ExtArgs>
     donor?: boolean | DonorDefaultArgs<ExtArgs>
+    segment?: boolean | SegmentDefaultArgs<ExtArgs>
   }
 
   export type $SegmentMemberPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "SegmentMember"
     objects: {
-      segment: Prisma.$SegmentPayload<ExtArgs>
       donor: Prisma.$DonorPayload<ExtArgs>
+      segment: Prisma.$SegmentPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -13680,8 +13694,8 @@ export namespace Prisma {
    */
   export interface Prisma__SegmentMemberClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    segment<T extends SegmentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SegmentDefaultArgs<ExtArgs>>): Prisma__SegmentClient<$Result.GetResult<Prisma.$SegmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     donor<T extends DonorDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DonorDefaultArgs<ExtArgs>>): Prisma__DonorClient<$Result.GetResult<Prisma.$DonorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    segment<T extends SegmentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SegmentDefaultArgs<ExtArgs>>): Prisma__SegmentClient<$Result.GetResult<Prisma.$SegmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -14371,9 +14385,9 @@ export namespace Prisma {
     executionCount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    executions?: boolean | Workflow$executionsArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     segment?: boolean | Workflow$segmentArgs<ExtArgs>
-    executions?: boolean | Workflow$executionsArgs<ExtArgs>
     _count?: boolean | WorkflowCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["workflow"]>
 
@@ -14425,9 +14439,9 @@ export namespace Prisma {
 
   export type WorkflowOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "segmentId" | "name" | "description" | "trigger" | "steps" | "isActive" | "executionCount" | "createdAt" | "updatedAt", ExtArgs["result"]["workflow"]>
   export type WorkflowInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    executions?: boolean | Workflow$executionsArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     segment?: boolean | Workflow$segmentArgs<ExtArgs>
-    executions?: boolean | Workflow$executionsArgs<ExtArgs>
     _count?: boolean | WorkflowCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type WorkflowIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -14442,9 +14456,9 @@ export namespace Prisma {
   export type $WorkflowPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Workflow"
     objects: {
+      executions: Prisma.$WorkflowExecutionPayload<ExtArgs>[]
       organization: Prisma.$OrganizationPayload<ExtArgs>
       segment: Prisma.$SegmentPayload<ExtArgs> | null
-      executions: Prisma.$WorkflowExecutionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -14852,9 +14866,9 @@ export namespace Prisma {
    */
   export interface Prisma__WorkflowClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    executions<T extends Workflow$executionsArgs<ExtArgs> = {}>(args?: Subset<T, Workflow$executionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkflowExecutionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     segment<T extends Workflow$segmentArgs<ExtArgs> = {}>(args?: Subset<T, Workflow$segmentArgs<ExtArgs>>): Prisma__SegmentClient<$Result.GetResult<Prisma.$SegmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    executions<T extends Workflow$executionsArgs<ExtArgs> = {}>(args?: Subset<T, Workflow$executionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkflowExecutionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -15291,25 +15305,6 @@ export namespace Prisma {
   }
 
   /**
-   * Workflow.segment
-   */
-  export type Workflow$segmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Segment
-     */
-    select?: SegmentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Segment
-     */
-    omit?: SegmentOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SegmentInclude<ExtArgs> | null
-    where?: SegmentWhereInput
-  }
-
-  /**
    * Workflow.executions
    */
   export type Workflow$executionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -15331,6 +15326,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: WorkflowExecutionScalarFieldEnum | WorkflowExecutionScalarFieldEnum[]
+  }
+
+  /**
+   * Workflow.segment
+   */
+  export type Workflow$segmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Segment
+     */
+    select?: SegmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Segment
+     */
+    omit?: SegmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SegmentInclude<ExtArgs> | null
+    where?: SegmentWhereInput
   }
 
   /**
@@ -15536,8 +15550,8 @@ export namespace Prisma {
     startedAt?: boolean
     completedAt?: boolean
     error?: boolean
-    workflow?: boolean | WorkflowDefaultArgs<ExtArgs>
     executedBy?: boolean | WorkflowExecution$executedByArgs<ExtArgs>
+    workflow?: boolean | WorkflowDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["workflowExecution"]>
 
   export type WorkflowExecutionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -15549,8 +15563,8 @@ export namespace Prisma {
     startedAt?: boolean
     completedAt?: boolean
     error?: boolean
-    workflow?: boolean | WorkflowDefaultArgs<ExtArgs>
     executedBy?: boolean | WorkflowExecution$executedByArgs<ExtArgs>
+    workflow?: boolean | WorkflowDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["workflowExecution"]>
 
   export type WorkflowExecutionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -15562,8 +15576,8 @@ export namespace Prisma {
     startedAt?: boolean
     completedAt?: boolean
     error?: boolean
-    workflow?: boolean | WorkflowDefaultArgs<ExtArgs>
     executedBy?: boolean | WorkflowExecution$executedByArgs<ExtArgs>
+    workflow?: boolean | WorkflowDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["workflowExecution"]>
 
   export type WorkflowExecutionSelectScalar = {
@@ -15579,23 +15593,23 @@ export namespace Prisma {
 
   export type WorkflowExecutionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "workflowId" | "executedById" | "status" | "progress" | "startedAt" | "completedAt" | "error", ExtArgs["result"]["workflowExecution"]>
   export type WorkflowExecutionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    workflow?: boolean | WorkflowDefaultArgs<ExtArgs>
     executedBy?: boolean | WorkflowExecution$executedByArgs<ExtArgs>
+    workflow?: boolean | WorkflowDefaultArgs<ExtArgs>
   }
   export type WorkflowExecutionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    workflow?: boolean | WorkflowDefaultArgs<ExtArgs>
     executedBy?: boolean | WorkflowExecution$executedByArgs<ExtArgs>
+    workflow?: boolean | WorkflowDefaultArgs<ExtArgs>
   }
   export type WorkflowExecutionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    workflow?: boolean | WorkflowDefaultArgs<ExtArgs>
     executedBy?: boolean | WorkflowExecution$executedByArgs<ExtArgs>
+    workflow?: boolean | WorkflowDefaultArgs<ExtArgs>
   }
 
   export type $WorkflowExecutionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "WorkflowExecution"
     objects: {
-      workflow: Prisma.$WorkflowPayload<ExtArgs>
       executedBy: Prisma.$UserPayload<ExtArgs> | null
+      workflow: Prisma.$WorkflowPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -16000,8 +16014,8 @@ export namespace Prisma {
    */
   export interface Prisma__WorkflowExecutionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    workflow<T extends WorkflowDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WorkflowDefaultArgs<ExtArgs>>): Prisma__WorkflowClient<$Result.GetResult<Prisma.$WorkflowPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     executedBy<T extends WorkflowExecution$executedByArgs<ExtArgs> = {}>(args?: Subset<T, WorkflowExecution$executedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    workflow<T extends WorkflowDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WorkflowDefaultArgs<ExtArgs>>): Prisma__WorkflowClient<$Result.GetResult<Prisma.$WorkflowPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -17632,6 +17646,7 @@ export namespace Prisma {
     city: 'city',
     state: 'state',
     zipCode: 'zipCode',
+    donorPassword: 'donorPassword',
     status: 'status',
     retentionRisk: 'retentionRisk',
     totalGifts: 'totalGifts',
@@ -18046,10 +18061,10 @@ export namespace Prisma {
     name?: StringFilter<"Organization"> | string
     createdAt?: DateTimeFilter<"Organization"> | Date | string
     updatedAt?: DateTimeFilter<"Organization"> | Date | string
-    users?: UserListRelationFilter
-    donors?: DonorListRelationFilter
     campaigns?: CampaignListRelationFilter
+    donors?: DonorListRelationFilter
     segments?: SegmentListRelationFilter
+    users?: UserListRelationFilter
     workflows?: WorkflowListRelationFilter
   }
 
@@ -18058,10 +18073,10 @@ export namespace Prisma {
     name?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    users?: UserOrderByRelationAggregateInput
-    donors?: DonorOrderByRelationAggregateInput
     campaigns?: CampaignOrderByRelationAggregateInput
+    donors?: DonorOrderByRelationAggregateInput
     segments?: SegmentOrderByRelationAggregateInput
+    users?: UserOrderByRelationAggregateInput
     workflows?: WorkflowOrderByRelationAggregateInput
   }
 
@@ -18073,10 +18088,10 @@ export namespace Prisma {
     name?: StringFilter<"Organization"> | string
     createdAt?: DateTimeFilter<"Organization"> | Date | string
     updatedAt?: DateTimeFilter<"Organization"> | Date | string
-    users?: UserListRelationFilter
-    donors?: DonorListRelationFilter
     campaigns?: CampaignListRelationFilter
+    donors?: DonorListRelationFilter
     segments?: SegmentListRelationFilter
+    users?: UserListRelationFilter
     workflows?: WorkflowListRelationFilter
   }, "id">
 
@@ -18113,10 +18128,10 @@ export namespace Prisma {
     organizationId?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+    activityLogs?: ActivityLogListRelationFilter
     sessions?: SessionListRelationFilter
     assignedTasks?: TaskListRelationFilter
-    activityLogs?: ActivityLogListRelationFilter
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     workflowExecutions?: WorkflowExecutionListRelationFilter
   }
 
@@ -18130,10 +18145,10 @@ export namespace Prisma {
     organizationId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    organization?: OrganizationOrderByWithRelationInput
+    activityLogs?: ActivityLogOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
     assignedTasks?: TaskOrderByRelationAggregateInput
-    activityLogs?: ActivityLogOrderByRelationAggregateInput
+    organization?: OrganizationOrderByWithRelationInput
     workflowExecutions?: WorkflowExecutionOrderByRelationAggregateInput
   }
 
@@ -18150,10 +18165,10 @@ export namespace Prisma {
     organizationId?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+    activityLogs?: ActivityLogListRelationFilter
     sessions?: SessionListRelationFilter
     assignedTasks?: TaskListRelationFilter
-    activityLogs?: ActivityLogListRelationFilter
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     workflowExecutions?: WorkflowExecutionListRelationFilter
   }, "id" | "email">
 
@@ -18256,6 +18271,7 @@ export namespace Prisma {
     city?: StringNullableFilter<"Donor"> | string | null
     state?: StringNullableFilter<"Donor"> | string | null
     zipCode?: StringNullableFilter<"Donor"> | string | null
+    donorPassword?: StringNullableFilter<"Donor"> | string | null
     status?: EnumDonorStatusFilter<"Donor"> | $Enums.DonorStatus
     retentionRisk?: EnumRetentionRiskFilter<"Donor"> | $Enums.RetentionRisk
     totalGifts?: IntFilter<"Donor"> | number
@@ -18264,11 +18280,11 @@ export namespace Prisma {
     lastGiftDate?: DateTimeNullableFilter<"Donor"> | Date | string | null
     createdAt?: DateTimeFilter<"Donor"> | Date | string
     updatedAt?: DateTimeFilter<"Donor"> | Date | string
-    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     donations?: DonationListRelationFilter
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     interactions?: InteractionListRelationFilter
-    tasks?: TaskListRelationFilter
     segmentMembers?: SegmentMemberListRelationFilter
+    tasks?: TaskListRelationFilter
   }
 
   export type DonorOrderByWithRelationInput = {
@@ -18282,6 +18298,7 @@ export namespace Prisma {
     city?: SortOrderInput | SortOrder
     state?: SortOrderInput | SortOrder
     zipCode?: SortOrderInput | SortOrder
+    donorPassword?: SortOrderInput | SortOrder
     status?: SortOrder
     retentionRisk?: SortOrder
     totalGifts?: SortOrder
@@ -18290,11 +18307,11 @@ export namespace Prisma {
     lastGiftDate?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    organization?: OrganizationOrderByWithRelationInput
     donations?: DonationOrderByRelationAggregateInput
+    organization?: OrganizationOrderByWithRelationInput
     interactions?: InteractionOrderByRelationAggregateInput
-    tasks?: TaskOrderByRelationAggregateInput
     segmentMembers?: SegmentMemberOrderByRelationAggregateInput
+    tasks?: TaskOrderByRelationAggregateInput
   }
 
   export type DonorWhereUniqueInput = Prisma.AtLeast<{
@@ -18311,6 +18328,7 @@ export namespace Prisma {
     city?: StringNullableFilter<"Donor"> | string | null
     state?: StringNullableFilter<"Donor"> | string | null
     zipCode?: StringNullableFilter<"Donor"> | string | null
+    donorPassword?: StringNullableFilter<"Donor"> | string | null
     status?: EnumDonorStatusFilter<"Donor"> | $Enums.DonorStatus
     retentionRisk?: EnumRetentionRiskFilter<"Donor"> | $Enums.RetentionRisk
     totalGifts?: IntFilter<"Donor"> | number
@@ -18319,11 +18337,11 @@ export namespace Prisma {
     lastGiftDate?: DateTimeNullableFilter<"Donor"> | Date | string | null
     createdAt?: DateTimeFilter<"Donor"> | Date | string
     updatedAt?: DateTimeFilter<"Donor"> | Date | string
-    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     donations?: DonationListRelationFilter
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     interactions?: InteractionListRelationFilter
-    tasks?: TaskListRelationFilter
     segmentMembers?: SegmentMemberListRelationFilter
+    tasks?: TaskListRelationFilter
   }, "id">
 
   export type DonorOrderByWithAggregationInput = {
@@ -18337,6 +18355,7 @@ export namespace Prisma {
     city?: SortOrderInput | SortOrder
     state?: SortOrderInput | SortOrder
     zipCode?: SortOrderInput | SortOrder
+    donorPassword?: SortOrderInput | SortOrder
     status?: SortOrder
     retentionRisk?: SortOrder
     totalGifts?: SortOrder
@@ -18366,6 +18385,7 @@ export namespace Prisma {
     city?: StringNullableWithAggregatesFilter<"Donor"> | string | null
     state?: StringNullableWithAggregatesFilter<"Donor"> | string | null
     zipCode?: StringNullableWithAggregatesFilter<"Donor"> | string | null
+    donorPassword?: StringNullableWithAggregatesFilter<"Donor"> | string | null
     status?: EnumDonorStatusWithAggregatesFilter<"Donor"> | $Enums.DonorStatus
     retentionRisk?: EnumRetentionRiskWithAggregatesFilter<"Donor"> | $Enums.RetentionRisk
     totalGifts?: IntWithAggregatesFilter<"Donor"> | number
@@ -18480,8 +18500,8 @@ export namespace Prisma {
     notes?: StringNullableFilter<"Donation"> | string | null
     createdAt?: DateTimeFilter<"Donation"> | Date | string
     updatedAt?: DateTimeFilter<"Donation"> | Date | string
-    donor?: XOR<DonorScalarRelationFilter, DonorWhereInput>
     campaign?: XOR<CampaignNullableScalarRelationFilter, CampaignWhereInput> | null
+    donor?: XOR<DonorScalarRelationFilter, DonorWhereInput>
   }
 
   export type DonationOrderByWithRelationInput = {
@@ -18495,8 +18515,8 @@ export namespace Prisma {
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    donor?: DonorOrderByWithRelationInput
     campaign?: CampaignOrderByWithRelationInput
+    donor?: DonorOrderByWithRelationInput
   }
 
   export type DonationWhereUniqueInput = Prisma.AtLeast<{
@@ -18513,8 +18533,8 @@ export namespace Prisma {
     notes?: StringNullableFilter<"Donation"> | string | null
     createdAt?: DateTimeFilter<"Donation"> | Date | string
     updatedAt?: DateTimeFilter<"Donation"> | Date | string
-    donor?: XOR<DonorScalarRelationFilter, DonorWhereInput>
     campaign?: XOR<CampaignNullableScalarRelationFilter, CampaignWhereInput> | null
+    donor?: XOR<DonorScalarRelationFilter, DonorWhereInput>
   }, "id">
 
   export type DonationOrderByWithAggregationInput = {
@@ -18641,8 +18661,8 @@ export namespace Prisma {
     completedAt?: DateTimeNullableFilter<"Task"> | Date | string | null
     createdAt?: DateTimeFilter<"Task"> | Date | string
     updatedAt?: DateTimeFilter<"Task"> | Date | string
-    donor?: XOR<DonorNullableScalarRelationFilter, DonorWhereInput> | null
     assignedUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    donor?: XOR<DonorNullableScalarRelationFilter, DonorWhereInput> | null
   }
 
   export type TaskOrderByWithRelationInput = {
@@ -18657,8 +18677,8 @@ export namespace Prisma {
     completedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    donor?: DonorOrderByWithRelationInput
     assignedUser?: UserOrderByWithRelationInput
+    donor?: DonorOrderByWithRelationInput
   }
 
   export type TaskWhereUniqueInput = Prisma.AtLeast<{
@@ -18676,8 +18696,8 @@ export namespace Prisma {
     completedAt?: DateTimeNullableFilter<"Task"> | Date | string | null
     createdAt?: DateTimeFilter<"Task"> | Date | string
     updatedAt?: DateTimeFilter<"Task"> | Date | string
-    donor?: XOR<DonorNullableScalarRelationFilter, DonorWhereInput> | null
     assignedUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    donor?: XOR<DonorNullableScalarRelationFilter, DonorWhereInput> | null
   }, "id">
 
   export type TaskOrderByWithAggregationInput = {
@@ -18727,8 +18747,8 @@ export namespace Prisma {
     lastCalculated?: DateTimeNullableFilter<"Segment"> | Date | string | null
     createdAt?: DateTimeFilter<"Segment"> | Date | string
     updatedAt?: DateTimeFilter<"Segment"> | Date | string
-    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     members?: SegmentMemberListRelationFilter
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     workflows?: WorkflowListRelationFilter
   }
 
@@ -18742,8 +18762,8 @@ export namespace Prisma {
     lastCalculated?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    organization?: OrganizationOrderByWithRelationInput
     members?: SegmentMemberOrderByRelationAggregateInput
+    organization?: OrganizationOrderByWithRelationInput
     workflows?: WorkflowOrderByRelationAggregateInput
   }
 
@@ -18760,8 +18780,8 @@ export namespace Prisma {
     lastCalculated?: DateTimeNullableFilter<"Segment"> | Date | string | null
     createdAt?: DateTimeFilter<"Segment"> | Date | string
     updatedAt?: DateTimeFilter<"Segment"> | Date | string
-    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     members?: SegmentMemberListRelationFilter
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     workflows?: WorkflowListRelationFilter
   }, "id">
 
@@ -18805,8 +18825,8 @@ export namespace Prisma {
     segmentId?: StringFilter<"SegmentMember"> | string
     donorId?: StringFilter<"SegmentMember"> | string
     createdAt?: DateTimeFilter<"SegmentMember"> | Date | string
-    segment?: XOR<SegmentScalarRelationFilter, SegmentWhereInput>
     donor?: XOR<DonorScalarRelationFilter, DonorWhereInput>
+    segment?: XOR<SegmentScalarRelationFilter, SegmentWhereInput>
   }
 
   export type SegmentMemberOrderByWithRelationInput = {
@@ -18814,8 +18834,8 @@ export namespace Prisma {
     segmentId?: SortOrder
     donorId?: SortOrder
     createdAt?: SortOrder
-    segment?: SegmentOrderByWithRelationInput
     donor?: DonorOrderByWithRelationInput
+    segment?: SegmentOrderByWithRelationInput
   }
 
   export type SegmentMemberWhereUniqueInput = Prisma.AtLeast<{
@@ -18827,8 +18847,8 @@ export namespace Prisma {
     segmentId?: StringFilter<"SegmentMember"> | string
     donorId?: StringFilter<"SegmentMember"> | string
     createdAt?: DateTimeFilter<"SegmentMember"> | Date | string
-    segment?: XOR<SegmentScalarRelationFilter, SegmentWhereInput>
     donor?: XOR<DonorScalarRelationFilter, DonorWhereInput>
+    segment?: XOR<SegmentScalarRelationFilter, SegmentWhereInput>
   }, "id" | "segmentId_donorId">
 
   export type SegmentMemberOrderByWithAggregationInput = {
@@ -18866,9 +18886,9 @@ export namespace Prisma {
     executionCount?: IntFilter<"Workflow"> | number
     createdAt?: DateTimeFilter<"Workflow"> | Date | string
     updatedAt?: DateTimeFilter<"Workflow"> | Date | string
+    executions?: WorkflowExecutionListRelationFilter
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     segment?: XOR<SegmentNullableScalarRelationFilter, SegmentWhereInput> | null
-    executions?: WorkflowExecutionListRelationFilter
   }
 
   export type WorkflowOrderByWithRelationInput = {
@@ -18883,9 +18903,9 @@ export namespace Prisma {
     executionCount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    executions?: WorkflowExecutionOrderByRelationAggregateInput
     organization?: OrganizationOrderByWithRelationInput
     segment?: SegmentOrderByWithRelationInput
-    executions?: WorkflowExecutionOrderByRelationAggregateInput
   }
 
   export type WorkflowWhereUniqueInput = Prisma.AtLeast<{
@@ -18903,9 +18923,9 @@ export namespace Prisma {
     executionCount?: IntFilter<"Workflow"> | number
     createdAt?: DateTimeFilter<"Workflow"> | Date | string
     updatedAt?: DateTimeFilter<"Workflow"> | Date | string
+    executions?: WorkflowExecutionListRelationFilter
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     segment?: XOR<SegmentNullableScalarRelationFilter, SegmentWhereInput> | null
-    executions?: WorkflowExecutionListRelationFilter
   }, "id">
 
   export type WorkflowOrderByWithAggregationInput = {
@@ -18956,8 +18976,8 @@ export namespace Prisma {
     startedAt?: DateTimeFilter<"WorkflowExecution"> | Date | string
     completedAt?: DateTimeNullableFilter<"WorkflowExecution"> | Date | string | null
     error?: StringNullableFilter<"WorkflowExecution"> | string | null
-    workflow?: XOR<WorkflowScalarRelationFilter, WorkflowWhereInput>
     executedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    workflow?: XOR<WorkflowScalarRelationFilter, WorkflowWhereInput>
   }
 
   export type WorkflowExecutionOrderByWithRelationInput = {
@@ -18969,8 +18989,8 @@ export namespace Prisma {
     startedAt?: SortOrder
     completedAt?: SortOrderInput | SortOrder
     error?: SortOrderInput | SortOrder
-    workflow?: WorkflowOrderByWithRelationInput
     executedBy?: UserOrderByWithRelationInput
+    workflow?: WorkflowOrderByWithRelationInput
   }
 
   export type WorkflowExecutionWhereUniqueInput = Prisma.AtLeast<{
@@ -18985,8 +19005,8 @@ export namespace Prisma {
     startedAt?: DateTimeFilter<"WorkflowExecution"> | Date | string
     completedAt?: DateTimeNullableFilter<"WorkflowExecution"> | Date | string | null
     error?: StringNullableFilter<"WorkflowExecution"> | string | null
-    workflow?: XOR<WorkflowScalarRelationFilter, WorkflowWhereInput>
     executedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    workflow?: XOR<WorkflowScalarRelationFilter, WorkflowWhereInput>
   }, "id">
 
   export type WorkflowExecutionOrderByWithAggregationInput = {
@@ -19087,10 +19107,10 @@ export namespace Prisma {
     name: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    users?: UserCreateNestedManyWithoutOrganizationInput
-    donors?: DonorCreateNestedManyWithoutOrganizationInput
     campaigns?: CampaignCreateNestedManyWithoutOrganizationInput
+    donors?: DonorCreateNestedManyWithoutOrganizationInput
     segments?: SegmentCreateNestedManyWithoutOrganizationInput
+    users?: UserCreateNestedManyWithoutOrganizationInput
     workflows?: WorkflowCreateNestedManyWithoutOrganizationInput
   }
 
@@ -19099,10 +19119,10 @@ export namespace Prisma {
     name: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
-    donors?: DonorUncheckedCreateNestedManyWithoutOrganizationInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutOrganizationInput
+    donors?: DonorUncheckedCreateNestedManyWithoutOrganizationInput
     segments?: SegmentUncheckedCreateNestedManyWithoutOrganizationInput
+    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     workflows?: WorkflowUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
@@ -19111,10 +19131,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    users?: UserUpdateManyWithoutOrganizationNestedInput
-    donors?: DonorUpdateManyWithoutOrganizationNestedInput
     campaigns?: CampaignUpdateManyWithoutOrganizationNestedInput
+    donors?: DonorUpdateManyWithoutOrganizationNestedInput
     segments?: SegmentUpdateManyWithoutOrganizationNestedInput
+    users?: UserUpdateManyWithoutOrganizationNestedInput
     workflows?: WorkflowUpdateManyWithoutOrganizationNestedInput
   }
 
@@ -19123,10 +19143,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
-    donors?: DonorUncheckedUpdateManyWithoutOrganizationNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutOrganizationNestedInput
+    donors?: DonorUncheckedUpdateManyWithoutOrganizationNestedInput
     segments?: SegmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     workflows?: WorkflowUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
@@ -19160,10 +19180,10 @@ export namespace Prisma {
     role?: $Enums.UserRole
     createdAt?: Date | string
     updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutUsersInput
+    activityLogs?: ActivityLogCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     assignedTasks?: TaskCreateNestedManyWithoutAssignedUserInput
-    activityLogs?: ActivityLogCreateNestedManyWithoutUserInput
+    organization: OrganizationCreateNestedOneWithoutUsersInput
     workflowExecutions?: WorkflowExecutionCreateNestedManyWithoutExecutedByInput
   }
 
@@ -19177,9 +19197,9 @@ export namespace Prisma {
     organizationId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedUserInput
-    activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutUserInput
     workflowExecutions?: WorkflowExecutionUncheckedCreateNestedManyWithoutExecutedByInput
   }
 
@@ -19192,10 +19212,10 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutUsersNestedInput
+    activityLogs?: ActivityLogUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     assignedTasks?: TaskUpdateManyWithoutAssignedUserNestedInput
-    activityLogs?: ActivityLogUpdateManyWithoutUserNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutUsersNestedInput
     workflowExecutions?: WorkflowExecutionUpdateManyWithoutExecutedByNestedInput
   }
 
@@ -19209,9 +19229,9 @@ export namespace Prisma {
     organizationId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activityLogs?: ActivityLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedUserNestedInput
-    activityLogs?: ActivityLogUncheckedUpdateManyWithoutUserNestedInput
     workflowExecutions?: WorkflowExecutionUncheckedUpdateManyWithoutExecutedByNestedInput
   }
 
@@ -19315,6 +19335,7 @@ export namespace Prisma {
     city?: string | null
     state?: string | null
     zipCode?: string | null
+    donorPassword?: string | null
     status?: $Enums.DonorStatus
     retentionRisk?: $Enums.RetentionRisk
     totalGifts?: number
@@ -19323,11 +19344,11 @@ export namespace Prisma {
     lastGiftDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutDonorsInput
     donations?: DonationCreateNestedManyWithoutDonorInput
+    organization: OrganizationCreateNestedOneWithoutDonorsInput
     interactions?: InteractionCreateNestedManyWithoutDonorInput
-    tasks?: TaskCreateNestedManyWithoutDonorInput
     segmentMembers?: SegmentMemberCreateNestedManyWithoutDonorInput
+    tasks?: TaskCreateNestedManyWithoutDonorInput
   }
 
   export type DonorUncheckedCreateInput = {
@@ -19341,6 +19362,7 @@ export namespace Prisma {
     city?: string | null
     state?: string | null
     zipCode?: string | null
+    donorPassword?: string | null
     status?: $Enums.DonorStatus
     retentionRisk?: $Enums.RetentionRisk
     totalGifts?: number
@@ -19351,8 +19373,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     donations?: DonationUncheckedCreateNestedManyWithoutDonorInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutDonorInput
-    tasks?: TaskUncheckedCreateNestedManyWithoutDonorInput
     segmentMembers?: SegmentMemberUncheckedCreateNestedManyWithoutDonorInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutDonorInput
   }
 
   export type DonorUpdateInput = {
@@ -19365,6 +19387,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    donorPassword?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDonorStatusFieldUpdateOperationsInput | $Enums.DonorStatus
     retentionRisk?: EnumRetentionRiskFieldUpdateOperationsInput | $Enums.RetentionRisk
     totalGifts?: IntFieldUpdateOperationsInput | number
@@ -19373,11 +19396,11 @@ export namespace Prisma {
     lastGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutDonorsNestedInput
     donations?: DonationUpdateManyWithoutDonorNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutDonorsNestedInput
     interactions?: InteractionUpdateManyWithoutDonorNestedInput
-    tasks?: TaskUpdateManyWithoutDonorNestedInput
     segmentMembers?: SegmentMemberUpdateManyWithoutDonorNestedInput
+    tasks?: TaskUpdateManyWithoutDonorNestedInput
   }
 
   export type DonorUncheckedUpdateInput = {
@@ -19391,6 +19414,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    donorPassword?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDonorStatusFieldUpdateOperationsInput | $Enums.DonorStatus
     retentionRisk?: EnumRetentionRiskFieldUpdateOperationsInput | $Enums.RetentionRisk
     totalGifts?: IntFieldUpdateOperationsInput | number
@@ -19401,8 +19425,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     donations?: DonationUncheckedUpdateManyWithoutDonorNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutDonorNestedInput
-    tasks?: TaskUncheckedUpdateManyWithoutDonorNestedInput
     segmentMembers?: SegmentMemberUncheckedUpdateManyWithoutDonorNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutDonorNestedInput
   }
 
   export type DonorCreateManyInput = {
@@ -19416,6 +19440,7 @@ export namespace Prisma {
     city?: string | null
     state?: string | null
     zipCode?: string | null
+    donorPassword?: string | null
     status?: $Enums.DonorStatus
     retentionRisk?: $Enums.RetentionRisk
     totalGifts?: number
@@ -19436,6 +19461,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    donorPassword?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDonorStatusFieldUpdateOperationsInput | $Enums.DonorStatus
     retentionRisk?: EnumRetentionRiskFieldUpdateOperationsInput | $Enums.RetentionRisk
     totalGifts?: IntFieldUpdateOperationsInput | number
@@ -19457,6 +19483,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    donorPassword?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDonorStatusFieldUpdateOperationsInput | $Enums.DonorStatus
     retentionRisk?: EnumRetentionRiskFieldUpdateOperationsInput | $Enums.RetentionRisk
     totalGifts?: IntFieldUpdateOperationsInput | number
@@ -19577,8 +19604,8 @@ export namespace Prisma {
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    donor: DonorCreateNestedOneWithoutDonationsInput
     campaign?: CampaignCreateNestedOneWithoutDonationsInput
+    donor: DonorCreateNestedOneWithoutDonationsInput
   }
 
   export type DonationUncheckedCreateInput = {
@@ -19603,8 +19630,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    donor?: DonorUpdateOneRequiredWithoutDonationsNestedInput
     campaign?: CampaignUpdateOneWithoutDonationsNestedInput
+    donor?: DonorUpdateOneRequiredWithoutDonationsNestedInput
   }
 
   export type DonationUncheckedUpdateInput = {
@@ -19750,8 +19777,8 @@ export namespace Prisma {
     completedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    donor?: DonorCreateNestedOneWithoutTasksInput
     assignedUser?: UserCreateNestedOneWithoutAssignedTasksInput
+    donor?: DonorCreateNestedOneWithoutTasksInput
   }
 
   export type TaskUncheckedCreateInput = {
@@ -19778,8 +19805,8 @@ export namespace Prisma {
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    donor?: DonorUpdateOneWithoutTasksNestedInput
     assignedUser?: UserUpdateOneWithoutAssignedTasksNestedInput
+    donor?: DonorUpdateOneWithoutTasksNestedInput
   }
 
   export type TaskUncheckedUpdateInput = {
@@ -19845,8 +19872,8 @@ export namespace Prisma {
     lastCalculated?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutSegmentsInput
     members?: SegmentMemberCreateNestedManyWithoutSegmentInput
+    organization: OrganizationCreateNestedOneWithoutSegmentsInput
     workflows?: WorkflowCreateNestedManyWithoutSegmentInput
   }
 
@@ -19873,8 +19900,8 @@ export namespace Prisma {
     lastCalculated?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutSegmentsNestedInput
     members?: SegmentMemberUpdateManyWithoutSegmentNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutSegmentsNestedInput
     workflows?: WorkflowUpdateManyWithoutSegmentNestedInput
   }
 
@@ -19930,8 +19957,8 @@ export namespace Prisma {
   export type SegmentMemberCreateInput = {
     id?: string
     createdAt?: Date | string
-    segment: SegmentCreateNestedOneWithoutMembersInput
     donor: DonorCreateNestedOneWithoutSegmentMembersInput
+    segment: SegmentCreateNestedOneWithoutMembersInput
   }
 
   export type SegmentMemberUncheckedCreateInput = {
@@ -19944,8 +19971,8 @@ export namespace Prisma {
   export type SegmentMemberUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    segment?: SegmentUpdateOneRequiredWithoutMembersNestedInput
     donor?: DonorUpdateOneRequiredWithoutSegmentMembersNestedInput
+    segment?: SegmentUpdateOneRequiredWithoutMembersNestedInput
   }
 
   export type SegmentMemberUncheckedUpdateInput = {
@@ -19984,9 +20011,9 @@ export namespace Prisma {
     executionCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    executions?: WorkflowExecutionCreateNestedManyWithoutWorkflowInput
     organization: OrganizationCreateNestedOneWithoutWorkflowsInput
     segment?: SegmentCreateNestedOneWithoutWorkflowsInput
-    executions?: WorkflowExecutionCreateNestedManyWithoutWorkflowInput
   }
 
   export type WorkflowUncheckedCreateInput = {
@@ -20014,9 +20041,9 @@ export namespace Prisma {
     executionCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    executions?: WorkflowExecutionUpdateManyWithoutWorkflowNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutWorkflowsNestedInput
     segment?: SegmentUpdateOneWithoutWorkflowsNestedInput
-    executions?: WorkflowExecutionUpdateManyWithoutWorkflowNestedInput
   }
 
   export type WorkflowUncheckedUpdateInput = {
@@ -20081,8 +20108,8 @@ export namespace Prisma {
     startedAt?: Date | string
     completedAt?: Date | string | null
     error?: string | null
-    workflow: WorkflowCreateNestedOneWithoutExecutionsInput
     executedBy?: UserCreateNestedOneWithoutWorkflowExecutionsInput
+    workflow: WorkflowCreateNestedOneWithoutExecutionsInput
   }
 
   export type WorkflowExecutionUncheckedCreateInput = {
@@ -20103,8 +20130,8 @@ export namespace Prisma {
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     error?: NullableStringFieldUpdateOperationsInput | string | null
-    workflow?: WorkflowUpdateOneRequiredWithoutExecutionsNestedInput
     executedBy?: UserUpdateOneWithoutWorkflowExecutionsNestedInput
+    workflow?: WorkflowUpdateOneRequiredWithoutExecutionsNestedInput
   }
 
   export type WorkflowExecutionUncheckedUpdateInput = {
@@ -20244,10 +20271,10 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type UserListRelationFilter = {
-    every?: UserWhereInput
-    some?: UserWhereInput
-    none?: UserWhereInput
+  export type CampaignListRelationFilter = {
+    every?: CampaignWhereInput
+    some?: CampaignWhereInput
+    none?: CampaignWhereInput
   }
 
   export type DonorListRelationFilter = {
@@ -20256,16 +20283,16 @@ export namespace Prisma {
     none?: DonorWhereInput
   }
 
-  export type CampaignListRelationFilter = {
-    every?: CampaignWhereInput
-    some?: CampaignWhereInput
-    none?: CampaignWhereInput
-  }
-
   export type SegmentListRelationFilter = {
     every?: SegmentWhereInput
     some?: SegmentWhereInput
     none?: SegmentWhereInput
+  }
+
+  export type UserListRelationFilter = {
+    every?: UserWhereInput
+    some?: UserWhereInput
+    none?: UserWhereInput
   }
 
   export type WorkflowListRelationFilter = {
@@ -20274,7 +20301,7 @@ export namespace Prisma {
     none?: WorkflowWhereInput
   }
 
-  export type UserOrderByRelationAggregateInput = {
+  export type CampaignOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -20282,11 +20309,11 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type CampaignOrderByRelationAggregateInput = {
+  export type SegmentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
-  export type SegmentOrderByRelationAggregateInput = {
+  export type UserOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -20354,9 +20381,10 @@ export namespace Prisma {
     not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
   }
 
-  export type OrganizationScalarRelationFilter = {
-    is?: OrganizationWhereInput
-    isNot?: OrganizationWhereInput
+  export type ActivityLogListRelationFilter = {
+    every?: ActivityLogWhereInput
+    some?: ActivityLogWhereInput
+    none?: ActivityLogWhereInput
   }
 
   export type SessionListRelationFilter = {
@@ -20371,10 +20399,9 @@ export namespace Prisma {
     none?: TaskWhereInput
   }
 
-  export type ActivityLogListRelationFilter = {
-    every?: ActivityLogWhereInput
-    some?: ActivityLogWhereInput
-    none?: ActivityLogWhereInput
+  export type OrganizationScalarRelationFilter = {
+    is?: OrganizationWhereInput
+    isNot?: OrganizationWhereInput
   }
 
   export type WorkflowExecutionListRelationFilter = {
@@ -20383,15 +20410,15 @@ export namespace Prisma {
     none?: WorkflowExecutionWhereInput
   }
 
+  export type ActivityLogOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type SessionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type TaskOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ActivityLogOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -20582,6 +20609,7 @@ export namespace Prisma {
     city?: SortOrder
     state?: SortOrder
     zipCode?: SortOrder
+    donorPassword?: SortOrder
     status?: SortOrder
     retentionRisk?: SortOrder
     totalGifts?: SortOrder
@@ -20608,6 +20636,7 @@ export namespace Prisma {
     city?: SortOrder
     state?: SortOrder
     zipCode?: SortOrder
+    donorPassword?: SortOrder
     status?: SortOrder
     retentionRisk?: SortOrder
     totalGifts?: SortOrder
@@ -20629,6 +20658,7 @@ export namespace Prisma {
     city?: SortOrder
     state?: SortOrder
     zipCode?: SortOrder
+    donorPassword?: SortOrder
     status?: SortOrder
     retentionRisk?: SortOrder
     totalGifts?: SortOrder
@@ -20829,14 +20859,14 @@ export namespace Prisma {
     not?: NestedEnumDonationTypeFilter<$PrismaModel> | $Enums.DonationType
   }
 
-  export type DonorScalarRelationFilter = {
-    is?: DonorWhereInput
-    isNot?: DonorWhereInput
-  }
-
   export type CampaignNullableScalarRelationFilter = {
     is?: CampaignWhereInput | null
     isNot?: CampaignWhereInput | null
+  }
+
+  export type DonorScalarRelationFilter = {
+    is?: DonorWhereInput
+    isNot?: DonorWhereInput
   }
 
   export type DonationCountOrderByAggregateInput = {
@@ -20963,14 +20993,14 @@ export namespace Prisma {
     not?: NestedEnumTaskPriorityFilter<$PrismaModel> | $Enums.TaskPriority
   }
 
-  export type DonorNullableScalarRelationFilter = {
-    is?: DonorWhereInput | null
-    isNot?: DonorWhereInput | null
-  }
-
   export type UserNullableScalarRelationFilter = {
     is?: UserWhereInput | null
     isNot?: UserWhereInput | null
+  }
+
+  export type DonorNullableScalarRelationFilter = {
+    is?: DonorWhereInput | null
+    isNot?: DonorWhereInput | null
   }
 
   export type TaskCountOrderByAggregateInput = {
@@ -21353,11 +21383,11 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
-  export type UserCreateNestedManyWithoutOrganizationInput = {
-    create?: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput> | UserCreateWithoutOrganizationInput[] | UserUncheckedCreateWithoutOrganizationInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutOrganizationInput | UserCreateOrConnectWithoutOrganizationInput[]
-    createMany?: UserCreateManyOrganizationInputEnvelope
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  export type CampaignCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<CampaignCreateWithoutOrganizationInput, CampaignUncheckedCreateWithoutOrganizationInput> | CampaignCreateWithoutOrganizationInput[] | CampaignUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: CampaignCreateOrConnectWithoutOrganizationInput | CampaignCreateOrConnectWithoutOrganizationInput[]
+    createMany?: CampaignCreateManyOrganizationInputEnvelope
+    connect?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
   }
 
   export type DonorCreateNestedManyWithoutOrganizationInput = {
@@ -21367,18 +21397,18 @@ export namespace Prisma {
     connect?: DonorWhereUniqueInput | DonorWhereUniqueInput[]
   }
 
-  export type CampaignCreateNestedManyWithoutOrganizationInput = {
-    create?: XOR<CampaignCreateWithoutOrganizationInput, CampaignUncheckedCreateWithoutOrganizationInput> | CampaignCreateWithoutOrganizationInput[] | CampaignUncheckedCreateWithoutOrganizationInput[]
-    connectOrCreate?: CampaignCreateOrConnectWithoutOrganizationInput | CampaignCreateOrConnectWithoutOrganizationInput[]
-    createMany?: CampaignCreateManyOrganizationInputEnvelope
-    connect?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
-  }
-
   export type SegmentCreateNestedManyWithoutOrganizationInput = {
     create?: XOR<SegmentCreateWithoutOrganizationInput, SegmentUncheckedCreateWithoutOrganizationInput> | SegmentCreateWithoutOrganizationInput[] | SegmentUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: SegmentCreateOrConnectWithoutOrganizationInput | SegmentCreateOrConnectWithoutOrganizationInput[]
     createMany?: SegmentCreateManyOrganizationInputEnvelope
     connect?: SegmentWhereUniqueInput | SegmentWhereUniqueInput[]
+  }
+
+  export type UserCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput> | UserCreateWithoutOrganizationInput[] | UserUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutOrganizationInput | UserCreateOrConnectWithoutOrganizationInput[]
+    createMany?: UserCreateManyOrganizationInputEnvelope
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
   }
 
   export type WorkflowCreateNestedManyWithoutOrganizationInput = {
@@ -21388,11 +21418,11 @@ export namespace Prisma {
     connect?: WorkflowWhereUniqueInput | WorkflowWhereUniqueInput[]
   }
 
-  export type UserUncheckedCreateNestedManyWithoutOrganizationInput = {
-    create?: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput> | UserCreateWithoutOrganizationInput[] | UserUncheckedCreateWithoutOrganizationInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutOrganizationInput | UserCreateOrConnectWithoutOrganizationInput[]
-    createMany?: UserCreateManyOrganizationInputEnvelope
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  export type CampaignUncheckedCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<CampaignCreateWithoutOrganizationInput, CampaignUncheckedCreateWithoutOrganizationInput> | CampaignCreateWithoutOrganizationInput[] | CampaignUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: CampaignCreateOrConnectWithoutOrganizationInput | CampaignCreateOrConnectWithoutOrganizationInput[]
+    createMany?: CampaignCreateManyOrganizationInputEnvelope
+    connect?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
   }
 
   export type DonorUncheckedCreateNestedManyWithoutOrganizationInput = {
@@ -21402,18 +21432,18 @@ export namespace Prisma {
     connect?: DonorWhereUniqueInput | DonorWhereUniqueInput[]
   }
 
-  export type CampaignUncheckedCreateNestedManyWithoutOrganizationInput = {
-    create?: XOR<CampaignCreateWithoutOrganizationInput, CampaignUncheckedCreateWithoutOrganizationInput> | CampaignCreateWithoutOrganizationInput[] | CampaignUncheckedCreateWithoutOrganizationInput[]
-    connectOrCreate?: CampaignCreateOrConnectWithoutOrganizationInput | CampaignCreateOrConnectWithoutOrganizationInput[]
-    createMany?: CampaignCreateManyOrganizationInputEnvelope
-    connect?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
-  }
-
   export type SegmentUncheckedCreateNestedManyWithoutOrganizationInput = {
     create?: XOR<SegmentCreateWithoutOrganizationInput, SegmentUncheckedCreateWithoutOrganizationInput> | SegmentCreateWithoutOrganizationInput[] | SegmentUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: SegmentCreateOrConnectWithoutOrganizationInput | SegmentCreateOrConnectWithoutOrganizationInput[]
     createMany?: SegmentCreateManyOrganizationInputEnvelope
     connect?: SegmentWhereUniqueInput | SegmentWhereUniqueInput[]
+  }
+
+  export type UserUncheckedCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput> | UserCreateWithoutOrganizationInput[] | UserUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutOrganizationInput | UserCreateOrConnectWithoutOrganizationInput[]
+    createMany?: UserCreateManyOrganizationInputEnvelope
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
   }
 
   export type WorkflowUncheckedCreateNestedManyWithoutOrganizationInput = {
@@ -21431,18 +21461,18 @@ export namespace Prisma {
     set?: Date | string
   }
 
-  export type UserUpdateManyWithoutOrganizationNestedInput = {
-    create?: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput> | UserCreateWithoutOrganizationInput[] | UserUncheckedCreateWithoutOrganizationInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutOrganizationInput | UserCreateOrConnectWithoutOrganizationInput[]
-    upsert?: UserUpsertWithWhereUniqueWithoutOrganizationInput | UserUpsertWithWhereUniqueWithoutOrganizationInput[]
-    createMany?: UserCreateManyOrganizationInputEnvelope
-    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    update?: UserUpdateWithWhereUniqueWithoutOrganizationInput | UserUpdateWithWhereUniqueWithoutOrganizationInput[]
-    updateMany?: UserUpdateManyWithWhereWithoutOrganizationInput | UserUpdateManyWithWhereWithoutOrganizationInput[]
-    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  export type CampaignUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<CampaignCreateWithoutOrganizationInput, CampaignUncheckedCreateWithoutOrganizationInput> | CampaignCreateWithoutOrganizationInput[] | CampaignUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: CampaignCreateOrConnectWithoutOrganizationInput | CampaignCreateOrConnectWithoutOrganizationInput[]
+    upsert?: CampaignUpsertWithWhereUniqueWithoutOrganizationInput | CampaignUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: CampaignCreateManyOrganizationInputEnvelope
+    set?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+    disconnect?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+    delete?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+    connect?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+    update?: CampaignUpdateWithWhereUniqueWithoutOrganizationInput | CampaignUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: CampaignUpdateManyWithWhereWithoutOrganizationInput | CampaignUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: CampaignScalarWhereInput | CampaignScalarWhereInput[]
   }
 
   export type DonorUpdateManyWithoutOrganizationNestedInput = {
@@ -21459,20 +21489,6 @@ export namespace Prisma {
     deleteMany?: DonorScalarWhereInput | DonorScalarWhereInput[]
   }
 
-  export type CampaignUpdateManyWithoutOrganizationNestedInput = {
-    create?: XOR<CampaignCreateWithoutOrganizationInput, CampaignUncheckedCreateWithoutOrganizationInput> | CampaignCreateWithoutOrganizationInput[] | CampaignUncheckedCreateWithoutOrganizationInput[]
-    connectOrCreate?: CampaignCreateOrConnectWithoutOrganizationInput | CampaignCreateOrConnectWithoutOrganizationInput[]
-    upsert?: CampaignUpsertWithWhereUniqueWithoutOrganizationInput | CampaignUpsertWithWhereUniqueWithoutOrganizationInput[]
-    createMany?: CampaignCreateManyOrganizationInputEnvelope
-    set?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
-    disconnect?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
-    delete?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
-    connect?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
-    update?: CampaignUpdateWithWhereUniqueWithoutOrganizationInput | CampaignUpdateWithWhereUniqueWithoutOrganizationInput[]
-    updateMany?: CampaignUpdateManyWithWhereWithoutOrganizationInput | CampaignUpdateManyWithWhereWithoutOrganizationInput[]
-    deleteMany?: CampaignScalarWhereInput | CampaignScalarWhereInput[]
-  }
-
   export type SegmentUpdateManyWithoutOrganizationNestedInput = {
     create?: XOR<SegmentCreateWithoutOrganizationInput, SegmentUncheckedCreateWithoutOrganizationInput> | SegmentCreateWithoutOrganizationInput[] | SegmentUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: SegmentCreateOrConnectWithoutOrganizationInput | SegmentCreateOrConnectWithoutOrganizationInput[]
@@ -21485,6 +21501,20 @@ export namespace Prisma {
     update?: SegmentUpdateWithWhereUniqueWithoutOrganizationInput | SegmentUpdateWithWhereUniqueWithoutOrganizationInput[]
     updateMany?: SegmentUpdateManyWithWhereWithoutOrganizationInput | SegmentUpdateManyWithWhereWithoutOrganizationInput[]
     deleteMany?: SegmentScalarWhereInput | SegmentScalarWhereInput[]
+  }
+
+  export type UserUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput> | UserCreateWithoutOrganizationInput[] | UserUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutOrganizationInput | UserCreateOrConnectWithoutOrganizationInput[]
+    upsert?: UserUpsertWithWhereUniqueWithoutOrganizationInput | UserUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: UserCreateManyOrganizationInputEnvelope
+    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    update?: UserUpdateWithWhereUniqueWithoutOrganizationInput | UserUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: UserUpdateManyWithWhereWithoutOrganizationInput | UserUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
   }
 
   export type WorkflowUpdateManyWithoutOrganizationNestedInput = {
@@ -21501,18 +21531,18 @@ export namespace Prisma {
     deleteMany?: WorkflowScalarWhereInput | WorkflowScalarWhereInput[]
   }
 
-  export type UserUncheckedUpdateManyWithoutOrganizationNestedInput = {
-    create?: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput> | UserCreateWithoutOrganizationInput[] | UserUncheckedCreateWithoutOrganizationInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutOrganizationInput | UserCreateOrConnectWithoutOrganizationInput[]
-    upsert?: UserUpsertWithWhereUniqueWithoutOrganizationInput | UserUpsertWithWhereUniqueWithoutOrganizationInput[]
-    createMany?: UserCreateManyOrganizationInputEnvelope
-    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    update?: UserUpdateWithWhereUniqueWithoutOrganizationInput | UserUpdateWithWhereUniqueWithoutOrganizationInput[]
-    updateMany?: UserUpdateManyWithWhereWithoutOrganizationInput | UserUpdateManyWithWhereWithoutOrganizationInput[]
-    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  export type CampaignUncheckedUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<CampaignCreateWithoutOrganizationInput, CampaignUncheckedCreateWithoutOrganizationInput> | CampaignCreateWithoutOrganizationInput[] | CampaignUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: CampaignCreateOrConnectWithoutOrganizationInput | CampaignCreateOrConnectWithoutOrganizationInput[]
+    upsert?: CampaignUpsertWithWhereUniqueWithoutOrganizationInput | CampaignUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: CampaignCreateManyOrganizationInputEnvelope
+    set?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+    disconnect?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+    delete?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+    connect?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
+    update?: CampaignUpdateWithWhereUniqueWithoutOrganizationInput | CampaignUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: CampaignUpdateManyWithWhereWithoutOrganizationInput | CampaignUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: CampaignScalarWhereInput | CampaignScalarWhereInput[]
   }
 
   export type DonorUncheckedUpdateManyWithoutOrganizationNestedInput = {
@@ -21529,20 +21559,6 @@ export namespace Prisma {
     deleteMany?: DonorScalarWhereInput | DonorScalarWhereInput[]
   }
 
-  export type CampaignUncheckedUpdateManyWithoutOrganizationNestedInput = {
-    create?: XOR<CampaignCreateWithoutOrganizationInput, CampaignUncheckedCreateWithoutOrganizationInput> | CampaignCreateWithoutOrganizationInput[] | CampaignUncheckedCreateWithoutOrganizationInput[]
-    connectOrCreate?: CampaignCreateOrConnectWithoutOrganizationInput | CampaignCreateOrConnectWithoutOrganizationInput[]
-    upsert?: CampaignUpsertWithWhereUniqueWithoutOrganizationInput | CampaignUpsertWithWhereUniqueWithoutOrganizationInput[]
-    createMany?: CampaignCreateManyOrganizationInputEnvelope
-    set?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
-    disconnect?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
-    delete?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
-    connect?: CampaignWhereUniqueInput | CampaignWhereUniqueInput[]
-    update?: CampaignUpdateWithWhereUniqueWithoutOrganizationInput | CampaignUpdateWithWhereUniqueWithoutOrganizationInput[]
-    updateMany?: CampaignUpdateManyWithWhereWithoutOrganizationInput | CampaignUpdateManyWithWhereWithoutOrganizationInput[]
-    deleteMany?: CampaignScalarWhereInput | CampaignScalarWhereInput[]
-  }
-
   export type SegmentUncheckedUpdateManyWithoutOrganizationNestedInput = {
     create?: XOR<SegmentCreateWithoutOrganizationInput, SegmentUncheckedCreateWithoutOrganizationInput> | SegmentCreateWithoutOrganizationInput[] | SegmentUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: SegmentCreateOrConnectWithoutOrganizationInput | SegmentCreateOrConnectWithoutOrganizationInput[]
@@ -21555,6 +21571,20 @@ export namespace Prisma {
     update?: SegmentUpdateWithWhereUniqueWithoutOrganizationInput | SegmentUpdateWithWhereUniqueWithoutOrganizationInput[]
     updateMany?: SegmentUpdateManyWithWhereWithoutOrganizationInput | SegmentUpdateManyWithWhereWithoutOrganizationInput[]
     deleteMany?: SegmentScalarWhereInput | SegmentScalarWhereInput[]
+  }
+
+  export type UserUncheckedUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput> | UserCreateWithoutOrganizationInput[] | UserUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutOrganizationInput | UserCreateOrConnectWithoutOrganizationInput[]
+    upsert?: UserUpsertWithWhereUniqueWithoutOrganizationInput | UserUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: UserCreateManyOrganizationInputEnvelope
+    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    update?: UserUpdateWithWhereUniqueWithoutOrganizationInput | UserUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: UserUpdateManyWithWhereWithoutOrganizationInput | UserUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
   }
 
   export type WorkflowUncheckedUpdateManyWithoutOrganizationNestedInput = {
@@ -21571,10 +21601,11 @@ export namespace Prisma {
     deleteMany?: WorkflowScalarWhereInput | WorkflowScalarWhereInput[]
   }
 
-  export type OrganizationCreateNestedOneWithoutUsersInput = {
-    create?: XOR<OrganizationCreateWithoutUsersInput, OrganizationUncheckedCreateWithoutUsersInput>
-    connectOrCreate?: OrganizationCreateOrConnectWithoutUsersInput
-    connect?: OrganizationWhereUniqueInput
+  export type ActivityLogCreateNestedManyWithoutUserInput = {
+    create?: XOR<ActivityLogCreateWithoutUserInput, ActivityLogUncheckedCreateWithoutUserInput> | ActivityLogCreateWithoutUserInput[] | ActivityLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ActivityLogCreateOrConnectWithoutUserInput | ActivityLogCreateOrConnectWithoutUserInput[]
+    createMany?: ActivityLogCreateManyUserInputEnvelope
+    connect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
   }
 
   export type SessionCreateNestedManyWithoutUserInput = {
@@ -21591,11 +21622,10 @@ export namespace Prisma {
     connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
   }
 
-  export type ActivityLogCreateNestedManyWithoutUserInput = {
-    create?: XOR<ActivityLogCreateWithoutUserInput, ActivityLogUncheckedCreateWithoutUserInput> | ActivityLogCreateWithoutUserInput[] | ActivityLogUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ActivityLogCreateOrConnectWithoutUserInput | ActivityLogCreateOrConnectWithoutUserInput[]
-    createMany?: ActivityLogCreateManyUserInputEnvelope
-    connect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+  export type OrganizationCreateNestedOneWithoutUsersInput = {
+    create?: XOR<OrganizationCreateWithoutUsersInput, OrganizationUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutUsersInput
+    connect?: OrganizationWhereUniqueInput
   }
 
   export type WorkflowExecutionCreateNestedManyWithoutExecutedByInput = {
@@ -21603,6 +21633,13 @@ export namespace Prisma {
     connectOrCreate?: WorkflowExecutionCreateOrConnectWithoutExecutedByInput | WorkflowExecutionCreateOrConnectWithoutExecutedByInput[]
     createMany?: WorkflowExecutionCreateManyExecutedByInputEnvelope
     connect?: WorkflowExecutionWhereUniqueInput | WorkflowExecutionWhereUniqueInput[]
+  }
+
+  export type ActivityLogUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ActivityLogCreateWithoutUserInput, ActivityLogUncheckedCreateWithoutUserInput> | ActivityLogCreateWithoutUserInput[] | ActivityLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ActivityLogCreateOrConnectWithoutUserInput | ActivityLogCreateOrConnectWithoutUserInput[]
+    createMany?: ActivityLogCreateManyUserInputEnvelope
+    connect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
   }
 
   export type SessionUncheckedCreateNestedManyWithoutUserInput = {
@@ -21619,13 +21656,6 @@ export namespace Prisma {
     connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
   }
 
-  export type ActivityLogUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<ActivityLogCreateWithoutUserInput, ActivityLogUncheckedCreateWithoutUserInput> | ActivityLogCreateWithoutUserInput[] | ActivityLogUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ActivityLogCreateOrConnectWithoutUserInput | ActivityLogCreateOrConnectWithoutUserInput[]
-    createMany?: ActivityLogCreateManyUserInputEnvelope
-    connect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
-  }
-
   export type WorkflowExecutionUncheckedCreateNestedManyWithoutExecutedByInput = {
     create?: XOR<WorkflowExecutionCreateWithoutExecutedByInput, WorkflowExecutionUncheckedCreateWithoutExecutedByInput> | WorkflowExecutionCreateWithoutExecutedByInput[] | WorkflowExecutionUncheckedCreateWithoutExecutedByInput[]
     connectOrCreate?: WorkflowExecutionCreateOrConnectWithoutExecutedByInput | WorkflowExecutionCreateOrConnectWithoutExecutedByInput[]
@@ -21637,12 +21667,18 @@ export namespace Prisma {
     set?: $Enums.UserRole
   }
 
-  export type OrganizationUpdateOneRequiredWithoutUsersNestedInput = {
-    create?: XOR<OrganizationCreateWithoutUsersInput, OrganizationUncheckedCreateWithoutUsersInput>
-    connectOrCreate?: OrganizationCreateOrConnectWithoutUsersInput
-    upsert?: OrganizationUpsertWithoutUsersInput
-    connect?: OrganizationWhereUniqueInput
-    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutUsersInput, OrganizationUpdateWithoutUsersInput>, OrganizationUncheckedUpdateWithoutUsersInput>
+  export type ActivityLogUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ActivityLogCreateWithoutUserInput, ActivityLogUncheckedCreateWithoutUserInput> | ActivityLogCreateWithoutUserInput[] | ActivityLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ActivityLogCreateOrConnectWithoutUserInput | ActivityLogCreateOrConnectWithoutUserInput[]
+    upsert?: ActivityLogUpsertWithWhereUniqueWithoutUserInput | ActivityLogUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ActivityLogCreateManyUserInputEnvelope
+    set?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+    disconnect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+    delete?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+    connect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+    update?: ActivityLogUpdateWithWhereUniqueWithoutUserInput | ActivityLogUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ActivityLogUpdateManyWithWhereWithoutUserInput | ActivityLogUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ActivityLogScalarWhereInput | ActivityLogScalarWhereInput[]
   }
 
   export type SessionUpdateManyWithoutUserNestedInput = {
@@ -21673,18 +21709,12 @@ export namespace Prisma {
     deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
   }
 
-  export type ActivityLogUpdateManyWithoutUserNestedInput = {
-    create?: XOR<ActivityLogCreateWithoutUserInput, ActivityLogUncheckedCreateWithoutUserInput> | ActivityLogCreateWithoutUserInput[] | ActivityLogUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ActivityLogCreateOrConnectWithoutUserInput | ActivityLogCreateOrConnectWithoutUserInput[]
-    upsert?: ActivityLogUpsertWithWhereUniqueWithoutUserInput | ActivityLogUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: ActivityLogCreateManyUserInputEnvelope
-    set?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
-    disconnect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
-    delete?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
-    connect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
-    update?: ActivityLogUpdateWithWhereUniqueWithoutUserInput | ActivityLogUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: ActivityLogUpdateManyWithWhereWithoutUserInput | ActivityLogUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: ActivityLogScalarWhereInput | ActivityLogScalarWhereInput[]
+  export type OrganizationUpdateOneRequiredWithoutUsersNestedInput = {
+    create?: XOR<OrganizationCreateWithoutUsersInput, OrganizationUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutUsersInput
+    upsert?: OrganizationUpsertWithoutUsersInput
+    connect?: OrganizationWhereUniqueInput
+    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutUsersInput, OrganizationUpdateWithoutUsersInput>, OrganizationUncheckedUpdateWithoutUsersInput>
   }
 
   export type WorkflowExecutionUpdateManyWithoutExecutedByNestedInput = {
@@ -21699,6 +21729,20 @@ export namespace Prisma {
     update?: WorkflowExecutionUpdateWithWhereUniqueWithoutExecutedByInput | WorkflowExecutionUpdateWithWhereUniqueWithoutExecutedByInput[]
     updateMany?: WorkflowExecutionUpdateManyWithWhereWithoutExecutedByInput | WorkflowExecutionUpdateManyWithWhereWithoutExecutedByInput[]
     deleteMany?: WorkflowExecutionScalarWhereInput | WorkflowExecutionScalarWhereInput[]
+  }
+
+  export type ActivityLogUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ActivityLogCreateWithoutUserInput, ActivityLogUncheckedCreateWithoutUserInput> | ActivityLogCreateWithoutUserInput[] | ActivityLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ActivityLogCreateOrConnectWithoutUserInput | ActivityLogCreateOrConnectWithoutUserInput[]
+    upsert?: ActivityLogUpsertWithWhereUniqueWithoutUserInput | ActivityLogUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ActivityLogCreateManyUserInputEnvelope
+    set?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+    disconnect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+    delete?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+    connect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+    update?: ActivityLogUpdateWithWhereUniqueWithoutUserInput | ActivityLogUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ActivityLogUpdateManyWithWhereWithoutUserInput | ActivityLogUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ActivityLogScalarWhereInput | ActivityLogScalarWhereInput[]
   }
 
   export type SessionUncheckedUpdateManyWithoutUserNestedInput = {
@@ -21729,20 +21773,6 @@ export namespace Prisma {
     deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
   }
 
-  export type ActivityLogUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<ActivityLogCreateWithoutUserInput, ActivityLogUncheckedCreateWithoutUserInput> | ActivityLogCreateWithoutUserInput[] | ActivityLogUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ActivityLogCreateOrConnectWithoutUserInput | ActivityLogCreateOrConnectWithoutUserInput[]
-    upsert?: ActivityLogUpsertWithWhereUniqueWithoutUserInput | ActivityLogUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: ActivityLogCreateManyUserInputEnvelope
-    set?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
-    disconnect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
-    delete?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
-    connect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
-    update?: ActivityLogUpdateWithWhereUniqueWithoutUserInput | ActivityLogUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: ActivityLogUpdateManyWithWhereWithoutUserInput | ActivityLogUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: ActivityLogScalarWhereInput | ActivityLogScalarWhereInput[]
-  }
-
   export type WorkflowExecutionUncheckedUpdateManyWithoutExecutedByNestedInput = {
     create?: XOR<WorkflowExecutionCreateWithoutExecutedByInput, WorkflowExecutionUncheckedCreateWithoutExecutedByInput> | WorkflowExecutionCreateWithoutExecutedByInput[] | WorkflowExecutionUncheckedCreateWithoutExecutedByInput[]
     connectOrCreate?: WorkflowExecutionCreateOrConnectWithoutExecutedByInput | WorkflowExecutionCreateOrConnectWithoutExecutedByInput[]
@@ -21771,17 +21801,17 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSessionsInput, UserUpdateWithoutSessionsInput>, UserUncheckedUpdateWithoutSessionsInput>
   }
 
-  export type OrganizationCreateNestedOneWithoutDonorsInput = {
-    create?: XOR<OrganizationCreateWithoutDonorsInput, OrganizationUncheckedCreateWithoutDonorsInput>
-    connectOrCreate?: OrganizationCreateOrConnectWithoutDonorsInput
-    connect?: OrganizationWhereUniqueInput
-  }
-
   export type DonationCreateNestedManyWithoutDonorInput = {
     create?: XOR<DonationCreateWithoutDonorInput, DonationUncheckedCreateWithoutDonorInput> | DonationCreateWithoutDonorInput[] | DonationUncheckedCreateWithoutDonorInput[]
     connectOrCreate?: DonationCreateOrConnectWithoutDonorInput | DonationCreateOrConnectWithoutDonorInput[]
     createMany?: DonationCreateManyDonorInputEnvelope
     connect?: DonationWhereUniqueInput | DonationWhereUniqueInput[]
+  }
+
+  export type OrganizationCreateNestedOneWithoutDonorsInput = {
+    create?: XOR<OrganizationCreateWithoutDonorsInput, OrganizationUncheckedCreateWithoutDonorsInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutDonorsInput
+    connect?: OrganizationWhereUniqueInput
   }
 
   export type InteractionCreateNestedManyWithoutDonorInput = {
@@ -21791,18 +21821,18 @@ export namespace Prisma {
     connect?: InteractionWhereUniqueInput | InteractionWhereUniqueInput[]
   }
 
-  export type TaskCreateNestedManyWithoutDonorInput = {
-    create?: XOR<TaskCreateWithoutDonorInput, TaskUncheckedCreateWithoutDonorInput> | TaskCreateWithoutDonorInput[] | TaskUncheckedCreateWithoutDonorInput[]
-    connectOrCreate?: TaskCreateOrConnectWithoutDonorInput | TaskCreateOrConnectWithoutDonorInput[]
-    createMany?: TaskCreateManyDonorInputEnvelope
-    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-  }
-
   export type SegmentMemberCreateNestedManyWithoutDonorInput = {
     create?: XOR<SegmentMemberCreateWithoutDonorInput, SegmentMemberUncheckedCreateWithoutDonorInput> | SegmentMemberCreateWithoutDonorInput[] | SegmentMemberUncheckedCreateWithoutDonorInput[]
     connectOrCreate?: SegmentMemberCreateOrConnectWithoutDonorInput | SegmentMemberCreateOrConnectWithoutDonorInput[]
     createMany?: SegmentMemberCreateManyDonorInputEnvelope
     connect?: SegmentMemberWhereUniqueInput | SegmentMemberWhereUniqueInput[]
+  }
+
+  export type TaskCreateNestedManyWithoutDonorInput = {
+    create?: XOR<TaskCreateWithoutDonorInput, TaskUncheckedCreateWithoutDonorInput> | TaskCreateWithoutDonorInput[] | TaskUncheckedCreateWithoutDonorInput[]
+    connectOrCreate?: TaskCreateOrConnectWithoutDonorInput | TaskCreateOrConnectWithoutDonorInput[]
+    createMany?: TaskCreateManyDonorInputEnvelope
+    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
   }
 
   export type DonationUncheckedCreateNestedManyWithoutDonorInput = {
@@ -21819,18 +21849,18 @@ export namespace Prisma {
     connect?: InteractionWhereUniqueInput | InteractionWhereUniqueInput[]
   }
 
-  export type TaskUncheckedCreateNestedManyWithoutDonorInput = {
-    create?: XOR<TaskCreateWithoutDonorInput, TaskUncheckedCreateWithoutDonorInput> | TaskCreateWithoutDonorInput[] | TaskUncheckedCreateWithoutDonorInput[]
-    connectOrCreate?: TaskCreateOrConnectWithoutDonorInput | TaskCreateOrConnectWithoutDonorInput[]
-    createMany?: TaskCreateManyDonorInputEnvelope
-    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-  }
-
   export type SegmentMemberUncheckedCreateNestedManyWithoutDonorInput = {
     create?: XOR<SegmentMemberCreateWithoutDonorInput, SegmentMemberUncheckedCreateWithoutDonorInput> | SegmentMemberCreateWithoutDonorInput[] | SegmentMemberUncheckedCreateWithoutDonorInput[]
     connectOrCreate?: SegmentMemberCreateOrConnectWithoutDonorInput | SegmentMemberCreateOrConnectWithoutDonorInput[]
     createMany?: SegmentMemberCreateManyDonorInputEnvelope
     connect?: SegmentMemberWhereUniqueInput | SegmentMemberWhereUniqueInput[]
+  }
+
+  export type TaskUncheckedCreateNestedManyWithoutDonorInput = {
+    create?: XOR<TaskCreateWithoutDonorInput, TaskUncheckedCreateWithoutDonorInput> | TaskCreateWithoutDonorInput[] | TaskUncheckedCreateWithoutDonorInput[]
+    connectOrCreate?: TaskCreateOrConnectWithoutDonorInput | TaskCreateOrConnectWithoutDonorInput[]
+    createMany?: TaskCreateManyDonorInputEnvelope
+    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -21865,14 +21895,6 @@ export namespace Prisma {
     set?: Date | string | null
   }
 
-  export type OrganizationUpdateOneRequiredWithoutDonorsNestedInput = {
-    create?: XOR<OrganizationCreateWithoutDonorsInput, OrganizationUncheckedCreateWithoutDonorsInput>
-    connectOrCreate?: OrganizationCreateOrConnectWithoutDonorsInput
-    upsert?: OrganizationUpsertWithoutDonorsInput
-    connect?: OrganizationWhereUniqueInput
-    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutDonorsInput, OrganizationUpdateWithoutDonorsInput>, OrganizationUncheckedUpdateWithoutDonorsInput>
-  }
-
   export type DonationUpdateManyWithoutDonorNestedInput = {
     create?: XOR<DonationCreateWithoutDonorInput, DonationUncheckedCreateWithoutDonorInput> | DonationCreateWithoutDonorInput[] | DonationUncheckedCreateWithoutDonorInput[]
     connectOrCreate?: DonationCreateOrConnectWithoutDonorInput | DonationCreateOrConnectWithoutDonorInput[]
@@ -21885,6 +21907,14 @@ export namespace Prisma {
     update?: DonationUpdateWithWhereUniqueWithoutDonorInput | DonationUpdateWithWhereUniqueWithoutDonorInput[]
     updateMany?: DonationUpdateManyWithWhereWithoutDonorInput | DonationUpdateManyWithWhereWithoutDonorInput[]
     deleteMany?: DonationScalarWhereInput | DonationScalarWhereInput[]
+  }
+
+  export type OrganizationUpdateOneRequiredWithoutDonorsNestedInput = {
+    create?: XOR<OrganizationCreateWithoutDonorsInput, OrganizationUncheckedCreateWithoutDonorsInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutDonorsInput
+    upsert?: OrganizationUpsertWithoutDonorsInput
+    connect?: OrganizationWhereUniqueInput
+    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutDonorsInput, OrganizationUpdateWithoutDonorsInput>, OrganizationUncheckedUpdateWithoutDonorsInput>
   }
 
   export type InteractionUpdateManyWithoutDonorNestedInput = {
@@ -21901,20 +21931,6 @@ export namespace Prisma {
     deleteMany?: InteractionScalarWhereInput | InteractionScalarWhereInput[]
   }
 
-  export type TaskUpdateManyWithoutDonorNestedInput = {
-    create?: XOR<TaskCreateWithoutDonorInput, TaskUncheckedCreateWithoutDonorInput> | TaskCreateWithoutDonorInput[] | TaskUncheckedCreateWithoutDonorInput[]
-    connectOrCreate?: TaskCreateOrConnectWithoutDonorInput | TaskCreateOrConnectWithoutDonorInput[]
-    upsert?: TaskUpsertWithWhereUniqueWithoutDonorInput | TaskUpsertWithWhereUniqueWithoutDonorInput[]
-    createMany?: TaskCreateManyDonorInputEnvelope
-    set?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    disconnect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    delete?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    update?: TaskUpdateWithWhereUniqueWithoutDonorInput | TaskUpdateWithWhereUniqueWithoutDonorInput[]
-    updateMany?: TaskUpdateManyWithWhereWithoutDonorInput | TaskUpdateManyWithWhereWithoutDonorInput[]
-    deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
-  }
-
   export type SegmentMemberUpdateManyWithoutDonorNestedInput = {
     create?: XOR<SegmentMemberCreateWithoutDonorInput, SegmentMemberUncheckedCreateWithoutDonorInput> | SegmentMemberCreateWithoutDonorInput[] | SegmentMemberUncheckedCreateWithoutDonorInput[]
     connectOrCreate?: SegmentMemberCreateOrConnectWithoutDonorInput | SegmentMemberCreateOrConnectWithoutDonorInput[]
@@ -21927,6 +21943,20 @@ export namespace Prisma {
     update?: SegmentMemberUpdateWithWhereUniqueWithoutDonorInput | SegmentMemberUpdateWithWhereUniqueWithoutDonorInput[]
     updateMany?: SegmentMemberUpdateManyWithWhereWithoutDonorInput | SegmentMemberUpdateManyWithWhereWithoutDonorInput[]
     deleteMany?: SegmentMemberScalarWhereInput | SegmentMemberScalarWhereInput[]
+  }
+
+  export type TaskUpdateManyWithoutDonorNestedInput = {
+    create?: XOR<TaskCreateWithoutDonorInput, TaskUncheckedCreateWithoutDonorInput> | TaskCreateWithoutDonorInput[] | TaskUncheckedCreateWithoutDonorInput[]
+    connectOrCreate?: TaskCreateOrConnectWithoutDonorInput | TaskCreateOrConnectWithoutDonorInput[]
+    upsert?: TaskUpsertWithWhereUniqueWithoutDonorInput | TaskUpsertWithWhereUniqueWithoutDonorInput[]
+    createMany?: TaskCreateManyDonorInputEnvelope
+    set?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    disconnect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    delete?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    update?: TaskUpdateWithWhereUniqueWithoutDonorInput | TaskUpdateWithWhereUniqueWithoutDonorInput[]
+    updateMany?: TaskUpdateManyWithWhereWithoutDonorInput | TaskUpdateManyWithWhereWithoutDonorInput[]
+    deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
   }
 
   export type DonationUncheckedUpdateManyWithoutDonorNestedInput = {
@@ -21957,20 +21987,6 @@ export namespace Prisma {
     deleteMany?: InteractionScalarWhereInput | InteractionScalarWhereInput[]
   }
 
-  export type TaskUncheckedUpdateManyWithoutDonorNestedInput = {
-    create?: XOR<TaskCreateWithoutDonorInput, TaskUncheckedCreateWithoutDonorInput> | TaskCreateWithoutDonorInput[] | TaskUncheckedCreateWithoutDonorInput[]
-    connectOrCreate?: TaskCreateOrConnectWithoutDonorInput | TaskCreateOrConnectWithoutDonorInput[]
-    upsert?: TaskUpsertWithWhereUniqueWithoutDonorInput | TaskUpsertWithWhereUniqueWithoutDonorInput[]
-    createMany?: TaskCreateManyDonorInputEnvelope
-    set?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    disconnect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    delete?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    update?: TaskUpdateWithWhereUniqueWithoutDonorInput | TaskUpdateWithWhereUniqueWithoutDonorInput[]
-    updateMany?: TaskUpdateManyWithWhereWithoutDonorInput | TaskUpdateManyWithWhereWithoutDonorInput[]
-    deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
-  }
-
   export type SegmentMemberUncheckedUpdateManyWithoutDonorNestedInput = {
     create?: XOR<SegmentMemberCreateWithoutDonorInput, SegmentMemberUncheckedCreateWithoutDonorInput> | SegmentMemberCreateWithoutDonorInput[] | SegmentMemberUncheckedCreateWithoutDonorInput[]
     connectOrCreate?: SegmentMemberCreateOrConnectWithoutDonorInput | SegmentMemberCreateOrConnectWithoutDonorInput[]
@@ -21983,6 +21999,20 @@ export namespace Prisma {
     update?: SegmentMemberUpdateWithWhereUniqueWithoutDonorInput | SegmentMemberUpdateWithWhereUniqueWithoutDonorInput[]
     updateMany?: SegmentMemberUpdateManyWithWhereWithoutDonorInput | SegmentMemberUpdateManyWithWhereWithoutDonorInput[]
     deleteMany?: SegmentMemberScalarWhereInput | SegmentMemberScalarWhereInput[]
+  }
+
+  export type TaskUncheckedUpdateManyWithoutDonorNestedInput = {
+    create?: XOR<TaskCreateWithoutDonorInput, TaskUncheckedCreateWithoutDonorInput> | TaskCreateWithoutDonorInput[] | TaskUncheckedCreateWithoutDonorInput[]
+    connectOrCreate?: TaskCreateOrConnectWithoutDonorInput | TaskCreateOrConnectWithoutDonorInput[]
+    upsert?: TaskUpsertWithWhereUniqueWithoutDonorInput | TaskUpsertWithWhereUniqueWithoutDonorInput[]
+    createMany?: TaskCreateManyDonorInputEnvelope
+    set?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    disconnect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    delete?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    update?: TaskUpdateWithWhereUniqueWithoutDonorInput | TaskUpdateWithWhereUniqueWithoutDonorInput[]
+    updateMany?: TaskUpdateManyWithWhereWithoutDonorInput | TaskUpdateManyWithWhereWithoutDonorInput[]
+    deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
   }
 
   export type OrganizationCreateNestedOneWithoutCampaignsInput = {
@@ -22053,28 +22083,20 @@ export namespace Prisma {
     deleteMany?: DonationScalarWhereInput | DonationScalarWhereInput[]
   }
 
-  export type DonorCreateNestedOneWithoutDonationsInput = {
-    create?: XOR<DonorCreateWithoutDonationsInput, DonorUncheckedCreateWithoutDonationsInput>
-    connectOrCreate?: DonorCreateOrConnectWithoutDonationsInput
-    connect?: DonorWhereUniqueInput
-  }
-
   export type CampaignCreateNestedOneWithoutDonationsInput = {
     create?: XOR<CampaignCreateWithoutDonationsInput, CampaignUncheckedCreateWithoutDonationsInput>
     connectOrCreate?: CampaignCreateOrConnectWithoutDonationsInput
     connect?: CampaignWhereUniqueInput
   }
 
-  export type EnumDonationTypeFieldUpdateOperationsInput = {
-    set?: $Enums.DonationType
-  }
-
-  export type DonorUpdateOneRequiredWithoutDonationsNestedInput = {
+  export type DonorCreateNestedOneWithoutDonationsInput = {
     create?: XOR<DonorCreateWithoutDonationsInput, DonorUncheckedCreateWithoutDonationsInput>
     connectOrCreate?: DonorCreateOrConnectWithoutDonationsInput
-    upsert?: DonorUpsertWithoutDonationsInput
     connect?: DonorWhereUniqueInput
-    update?: XOR<XOR<DonorUpdateToOneWithWhereWithoutDonationsInput, DonorUpdateWithoutDonationsInput>, DonorUncheckedUpdateWithoutDonationsInput>
+  }
+
+  export type EnumDonationTypeFieldUpdateOperationsInput = {
+    set?: $Enums.DonationType
   }
 
   export type CampaignUpdateOneWithoutDonationsNestedInput = {
@@ -22085,6 +22107,14 @@ export namespace Prisma {
     delete?: CampaignWhereInput | boolean
     connect?: CampaignWhereUniqueInput
     update?: XOR<XOR<CampaignUpdateToOneWithWhereWithoutDonationsInput, CampaignUpdateWithoutDonationsInput>, CampaignUncheckedUpdateWithoutDonationsInput>
+  }
+
+  export type DonorUpdateOneRequiredWithoutDonationsNestedInput = {
+    create?: XOR<DonorCreateWithoutDonationsInput, DonorUncheckedCreateWithoutDonationsInput>
+    connectOrCreate?: DonorCreateOrConnectWithoutDonationsInput
+    upsert?: DonorUpsertWithoutDonationsInput
+    connect?: DonorWhereUniqueInput
+    update?: XOR<XOR<DonorUpdateToOneWithWhereWithoutDonationsInput, DonorUpdateWithoutDonationsInput>, DonorUncheckedUpdateWithoutDonationsInput>
   }
 
   export type DonorCreateNestedOneWithoutInteractionsInput = {
@@ -22105,16 +22135,16 @@ export namespace Prisma {
     update?: XOR<XOR<DonorUpdateToOneWithWhereWithoutInteractionsInput, DonorUpdateWithoutInteractionsInput>, DonorUncheckedUpdateWithoutInteractionsInput>
   }
 
-  export type DonorCreateNestedOneWithoutTasksInput = {
-    create?: XOR<DonorCreateWithoutTasksInput, DonorUncheckedCreateWithoutTasksInput>
-    connectOrCreate?: DonorCreateOrConnectWithoutTasksInput
-    connect?: DonorWhereUniqueInput
-  }
-
   export type UserCreateNestedOneWithoutAssignedTasksInput = {
     create?: XOR<UserCreateWithoutAssignedTasksInput, UserUncheckedCreateWithoutAssignedTasksInput>
     connectOrCreate?: UserCreateOrConnectWithoutAssignedTasksInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type DonorCreateNestedOneWithoutTasksInput = {
+    create?: XOR<DonorCreateWithoutTasksInput, DonorUncheckedCreateWithoutTasksInput>
+    connectOrCreate?: DonorCreateOrConnectWithoutTasksInput
+    connect?: DonorWhereUniqueInput
   }
 
   export type EnumTaskStatusFieldUpdateOperationsInput = {
@@ -22123,16 +22153,6 @@ export namespace Prisma {
 
   export type EnumTaskPriorityFieldUpdateOperationsInput = {
     set?: $Enums.TaskPriority
-  }
-
-  export type DonorUpdateOneWithoutTasksNestedInput = {
-    create?: XOR<DonorCreateWithoutTasksInput, DonorUncheckedCreateWithoutTasksInput>
-    connectOrCreate?: DonorCreateOrConnectWithoutTasksInput
-    upsert?: DonorUpsertWithoutTasksInput
-    disconnect?: DonorWhereInput | boolean
-    delete?: DonorWhereInput | boolean
-    connect?: DonorWhereUniqueInput
-    update?: XOR<XOR<DonorUpdateToOneWithWhereWithoutTasksInput, DonorUpdateWithoutTasksInput>, DonorUncheckedUpdateWithoutTasksInput>
   }
 
   export type UserUpdateOneWithoutAssignedTasksNestedInput = {
@@ -22145,10 +22165,14 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAssignedTasksInput, UserUpdateWithoutAssignedTasksInput>, UserUncheckedUpdateWithoutAssignedTasksInput>
   }
 
-  export type OrganizationCreateNestedOneWithoutSegmentsInput = {
-    create?: XOR<OrganizationCreateWithoutSegmentsInput, OrganizationUncheckedCreateWithoutSegmentsInput>
-    connectOrCreate?: OrganizationCreateOrConnectWithoutSegmentsInput
-    connect?: OrganizationWhereUniqueInput
+  export type DonorUpdateOneWithoutTasksNestedInput = {
+    create?: XOR<DonorCreateWithoutTasksInput, DonorUncheckedCreateWithoutTasksInput>
+    connectOrCreate?: DonorCreateOrConnectWithoutTasksInput
+    upsert?: DonorUpsertWithoutTasksInput
+    disconnect?: DonorWhereInput | boolean
+    delete?: DonorWhereInput | boolean
+    connect?: DonorWhereUniqueInput
+    update?: XOR<XOR<DonorUpdateToOneWithWhereWithoutTasksInput, DonorUpdateWithoutTasksInput>, DonorUncheckedUpdateWithoutTasksInput>
   }
 
   export type SegmentMemberCreateNestedManyWithoutSegmentInput = {
@@ -22156,6 +22180,12 @@ export namespace Prisma {
     connectOrCreate?: SegmentMemberCreateOrConnectWithoutSegmentInput | SegmentMemberCreateOrConnectWithoutSegmentInput[]
     createMany?: SegmentMemberCreateManySegmentInputEnvelope
     connect?: SegmentMemberWhereUniqueInput | SegmentMemberWhereUniqueInput[]
+  }
+
+  export type OrganizationCreateNestedOneWithoutSegmentsInput = {
+    create?: XOR<OrganizationCreateWithoutSegmentsInput, OrganizationUncheckedCreateWithoutSegmentsInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutSegmentsInput
+    connect?: OrganizationWhereUniqueInput
   }
 
   export type WorkflowCreateNestedManyWithoutSegmentInput = {
@@ -22179,14 +22209,6 @@ export namespace Prisma {
     connect?: WorkflowWhereUniqueInput | WorkflowWhereUniqueInput[]
   }
 
-  export type OrganizationUpdateOneRequiredWithoutSegmentsNestedInput = {
-    create?: XOR<OrganizationCreateWithoutSegmentsInput, OrganizationUncheckedCreateWithoutSegmentsInput>
-    connectOrCreate?: OrganizationCreateOrConnectWithoutSegmentsInput
-    upsert?: OrganizationUpsertWithoutSegmentsInput
-    connect?: OrganizationWhereUniqueInput
-    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutSegmentsInput, OrganizationUpdateWithoutSegmentsInput>, OrganizationUncheckedUpdateWithoutSegmentsInput>
-  }
-
   export type SegmentMemberUpdateManyWithoutSegmentNestedInput = {
     create?: XOR<SegmentMemberCreateWithoutSegmentInput, SegmentMemberUncheckedCreateWithoutSegmentInput> | SegmentMemberCreateWithoutSegmentInput[] | SegmentMemberUncheckedCreateWithoutSegmentInput[]
     connectOrCreate?: SegmentMemberCreateOrConnectWithoutSegmentInput | SegmentMemberCreateOrConnectWithoutSegmentInput[]
@@ -22199,6 +22221,14 @@ export namespace Prisma {
     update?: SegmentMemberUpdateWithWhereUniqueWithoutSegmentInput | SegmentMemberUpdateWithWhereUniqueWithoutSegmentInput[]
     updateMany?: SegmentMemberUpdateManyWithWhereWithoutSegmentInput | SegmentMemberUpdateManyWithWhereWithoutSegmentInput[]
     deleteMany?: SegmentMemberScalarWhereInput | SegmentMemberScalarWhereInput[]
+  }
+
+  export type OrganizationUpdateOneRequiredWithoutSegmentsNestedInput = {
+    create?: XOR<OrganizationCreateWithoutSegmentsInput, OrganizationUncheckedCreateWithoutSegmentsInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutSegmentsInput
+    upsert?: OrganizationUpsertWithoutSegmentsInput
+    connect?: OrganizationWhereUniqueInput
+    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutSegmentsInput, OrganizationUpdateWithoutSegmentsInput>, OrganizationUncheckedUpdateWithoutSegmentsInput>
   }
 
   export type WorkflowUpdateManyWithoutSegmentNestedInput = {
@@ -22243,16 +22273,24 @@ export namespace Prisma {
     deleteMany?: WorkflowScalarWhereInput | WorkflowScalarWhereInput[]
   }
 
+  export type DonorCreateNestedOneWithoutSegmentMembersInput = {
+    create?: XOR<DonorCreateWithoutSegmentMembersInput, DonorUncheckedCreateWithoutSegmentMembersInput>
+    connectOrCreate?: DonorCreateOrConnectWithoutSegmentMembersInput
+    connect?: DonorWhereUniqueInput
+  }
+
   export type SegmentCreateNestedOneWithoutMembersInput = {
     create?: XOR<SegmentCreateWithoutMembersInput, SegmentUncheckedCreateWithoutMembersInput>
     connectOrCreate?: SegmentCreateOrConnectWithoutMembersInput
     connect?: SegmentWhereUniqueInput
   }
 
-  export type DonorCreateNestedOneWithoutSegmentMembersInput = {
+  export type DonorUpdateOneRequiredWithoutSegmentMembersNestedInput = {
     create?: XOR<DonorCreateWithoutSegmentMembersInput, DonorUncheckedCreateWithoutSegmentMembersInput>
     connectOrCreate?: DonorCreateOrConnectWithoutSegmentMembersInput
+    upsert?: DonorUpsertWithoutSegmentMembersInput
     connect?: DonorWhereUniqueInput
+    update?: XOR<XOR<DonorUpdateToOneWithWhereWithoutSegmentMembersInput, DonorUpdateWithoutSegmentMembersInput>, DonorUncheckedUpdateWithoutSegmentMembersInput>
   }
 
   export type SegmentUpdateOneRequiredWithoutMembersNestedInput = {
@@ -22263,12 +22301,11 @@ export namespace Prisma {
     update?: XOR<XOR<SegmentUpdateToOneWithWhereWithoutMembersInput, SegmentUpdateWithoutMembersInput>, SegmentUncheckedUpdateWithoutMembersInput>
   }
 
-  export type DonorUpdateOneRequiredWithoutSegmentMembersNestedInput = {
-    create?: XOR<DonorCreateWithoutSegmentMembersInput, DonorUncheckedCreateWithoutSegmentMembersInput>
-    connectOrCreate?: DonorCreateOrConnectWithoutSegmentMembersInput
-    upsert?: DonorUpsertWithoutSegmentMembersInput
-    connect?: DonorWhereUniqueInput
-    update?: XOR<XOR<DonorUpdateToOneWithWhereWithoutSegmentMembersInput, DonorUpdateWithoutSegmentMembersInput>, DonorUncheckedUpdateWithoutSegmentMembersInput>
+  export type WorkflowExecutionCreateNestedManyWithoutWorkflowInput = {
+    create?: XOR<WorkflowExecutionCreateWithoutWorkflowInput, WorkflowExecutionUncheckedCreateWithoutWorkflowInput> | WorkflowExecutionCreateWithoutWorkflowInput[] | WorkflowExecutionUncheckedCreateWithoutWorkflowInput[]
+    connectOrCreate?: WorkflowExecutionCreateOrConnectWithoutWorkflowInput | WorkflowExecutionCreateOrConnectWithoutWorkflowInput[]
+    createMany?: WorkflowExecutionCreateManyWorkflowInputEnvelope
+    connect?: WorkflowExecutionWhereUniqueInput | WorkflowExecutionWhereUniqueInput[]
   }
 
   export type OrganizationCreateNestedOneWithoutWorkflowsInput = {
@@ -22281,13 +22318,6 @@ export namespace Prisma {
     create?: XOR<SegmentCreateWithoutWorkflowsInput, SegmentUncheckedCreateWithoutWorkflowsInput>
     connectOrCreate?: SegmentCreateOrConnectWithoutWorkflowsInput
     connect?: SegmentWhereUniqueInput
-  }
-
-  export type WorkflowExecutionCreateNestedManyWithoutWorkflowInput = {
-    create?: XOR<WorkflowExecutionCreateWithoutWorkflowInput, WorkflowExecutionUncheckedCreateWithoutWorkflowInput> | WorkflowExecutionCreateWithoutWorkflowInput[] | WorkflowExecutionUncheckedCreateWithoutWorkflowInput[]
-    connectOrCreate?: WorkflowExecutionCreateOrConnectWithoutWorkflowInput | WorkflowExecutionCreateOrConnectWithoutWorkflowInput[]
-    createMany?: WorkflowExecutionCreateManyWorkflowInputEnvelope
-    connect?: WorkflowExecutionWhereUniqueInput | WorkflowExecutionWhereUniqueInput[]
   }
 
   export type WorkflowExecutionUncheckedCreateNestedManyWithoutWorkflowInput = {
@@ -22303,6 +22333,20 @@ export namespace Prisma {
 
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
+  }
+
+  export type WorkflowExecutionUpdateManyWithoutWorkflowNestedInput = {
+    create?: XOR<WorkflowExecutionCreateWithoutWorkflowInput, WorkflowExecutionUncheckedCreateWithoutWorkflowInput> | WorkflowExecutionCreateWithoutWorkflowInput[] | WorkflowExecutionUncheckedCreateWithoutWorkflowInput[]
+    connectOrCreate?: WorkflowExecutionCreateOrConnectWithoutWorkflowInput | WorkflowExecutionCreateOrConnectWithoutWorkflowInput[]
+    upsert?: WorkflowExecutionUpsertWithWhereUniqueWithoutWorkflowInput | WorkflowExecutionUpsertWithWhereUniqueWithoutWorkflowInput[]
+    createMany?: WorkflowExecutionCreateManyWorkflowInputEnvelope
+    set?: WorkflowExecutionWhereUniqueInput | WorkflowExecutionWhereUniqueInput[]
+    disconnect?: WorkflowExecutionWhereUniqueInput | WorkflowExecutionWhereUniqueInput[]
+    delete?: WorkflowExecutionWhereUniqueInput | WorkflowExecutionWhereUniqueInput[]
+    connect?: WorkflowExecutionWhereUniqueInput | WorkflowExecutionWhereUniqueInput[]
+    update?: WorkflowExecutionUpdateWithWhereUniqueWithoutWorkflowInput | WorkflowExecutionUpdateWithWhereUniqueWithoutWorkflowInput[]
+    updateMany?: WorkflowExecutionUpdateManyWithWhereWithoutWorkflowInput | WorkflowExecutionUpdateManyWithWhereWithoutWorkflowInput[]
+    deleteMany?: WorkflowExecutionScalarWhereInput | WorkflowExecutionScalarWhereInput[]
   }
 
   export type OrganizationUpdateOneRequiredWithoutWorkflowsNestedInput = {
@@ -22323,20 +22367,6 @@ export namespace Prisma {
     update?: XOR<XOR<SegmentUpdateToOneWithWhereWithoutWorkflowsInput, SegmentUpdateWithoutWorkflowsInput>, SegmentUncheckedUpdateWithoutWorkflowsInput>
   }
 
-  export type WorkflowExecutionUpdateManyWithoutWorkflowNestedInput = {
-    create?: XOR<WorkflowExecutionCreateWithoutWorkflowInput, WorkflowExecutionUncheckedCreateWithoutWorkflowInput> | WorkflowExecutionCreateWithoutWorkflowInput[] | WorkflowExecutionUncheckedCreateWithoutWorkflowInput[]
-    connectOrCreate?: WorkflowExecutionCreateOrConnectWithoutWorkflowInput | WorkflowExecutionCreateOrConnectWithoutWorkflowInput[]
-    upsert?: WorkflowExecutionUpsertWithWhereUniqueWithoutWorkflowInput | WorkflowExecutionUpsertWithWhereUniqueWithoutWorkflowInput[]
-    createMany?: WorkflowExecutionCreateManyWorkflowInputEnvelope
-    set?: WorkflowExecutionWhereUniqueInput | WorkflowExecutionWhereUniqueInput[]
-    disconnect?: WorkflowExecutionWhereUniqueInput | WorkflowExecutionWhereUniqueInput[]
-    delete?: WorkflowExecutionWhereUniqueInput | WorkflowExecutionWhereUniqueInput[]
-    connect?: WorkflowExecutionWhereUniqueInput | WorkflowExecutionWhereUniqueInput[]
-    update?: WorkflowExecutionUpdateWithWhereUniqueWithoutWorkflowInput | WorkflowExecutionUpdateWithWhereUniqueWithoutWorkflowInput[]
-    updateMany?: WorkflowExecutionUpdateManyWithWhereWithoutWorkflowInput | WorkflowExecutionUpdateManyWithWhereWithoutWorkflowInput[]
-    deleteMany?: WorkflowExecutionScalarWhereInput | WorkflowExecutionScalarWhereInput[]
-  }
-
   export type WorkflowExecutionUncheckedUpdateManyWithoutWorkflowNestedInput = {
     create?: XOR<WorkflowExecutionCreateWithoutWorkflowInput, WorkflowExecutionUncheckedCreateWithoutWorkflowInput> | WorkflowExecutionCreateWithoutWorkflowInput[] | WorkflowExecutionUncheckedCreateWithoutWorkflowInput[]
     connectOrCreate?: WorkflowExecutionCreateOrConnectWithoutWorkflowInput | WorkflowExecutionCreateOrConnectWithoutWorkflowInput[]
@@ -22351,24 +22381,16 @@ export namespace Prisma {
     deleteMany?: WorkflowExecutionScalarWhereInput | WorkflowExecutionScalarWhereInput[]
   }
 
-  export type WorkflowCreateNestedOneWithoutExecutionsInput = {
-    create?: XOR<WorkflowCreateWithoutExecutionsInput, WorkflowUncheckedCreateWithoutExecutionsInput>
-    connectOrCreate?: WorkflowCreateOrConnectWithoutExecutionsInput
-    connect?: WorkflowWhereUniqueInput
-  }
-
   export type UserCreateNestedOneWithoutWorkflowExecutionsInput = {
     create?: XOR<UserCreateWithoutWorkflowExecutionsInput, UserUncheckedCreateWithoutWorkflowExecutionsInput>
     connectOrCreate?: UserCreateOrConnectWithoutWorkflowExecutionsInput
     connect?: UserWhereUniqueInput
   }
 
-  export type WorkflowUpdateOneRequiredWithoutExecutionsNestedInput = {
+  export type WorkflowCreateNestedOneWithoutExecutionsInput = {
     create?: XOR<WorkflowCreateWithoutExecutionsInput, WorkflowUncheckedCreateWithoutExecutionsInput>
     connectOrCreate?: WorkflowCreateOrConnectWithoutExecutionsInput
-    upsert?: WorkflowUpsertWithoutExecutionsInput
     connect?: WorkflowWhereUniqueInput
-    update?: XOR<XOR<WorkflowUpdateToOneWithWhereWithoutExecutionsInput, WorkflowUpdateWithoutExecutionsInput>, WorkflowUncheckedUpdateWithoutExecutionsInput>
   }
 
   export type UserUpdateOneWithoutWorkflowExecutionsNestedInput = {
@@ -22379,6 +22401,14 @@ export namespace Prisma {
     delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutWorkflowExecutionsInput, UserUpdateWithoutWorkflowExecutionsInput>, UserUncheckedUpdateWithoutWorkflowExecutionsInput>
+  }
+
+  export type WorkflowUpdateOneRequiredWithoutExecutionsNestedInput = {
+    create?: XOR<WorkflowCreateWithoutExecutionsInput, WorkflowUncheckedCreateWithoutExecutionsInput>
+    connectOrCreate?: WorkflowCreateOrConnectWithoutExecutionsInput
+    upsert?: WorkflowUpsertWithoutExecutionsInput
+    connect?: WorkflowWhereUniqueInput
+    update?: XOR<XOR<WorkflowUpdateToOneWithWhereWithoutExecutionsInput, WorkflowUpdateWithoutExecutionsInput>, WorkflowUncheckedUpdateWithoutExecutionsInput>
   }
 
   export type UserCreateNestedOneWithoutActivityLogsInput = {
@@ -22813,104 +22843,6 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
-  export type UserCreateWithoutOrganizationInput = {
-    id?: string
-    email: string
-    password: string
-    firstName: string
-    lastName: string
-    role?: $Enums.UserRole
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    sessions?: SessionCreateNestedManyWithoutUserInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedUserInput
-    activityLogs?: ActivityLogCreateNestedManyWithoutUserInput
-    workflowExecutions?: WorkflowExecutionCreateNestedManyWithoutExecutedByInput
-  }
-
-  export type UserUncheckedCreateWithoutOrganizationInput = {
-    id?: string
-    email: string
-    password: string
-    firstName: string
-    lastName: string
-    role?: $Enums.UserRole
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedUserInput
-    activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutUserInput
-    workflowExecutions?: WorkflowExecutionUncheckedCreateNestedManyWithoutExecutedByInput
-  }
-
-  export type UserCreateOrConnectWithoutOrganizationInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput>
-  }
-
-  export type UserCreateManyOrganizationInputEnvelope = {
-    data: UserCreateManyOrganizationInput | UserCreateManyOrganizationInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type DonorCreateWithoutOrganizationInput = {
-    id?: string
-    firstName: string
-    lastName: string
-    email?: string | null
-    phone?: string | null
-    address?: string | null
-    city?: string | null
-    state?: string | null
-    zipCode?: string | null
-    status?: $Enums.DonorStatus
-    retentionRisk?: $Enums.RetentionRisk
-    totalGifts?: number
-    totalAmount?: number
-    firstGiftDate?: Date | string | null
-    lastGiftDate?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    donations?: DonationCreateNestedManyWithoutDonorInput
-    interactions?: InteractionCreateNestedManyWithoutDonorInput
-    tasks?: TaskCreateNestedManyWithoutDonorInput
-    segmentMembers?: SegmentMemberCreateNestedManyWithoutDonorInput
-  }
-
-  export type DonorUncheckedCreateWithoutOrganizationInput = {
-    id?: string
-    firstName: string
-    lastName: string
-    email?: string | null
-    phone?: string | null
-    address?: string | null
-    city?: string | null
-    state?: string | null
-    zipCode?: string | null
-    status?: $Enums.DonorStatus
-    retentionRisk?: $Enums.RetentionRisk
-    totalGifts?: number
-    totalAmount?: number
-    firstGiftDate?: Date | string | null
-    lastGiftDate?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    donations?: DonationUncheckedCreateNestedManyWithoutDonorInput
-    interactions?: InteractionUncheckedCreateNestedManyWithoutDonorInput
-    tasks?: TaskUncheckedCreateNestedManyWithoutDonorInput
-    segmentMembers?: SegmentMemberUncheckedCreateNestedManyWithoutDonorInput
-  }
-
-  export type DonorCreateOrConnectWithoutOrganizationInput = {
-    where: DonorWhereUniqueInput
-    create: XOR<DonorCreateWithoutOrganizationInput, DonorUncheckedCreateWithoutOrganizationInput>
-  }
-
-  export type DonorCreateManyOrganizationInputEnvelope = {
-    data: DonorCreateManyOrganizationInput | DonorCreateManyOrganizationInput[]
-    skipDuplicates?: boolean
-  }
-
   export type CampaignCreateWithoutOrganizationInput = {
     id?: string
     name: string
@@ -22946,6 +22878,66 @@ export namespace Prisma {
 
   export type CampaignCreateManyOrganizationInputEnvelope = {
     data: CampaignCreateManyOrganizationInput | CampaignCreateManyOrganizationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DonorCreateWithoutOrganizationInput = {
+    id?: string
+    firstName: string
+    lastName: string
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    zipCode?: string | null
+    donorPassword?: string | null
+    status?: $Enums.DonorStatus
+    retentionRisk?: $Enums.RetentionRisk
+    totalGifts?: number
+    totalAmount?: number
+    firstGiftDate?: Date | string | null
+    lastGiftDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    donations?: DonationCreateNestedManyWithoutDonorInput
+    interactions?: InteractionCreateNestedManyWithoutDonorInput
+    segmentMembers?: SegmentMemberCreateNestedManyWithoutDonorInput
+    tasks?: TaskCreateNestedManyWithoutDonorInput
+  }
+
+  export type DonorUncheckedCreateWithoutOrganizationInput = {
+    id?: string
+    firstName: string
+    lastName: string
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    zipCode?: string | null
+    donorPassword?: string | null
+    status?: $Enums.DonorStatus
+    retentionRisk?: $Enums.RetentionRisk
+    totalGifts?: number
+    totalAmount?: number
+    firstGiftDate?: Date | string | null
+    lastGiftDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    donations?: DonationUncheckedCreateNestedManyWithoutDonorInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutDonorInput
+    segmentMembers?: SegmentMemberUncheckedCreateNestedManyWithoutDonorInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutDonorInput
+  }
+
+  export type DonorCreateOrConnectWithoutOrganizationInput = {
+    where: DonorWhereUniqueInput
+    create: XOR<DonorCreateWithoutOrganizationInput, DonorUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type DonorCreateManyOrganizationInputEnvelope = {
+    data: DonorCreateManyOrganizationInput | DonorCreateManyOrganizationInput[]
     skipDuplicates?: boolean
   }
 
@@ -22985,6 +22977,46 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type UserCreateWithoutOrganizationInput = {
+    id?: string
+    email: string
+    password: string
+    firstName: string
+    lastName: string
+    role?: $Enums.UserRole
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    activityLogs?: ActivityLogCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssignedUserInput
+    workflowExecutions?: WorkflowExecutionCreateNestedManyWithoutExecutedByInput
+  }
+
+  export type UserUncheckedCreateWithoutOrganizationInput = {
+    id?: string
+    email: string
+    password: string
+    firstName: string
+    lastName: string
+    role?: $Enums.UserRole
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedUserInput
+    workflowExecutions?: WorkflowExecutionUncheckedCreateNestedManyWithoutExecutedByInput
+  }
+
+  export type UserCreateOrConnectWithoutOrganizationInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type UserCreateManyOrganizationInputEnvelope = {
+    data: UserCreateManyOrganizationInput | UserCreateManyOrganizationInput[]
+    skipDuplicates?: boolean
+  }
+
   export type WorkflowCreateWithoutOrganizationInput = {
     id?: string
     name: string
@@ -22995,8 +23027,8 @@ export namespace Prisma {
     executionCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    segment?: SegmentCreateNestedOneWithoutWorkflowsInput
     executions?: WorkflowExecutionCreateNestedManyWithoutWorkflowInput
+    segment?: SegmentCreateNestedOneWithoutWorkflowsInput
   }
 
   export type WorkflowUncheckedCreateWithoutOrganizationInput = {
@@ -23021,77 +23053,6 @@ export namespace Prisma {
   export type WorkflowCreateManyOrganizationInputEnvelope = {
     data: WorkflowCreateManyOrganizationInput | WorkflowCreateManyOrganizationInput[]
     skipDuplicates?: boolean
-  }
-
-  export type UserUpsertWithWhereUniqueWithoutOrganizationInput = {
-    where: UserWhereUniqueInput
-    update: XOR<UserUpdateWithoutOrganizationInput, UserUncheckedUpdateWithoutOrganizationInput>
-    create: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput>
-  }
-
-  export type UserUpdateWithWhereUniqueWithoutOrganizationInput = {
-    where: UserWhereUniqueInput
-    data: XOR<UserUpdateWithoutOrganizationInput, UserUncheckedUpdateWithoutOrganizationInput>
-  }
-
-  export type UserUpdateManyWithWhereWithoutOrganizationInput = {
-    where: UserScalarWhereInput
-    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyWithoutOrganizationInput>
-  }
-
-  export type UserScalarWhereInput = {
-    AND?: UserScalarWhereInput | UserScalarWhereInput[]
-    OR?: UserScalarWhereInput[]
-    NOT?: UserScalarWhereInput | UserScalarWhereInput[]
-    id?: StringFilter<"User"> | string
-    email?: StringFilter<"User"> | string
-    password?: StringFilter<"User"> | string
-    firstName?: StringFilter<"User"> | string
-    lastName?: StringFilter<"User"> | string
-    role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
-    organizationId?: StringFilter<"User"> | string
-    createdAt?: DateTimeFilter<"User"> | Date | string
-    updatedAt?: DateTimeFilter<"User"> | Date | string
-  }
-
-  export type DonorUpsertWithWhereUniqueWithoutOrganizationInput = {
-    where: DonorWhereUniqueInput
-    update: XOR<DonorUpdateWithoutOrganizationInput, DonorUncheckedUpdateWithoutOrganizationInput>
-    create: XOR<DonorCreateWithoutOrganizationInput, DonorUncheckedCreateWithoutOrganizationInput>
-  }
-
-  export type DonorUpdateWithWhereUniqueWithoutOrganizationInput = {
-    where: DonorWhereUniqueInput
-    data: XOR<DonorUpdateWithoutOrganizationInput, DonorUncheckedUpdateWithoutOrganizationInput>
-  }
-
-  export type DonorUpdateManyWithWhereWithoutOrganizationInput = {
-    where: DonorScalarWhereInput
-    data: XOR<DonorUpdateManyMutationInput, DonorUncheckedUpdateManyWithoutOrganizationInput>
-  }
-
-  export type DonorScalarWhereInput = {
-    AND?: DonorScalarWhereInput | DonorScalarWhereInput[]
-    OR?: DonorScalarWhereInput[]
-    NOT?: DonorScalarWhereInput | DonorScalarWhereInput[]
-    id?: StringFilter<"Donor"> | string
-    organizationId?: StringFilter<"Donor"> | string
-    firstName?: StringFilter<"Donor"> | string
-    lastName?: StringFilter<"Donor"> | string
-    email?: StringNullableFilter<"Donor"> | string | null
-    phone?: StringNullableFilter<"Donor"> | string | null
-    address?: StringNullableFilter<"Donor"> | string | null
-    city?: StringNullableFilter<"Donor"> | string | null
-    state?: StringNullableFilter<"Donor"> | string | null
-    zipCode?: StringNullableFilter<"Donor"> | string | null
-    status?: EnumDonorStatusFilter<"Donor"> | $Enums.DonorStatus
-    retentionRisk?: EnumRetentionRiskFilter<"Donor"> | $Enums.RetentionRisk
-    totalGifts?: IntFilter<"Donor"> | number
-    totalAmount?: FloatFilter<"Donor"> | number
-    firstGiftDate?: DateTimeNullableFilter<"Donor"> | Date | string | null
-    lastGiftDate?: DateTimeNullableFilter<"Donor"> | Date | string | null
-    createdAt?: DateTimeFilter<"Donor"> | Date | string
-    updatedAt?: DateTimeFilter<"Donor"> | Date | string
   }
 
   export type CampaignUpsertWithWhereUniqueWithoutOrganizationInput = {
@@ -23127,6 +23088,47 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Campaign"> | Date | string
   }
 
+  export type DonorUpsertWithWhereUniqueWithoutOrganizationInput = {
+    where: DonorWhereUniqueInput
+    update: XOR<DonorUpdateWithoutOrganizationInput, DonorUncheckedUpdateWithoutOrganizationInput>
+    create: XOR<DonorCreateWithoutOrganizationInput, DonorUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type DonorUpdateWithWhereUniqueWithoutOrganizationInput = {
+    where: DonorWhereUniqueInput
+    data: XOR<DonorUpdateWithoutOrganizationInput, DonorUncheckedUpdateWithoutOrganizationInput>
+  }
+
+  export type DonorUpdateManyWithWhereWithoutOrganizationInput = {
+    where: DonorScalarWhereInput
+    data: XOR<DonorUpdateManyMutationInput, DonorUncheckedUpdateManyWithoutOrganizationInput>
+  }
+
+  export type DonorScalarWhereInput = {
+    AND?: DonorScalarWhereInput | DonorScalarWhereInput[]
+    OR?: DonorScalarWhereInput[]
+    NOT?: DonorScalarWhereInput | DonorScalarWhereInput[]
+    id?: StringFilter<"Donor"> | string
+    organizationId?: StringFilter<"Donor"> | string
+    firstName?: StringFilter<"Donor"> | string
+    lastName?: StringFilter<"Donor"> | string
+    email?: StringNullableFilter<"Donor"> | string | null
+    phone?: StringNullableFilter<"Donor"> | string | null
+    address?: StringNullableFilter<"Donor"> | string | null
+    city?: StringNullableFilter<"Donor"> | string | null
+    state?: StringNullableFilter<"Donor"> | string | null
+    zipCode?: StringNullableFilter<"Donor"> | string | null
+    donorPassword?: StringNullableFilter<"Donor"> | string | null
+    status?: EnumDonorStatusFilter<"Donor"> | $Enums.DonorStatus
+    retentionRisk?: EnumRetentionRiskFilter<"Donor"> | $Enums.RetentionRisk
+    totalGifts?: IntFilter<"Donor"> | number
+    totalAmount?: FloatFilter<"Donor"> | number
+    firstGiftDate?: DateTimeNullableFilter<"Donor"> | Date | string | null
+    lastGiftDate?: DateTimeNullableFilter<"Donor"> | Date | string | null
+    createdAt?: DateTimeFilter<"Donor"> | Date | string
+    updatedAt?: DateTimeFilter<"Donor"> | Date | string
+  }
+
   export type SegmentUpsertWithWhereUniqueWithoutOrganizationInput = {
     where: SegmentWhereUniqueInput
     update: XOR<SegmentUpdateWithoutOrganizationInput, SegmentUncheckedUpdateWithoutOrganizationInput>
@@ -23156,6 +23158,37 @@ export namespace Prisma {
     lastCalculated?: DateTimeNullableFilter<"Segment"> | Date | string | null
     createdAt?: DateTimeFilter<"Segment"> | Date | string
     updatedAt?: DateTimeFilter<"Segment"> | Date | string
+  }
+
+  export type UserUpsertWithWhereUniqueWithoutOrganizationInput = {
+    where: UserWhereUniqueInput
+    update: XOR<UserUpdateWithoutOrganizationInput, UserUncheckedUpdateWithoutOrganizationInput>
+    create: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type UserUpdateWithWhereUniqueWithoutOrganizationInput = {
+    where: UserWhereUniqueInput
+    data: XOR<UserUpdateWithoutOrganizationInput, UserUncheckedUpdateWithoutOrganizationInput>
+  }
+
+  export type UserUpdateManyWithWhereWithoutOrganizationInput = {
+    where: UserScalarWhereInput
+    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyWithoutOrganizationInput>
+  }
+
+  export type UserScalarWhereInput = {
+    AND?: UserScalarWhereInput | UserScalarWhereInput[]
+    OR?: UserScalarWhereInput[]
+    NOT?: UserScalarWhereInput | UserScalarWhereInput[]
+    id?: StringFilter<"User"> | string
+    email?: StringFilter<"User"> | string
+    password?: StringFilter<"User"> | string
+    firstName?: StringFilter<"User"> | string
+    lastName?: StringFilter<"User"> | string
+    role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
+    organizationId?: StringFilter<"User"> | string
+    createdAt?: DateTimeFilter<"User"> | Date | string
+    updatedAt?: DateTimeFilter<"User"> | Date | string
   }
 
   export type WorkflowUpsertWithWhereUniqueWithoutOrganizationInput = {
@@ -23191,31 +23224,32 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Workflow"> | Date | string
   }
 
-  export type OrganizationCreateWithoutUsersInput = {
+  export type ActivityLogCreateWithoutUserInput = {
     id?: string
-    name: string
+    action: string
+    entity: string
+    entityId: string
+    changes?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
-    updatedAt?: Date | string
-    donors?: DonorCreateNestedManyWithoutOrganizationInput
-    campaigns?: CampaignCreateNestedManyWithoutOrganizationInput
-    segments?: SegmentCreateNestedManyWithoutOrganizationInput
-    workflows?: WorkflowCreateNestedManyWithoutOrganizationInput
   }
 
-  export type OrganizationUncheckedCreateWithoutUsersInput = {
+  export type ActivityLogUncheckedCreateWithoutUserInput = {
     id?: string
-    name: string
+    action: string
+    entity: string
+    entityId: string
+    changes?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
-    updatedAt?: Date | string
-    donors?: DonorUncheckedCreateNestedManyWithoutOrganizationInput
-    campaigns?: CampaignUncheckedCreateNestedManyWithoutOrganizationInput
-    segments?: SegmentUncheckedCreateNestedManyWithoutOrganizationInput
-    workflows?: WorkflowUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
-  export type OrganizationCreateOrConnectWithoutUsersInput = {
-    where: OrganizationWhereUniqueInput
-    create: XOR<OrganizationCreateWithoutUsersInput, OrganizationUncheckedCreateWithoutUsersInput>
+  export type ActivityLogCreateOrConnectWithoutUserInput = {
+    where: ActivityLogWhereUniqueInput
+    create: XOR<ActivityLogCreateWithoutUserInput, ActivityLogUncheckedCreateWithoutUserInput>
+  }
+
+  export type ActivityLogCreateManyUserInputEnvelope = {
+    data: ActivityLogCreateManyUserInput | ActivityLogCreateManyUserInput[]
+    skipDuplicates?: boolean
   }
 
   export type SessionCreateWithoutUserInput = {
@@ -23278,32 +23312,31 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ActivityLogCreateWithoutUserInput = {
+  export type OrganizationCreateWithoutUsersInput = {
     id?: string
-    action: string
-    entity: string
-    entityId: string
-    changes?: NullableJsonNullValueInput | InputJsonValue
+    name: string
     createdAt?: Date | string
+    updatedAt?: Date | string
+    campaigns?: CampaignCreateNestedManyWithoutOrganizationInput
+    donors?: DonorCreateNestedManyWithoutOrganizationInput
+    segments?: SegmentCreateNestedManyWithoutOrganizationInput
+    workflows?: WorkflowCreateNestedManyWithoutOrganizationInput
   }
 
-  export type ActivityLogUncheckedCreateWithoutUserInput = {
+  export type OrganizationUncheckedCreateWithoutUsersInput = {
     id?: string
-    action: string
-    entity: string
-    entityId: string
-    changes?: NullableJsonNullValueInput | InputJsonValue
+    name: string
     createdAt?: Date | string
+    updatedAt?: Date | string
+    campaigns?: CampaignUncheckedCreateNestedManyWithoutOrganizationInput
+    donors?: DonorUncheckedCreateNestedManyWithoutOrganizationInput
+    segments?: SegmentUncheckedCreateNestedManyWithoutOrganizationInput
+    workflows?: WorkflowUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
-  export type ActivityLogCreateOrConnectWithoutUserInput = {
-    where: ActivityLogWhereUniqueInput
-    create: XOR<ActivityLogCreateWithoutUserInput, ActivityLogUncheckedCreateWithoutUserInput>
-  }
-
-  export type ActivityLogCreateManyUserInputEnvelope = {
-    data: ActivityLogCreateManyUserInput | ActivityLogCreateManyUserInput[]
-    skipDuplicates?: boolean
+  export type OrganizationCreateOrConnectWithoutUsersInput = {
+    where: OrganizationWhereUniqueInput
+    create: XOR<OrganizationCreateWithoutUsersInput, OrganizationUncheckedCreateWithoutUsersInput>
   }
 
   export type WorkflowExecutionCreateWithoutExecutedByInput = {
@@ -23336,37 +23369,33 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type OrganizationUpsertWithoutUsersInput = {
-    update: XOR<OrganizationUpdateWithoutUsersInput, OrganizationUncheckedUpdateWithoutUsersInput>
-    create: XOR<OrganizationCreateWithoutUsersInput, OrganizationUncheckedCreateWithoutUsersInput>
-    where?: OrganizationWhereInput
+  export type ActivityLogUpsertWithWhereUniqueWithoutUserInput = {
+    where: ActivityLogWhereUniqueInput
+    update: XOR<ActivityLogUpdateWithoutUserInput, ActivityLogUncheckedUpdateWithoutUserInput>
+    create: XOR<ActivityLogCreateWithoutUserInput, ActivityLogUncheckedCreateWithoutUserInput>
   }
 
-  export type OrganizationUpdateToOneWithWhereWithoutUsersInput = {
-    where?: OrganizationWhereInput
-    data: XOR<OrganizationUpdateWithoutUsersInput, OrganizationUncheckedUpdateWithoutUsersInput>
+  export type ActivityLogUpdateWithWhereUniqueWithoutUserInput = {
+    where: ActivityLogWhereUniqueInput
+    data: XOR<ActivityLogUpdateWithoutUserInput, ActivityLogUncheckedUpdateWithoutUserInput>
   }
 
-  export type OrganizationUpdateWithoutUsersInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    donors?: DonorUpdateManyWithoutOrganizationNestedInput
-    campaigns?: CampaignUpdateManyWithoutOrganizationNestedInput
-    segments?: SegmentUpdateManyWithoutOrganizationNestedInput
-    workflows?: WorkflowUpdateManyWithoutOrganizationNestedInput
+  export type ActivityLogUpdateManyWithWhereWithoutUserInput = {
+    where: ActivityLogScalarWhereInput
+    data: XOR<ActivityLogUpdateManyMutationInput, ActivityLogUncheckedUpdateManyWithoutUserInput>
   }
 
-  export type OrganizationUncheckedUpdateWithoutUsersInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    donors?: DonorUncheckedUpdateManyWithoutOrganizationNestedInput
-    campaigns?: CampaignUncheckedUpdateManyWithoutOrganizationNestedInput
-    segments?: SegmentUncheckedUpdateManyWithoutOrganizationNestedInput
-    workflows?: WorkflowUncheckedUpdateManyWithoutOrganizationNestedInput
+  export type ActivityLogScalarWhereInput = {
+    AND?: ActivityLogScalarWhereInput | ActivityLogScalarWhereInput[]
+    OR?: ActivityLogScalarWhereInput[]
+    NOT?: ActivityLogScalarWhereInput | ActivityLogScalarWhereInput[]
+    id?: StringFilter<"ActivityLog"> | string
+    userId?: StringNullableFilter<"ActivityLog"> | string | null
+    action?: StringFilter<"ActivityLog"> | string
+    entity?: StringFilter<"ActivityLog"> | string
+    entityId?: StringFilter<"ActivityLog"> | string
+    changes?: JsonNullableFilter<"ActivityLog">
+    createdAt?: DateTimeFilter<"ActivityLog"> | Date | string
   }
 
   export type SessionUpsertWithWhereUniqueWithoutUserInput = {
@@ -23429,33 +23458,37 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Task"> | Date | string
   }
 
-  export type ActivityLogUpsertWithWhereUniqueWithoutUserInput = {
-    where: ActivityLogWhereUniqueInput
-    update: XOR<ActivityLogUpdateWithoutUserInput, ActivityLogUncheckedUpdateWithoutUserInput>
-    create: XOR<ActivityLogCreateWithoutUserInput, ActivityLogUncheckedCreateWithoutUserInput>
+  export type OrganizationUpsertWithoutUsersInput = {
+    update: XOR<OrganizationUpdateWithoutUsersInput, OrganizationUncheckedUpdateWithoutUsersInput>
+    create: XOR<OrganizationCreateWithoutUsersInput, OrganizationUncheckedCreateWithoutUsersInput>
+    where?: OrganizationWhereInput
   }
 
-  export type ActivityLogUpdateWithWhereUniqueWithoutUserInput = {
-    where: ActivityLogWhereUniqueInput
-    data: XOR<ActivityLogUpdateWithoutUserInput, ActivityLogUncheckedUpdateWithoutUserInput>
+  export type OrganizationUpdateToOneWithWhereWithoutUsersInput = {
+    where?: OrganizationWhereInput
+    data: XOR<OrganizationUpdateWithoutUsersInput, OrganizationUncheckedUpdateWithoutUsersInput>
   }
 
-  export type ActivityLogUpdateManyWithWhereWithoutUserInput = {
-    where: ActivityLogScalarWhereInput
-    data: XOR<ActivityLogUpdateManyMutationInput, ActivityLogUncheckedUpdateManyWithoutUserInput>
+  export type OrganizationUpdateWithoutUsersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaigns?: CampaignUpdateManyWithoutOrganizationNestedInput
+    donors?: DonorUpdateManyWithoutOrganizationNestedInput
+    segments?: SegmentUpdateManyWithoutOrganizationNestedInput
+    workflows?: WorkflowUpdateManyWithoutOrganizationNestedInput
   }
 
-  export type ActivityLogScalarWhereInput = {
-    AND?: ActivityLogScalarWhereInput | ActivityLogScalarWhereInput[]
-    OR?: ActivityLogScalarWhereInput[]
-    NOT?: ActivityLogScalarWhereInput | ActivityLogScalarWhereInput[]
-    id?: StringFilter<"ActivityLog"> | string
-    userId?: StringNullableFilter<"ActivityLog"> | string | null
-    action?: StringFilter<"ActivityLog"> | string
-    entity?: StringFilter<"ActivityLog"> | string
-    entityId?: StringFilter<"ActivityLog"> | string
-    changes?: JsonNullableFilter<"ActivityLog">
-    createdAt?: DateTimeFilter<"ActivityLog"> | Date | string
+  export type OrganizationUncheckedUpdateWithoutUsersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaigns?: CampaignUncheckedUpdateManyWithoutOrganizationNestedInput
+    donors?: DonorUncheckedUpdateManyWithoutOrganizationNestedInput
+    segments?: SegmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    workflows?: WorkflowUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type WorkflowExecutionUpsertWithWhereUniqueWithoutExecutedByInput = {
@@ -23497,9 +23530,9 @@ export namespace Prisma {
     role?: $Enums.UserRole
     createdAt?: Date | string
     updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutUsersInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedUserInput
     activityLogs?: ActivityLogCreateNestedManyWithoutUserInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssignedUserInput
+    organization: OrganizationCreateNestedOneWithoutUsersInput
     workflowExecutions?: WorkflowExecutionCreateNestedManyWithoutExecutedByInput
   }
 
@@ -23513,8 +23546,8 @@ export namespace Prisma {
     organizationId: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedUserInput
     activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutUserInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedUserInput
     workflowExecutions?: WorkflowExecutionUncheckedCreateNestedManyWithoutExecutedByInput
   }
 
@@ -23543,9 +23576,9 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutUsersNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedUserNestedInput
     activityLogs?: ActivityLogUpdateManyWithoutUserNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssignedUserNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutUsersNestedInput
     workflowExecutions?: WorkflowExecutionUpdateManyWithoutExecutedByNestedInput
   }
 
@@ -23559,36 +23592,9 @@ export namespace Prisma {
     organizationId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedUserNestedInput
     activityLogs?: ActivityLogUncheckedUpdateManyWithoutUserNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedUserNestedInput
     workflowExecutions?: WorkflowExecutionUncheckedUpdateManyWithoutExecutedByNestedInput
-  }
-
-  export type OrganizationCreateWithoutDonorsInput = {
-    id?: string
-    name: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    users?: UserCreateNestedManyWithoutOrganizationInput
-    campaigns?: CampaignCreateNestedManyWithoutOrganizationInput
-    segments?: SegmentCreateNestedManyWithoutOrganizationInput
-    workflows?: WorkflowCreateNestedManyWithoutOrganizationInput
-  }
-
-  export type OrganizationUncheckedCreateWithoutDonorsInput = {
-    id?: string
-    name: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
-    campaigns?: CampaignUncheckedCreateNestedManyWithoutOrganizationInput
-    segments?: SegmentUncheckedCreateNestedManyWithoutOrganizationInput
-    workflows?: WorkflowUncheckedCreateNestedManyWithoutOrganizationInput
-  }
-
-  export type OrganizationCreateOrConnectWithoutDonorsInput = {
-    where: OrganizationWhereUniqueInput
-    create: XOR<OrganizationCreateWithoutDonorsInput, OrganizationUncheckedCreateWithoutDonorsInput>
   }
 
   export type DonationCreateWithoutDonorInput = {
@@ -23625,6 +23631,33 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type OrganizationCreateWithoutDonorsInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    campaigns?: CampaignCreateNestedManyWithoutOrganizationInput
+    segments?: SegmentCreateNestedManyWithoutOrganizationInput
+    users?: UserCreateNestedManyWithoutOrganizationInput
+    workflows?: WorkflowCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationUncheckedCreateWithoutDonorsInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    campaigns?: CampaignUncheckedCreateNestedManyWithoutOrganizationInput
+    segments?: SegmentUncheckedCreateNestedManyWithoutOrganizationInput
+    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    workflows?: WorkflowUncheckedCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationCreateOrConnectWithoutDonorsInput = {
+    where: OrganizationWhereUniqueInput
+    create: XOR<OrganizationCreateWithoutDonorsInput, OrganizationUncheckedCreateWithoutDonorsInput>
+  }
+
   export type InteractionCreateWithoutDonorInput = {
     id?: string
     type: $Enums.InteractionType
@@ -23654,6 +23687,28 @@ export namespace Prisma {
 
   export type InteractionCreateManyDonorInputEnvelope = {
     data: InteractionCreateManyDonorInput | InteractionCreateManyDonorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SegmentMemberCreateWithoutDonorInput = {
+    id?: string
+    createdAt?: Date | string
+    segment: SegmentCreateNestedOneWithoutMembersInput
+  }
+
+  export type SegmentMemberUncheckedCreateWithoutDonorInput = {
+    id?: string
+    segmentId: string
+    createdAt?: Date | string
+  }
+
+  export type SegmentMemberCreateOrConnectWithoutDonorInput = {
+    where: SegmentMemberWhereUniqueInput
+    create: XOR<SegmentMemberCreateWithoutDonorInput, SegmentMemberUncheckedCreateWithoutDonorInput>
+  }
+
+  export type SegmentMemberCreateManyDonorInputEnvelope = {
+    data: SegmentMemberCreateManyDonorInput | SegmentMemberCreateManyDonorInput[]
     skipDuplicates?: boolean
   }
 
@@ -23693,61 +23748,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type SegmentMemberCreateWithoutDonorInput = {
-    id?: string
-    createdAt?: Date | string
-    segment: SegmentCreateNestedOneWithoutMembersInput
-  }
-
-  export type SegmentMemberUncheckedCreateWithoutDonorInput = {
-    id?: string
-    segmentId: string
-    createdAt?: Date | string
-  }
-
-  export type SegmentMemberCreateOrConnectWithoutDonorInput = {
-    where: SegmentMemberWhereUniqueInput
-    create: XOR<SegmentMemberCreateWithoutDonorInput, SegmentMemberUncheckedCreateWithoutDonorInput>
-  }
-
-  export type SegmentMemberCreateManyDonorInputEnvelope = {
-    data: SegmentMemberCreateManyDonorInput | SegmentMemberCreateManyDonorInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type OrganizationUpsertWithoutDonorsInput = {
-    update: XOR<OrganizationUpdateWithoutDonorsInput, OrganizationUncheckedUpdateWithoutDonorsInput>
-    create: XOR<OrganizationCreateWithoutDonorsInput, OrganizationUncheckedCreateWithoutDonorsInput>
-    where?: OrganizationWhereInput
-  }
-
-  export type OrganizationUpdateToOneWithWhereWithoutDonorsInput = {
-    where?: OrganizationWhereInput
-    data: XOR<OrganizationUpdateWithoutDonorsInput, OrganizationUncheckedUpdateWithoutDonorsInput>
-  }
-
-  export type OrganizationUpdateWithoutDonorsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    users?: UserUpdateManyWithoutOrganizationNestedInput
-    campaigns?: CampaignUpdateManyWithoutOrganizationNestedInput
-    segments?: SegmentUpdateManyWithoutOrganizationNestedInput
-    workflows?: WorkflowUpdateManyWithoutOrganizationNestedInput
-  }
-
-  export type OrganizationUncheckedUpdateWithoutDonorsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
-    campaigns?: CampaignUncheckedUpdateManyWithoutOrganizationNestedInput
-    segments?: SegmentUncheckedUpdateManyWithoutOrganizationNestedInput
-    workflows?: WorkflowUncheckedUpdateManyWithoutOrganizationNestedInput
-  }
-
   export type DonationUpsertWithWhereUniqueWithoutDonorInput = {
     where: DonationWhereUniqueInput
     update: XOR<DonationUpdateWithoutDonorInput, DonationUncheckedUpdateWithoutDonorInput>
@@ -23778,6 +23778,39 @@ export namespace Prisma {
     notes?: StringNullableFilter<"Donation"> | string | null
     createdAt?: DateTimeFilter<"Donation"> | Date | string
     updatedAt?: DateTimeFilter<"Donation"> | Date | string
+  }
+
+  export type OrganizationUpsertWithoutDonorsInput = {
+    update: XOR<OrganizationUpdateWithoutDonorsInput, OrganizationUncheckedUpdateWithoutDonorsInput>
+    create: XOR<OrganizationCreateWithoutDonorsInput, OrganizationUncheckedCreateWithoutDonorsInput>
+    where?: OrganizationWhereInput
+  }
+
+  export type OrganizationUpdateToOneWithWhereWithoutDonorsInput = {
+    where?: OrganizationWhereInput
+    data: XOR<OrganizationUpdateWithoutDonorsInput, OrganizationUncheckedUpdateWithoutDonorsInput>
+  }
+
+  export type OrganizationUpdateWithoutDonorsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaigns?: CampaignUpdateManyWithoutOrganizationNestedInput
+    segments?: SegmentUpdateManyWithoutOrganizationNestedInput
+    users?: UserUpdateManyWithoutOrganizationNestedInput
+    workflows?: WorkflowUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type OrganizationUncheckedUpdateWithoutDonorsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaigns?: CampaignUncheckedUpdateManyWithoutOrganizationNestedInput
+    segments?: SegmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    workflows?: WorkflowUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type InteractionUpsertWithWhereUniqueWithoutDonorInput = {
@@ -23811,22 +23844,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Interaction"> | Date | string
   }
 
-  export type TaskUpsertWithWhereUniqueWithoutDonorInput = {
-    where: TaskWhereUniqueInput
-    update: XOR<TaskUpdateWithoutDonorInput, TaskUncheckedUpdateWithoutDonorInput>
-    create: XOR<TaskCreateWithoutDonorInput, TaskUncheckedCreateWithoutDonorInput>
-  }
-
-  export type TaskUpdateWithWhereUniqueWithoutDonorInput = {
-    where: TaskWhereUniqueInput
-    data: XOR<TaskUpdateWithoutDonorInput, TaskUncheckedUpdateWithoutDonorInput>
-  }
-
-  export type TaskUpdateManyWithWhereWithoutDonorInput = {
-    where: TaskScalarWhereInput
-    data: XOR<TaskUpdateManyMutationInput, TaskUncheckedUpdateManyWithoutDonorInput>
-  }
-
   export type SegmentMemberUpsertWithWhereUniqueWithoutDonorInput = {
     where: SegmentMemberWhereUniqueInput
     update: XOR<SegmentMemberUpdateWithoutDonorInput, SegmentMemberUncheckedUpdateWithoutDonorInput>
@@ -23853,14 +23870,30 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"SegmentMember"> | Date | string
   }
 
+  export type TaskUpsertWithWhereUniqueWithoutDonorInput = {
+    where: TaskWhereUniqueInput
+    update: XOR<TaskUpdateWithoutDonorInput, TaskUncheckedUpdateWithoutDonorInput>
+    create: XOR<TaskCreateWithoutDonorInput, TaskUncheckedCreateWithoutDonorInput>
+  }
+
+  export type TaskUpdateWithWhereUniqueWithoutDonorInput = {
+    where: TaskWhereUniqueInput
+    data: XOR<TaskUpdateWithoutDonorInput, TaskUncheckedUpdateWithoutDonorInput>
+  }
+
+  export type TaskUpdateManyWithWhereWithoutDonorInput = {
+    where: TaskScalarWhereInput
+    data: XOR<TaskUpdateManyMutationInput, TaskUncheckedUpdateManyWithoutDonorInput>
+  }
+
   export type OrganizationCreateWithoutCampaignsInput = {
     id?: string
     name: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    users?: UserCreateNestedManyWithoutOrganizationInput
     donors?: DonorCreateNestedManyWithoutOrganizationInput
     segments?: SegmentCreateNestedManyWithoutOrganizationInput
+    users?: UserCreateNestedManyWithoutOrganizationInput
     workflows?: WorkflowCreateNestedManyWithoutOrganizationInput
   }
 
@@ -23869,9 +23902,9 @@ export namespace Prisma {
     name: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     donors?: DonorUncheckedCreateNestedManyWithoutOrganizationInput
     segments?: SegmentUncheckedCreateNestedManyWithoutOrganizationInput
+    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     workflows?: WorkflowUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
@@ -23930,9 +23963,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    users?: UserUpdateManyWithoutOrganizationNestedInput
     donors?: DonorUpdateManyWithoutOrganizationNestedInput
     segments?: SegmentUpdateManyWithoutOrganizationNestedInput
+    users?: UserUpdateManyWithoutOrganizationNestedInput
     workflows?: WorkflowUpdateManyWithoutOrganizationNestedInput
   }
 
@@ -23941,9 +23974,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     donors?: DonorUncheckedUpdateManyWithoutOrganizationNestedInput
     segments?: SegmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     workflows?: WorkflowUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
@@ -23961,59 +23994,6 @@ export namespace Prisma {
   export type DonationUpdateManyWithWhereWithoutCampaignInput = {
     where: DonationScalarWhereInput
     data: XOR<DonationUpdateManyMutationInput, DonationUncheckedUpdateManyWithoutCampaignInput>
-  }
-
-  export type DonorCreateWithoutDonationsInput = {
-    id?: string
-    firstName: string
-    lastName: string
-    email?: string | null
-    phone?: string | null
-    address?: string | null
-    city?: string | null
-    state?: string | null
-    zipCode?: string | null
-    status?: $Enums.DonorStatus
-    retentionRisk?: $Enums.RetentionRisk
-    totalGifts?: number
-    totalAmount?: number
-    firstGiftDate?: Date | string | null
-    lastGiftDate?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutDonorsInput
-    interactions?: InteractionCreateNestedManyWithoutDonorInput
-    tasks?: TaskCreateNestedManyWithoutDonorInput
-    segmentMembers?: SegmentMemberCreateNestedManyWithoutDonorInput
-  }
-
-  export type DonorUncheckedCreateWithoutDonationsInput = {
-    id?: string
-    organizationId: string
-    firstName: string
-    lastName: string
-    email?: string | null
-    phone?: string | null
-    address?: string | null
-    city?: string | null
-    state?: string | null
-    zipCode?: string | null
-    status?: $Enums.DonorStatus
-    retentionRisk?: $Enums.RetentionRisk
-    totalGifts?: number
-    totalAmount?: number
-    firstGiftDate?: Date | string | null
-    lastGiftDate?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    interactions?: InteractionUncheckedCreateNestedManyWithoutDonorInput
-    tasks?: TaskUncheckedCreateNestedManyWithoutDonorInput
-    segmentMembers?: SegmentMemberUncheckedCreateNestedManyWithoutDonorInput
-  }
-
-  export type DonorCreateOrConnectWithoutDonationsInput = {
-    where: DonorWhereUniqueInput
-    create: XOR<DonorCreateWithoutDonationsInput, DonorUncheckedCreateWithoutDonationsInput>
   }
 
   export type CampaignCreateWithoutDonationsInput = {
@@ -24049,63 +24029,59 @@ export namespace Prisma {
     create: XOR<CampaignCreateWithoutDonationsInput, CampaignUncheckedCreateWithoutDonationsInput>
   }
 
-  export type DonorUpsertWithoutDonationsInput = {
-    update: XOR<DonorUpdateWithoutDonationsInput, DonorUncheckedUpdateWithoutDonationsInput>
+  export type DonorCreateWithoutDonationsInput = {
+    id?: string
+    firstName: string
+    lastName: string
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    zipCode?: string | null
+    donorPassword?: string | null
+    status?: $Enums.DonorStatus
+    retentionRisk?: $Enums.RetentionRisk
+    totalGifts?: number
+    totalAmount?: number
+    firstGiftDate?: Date | string | null
+    lastGiftDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutDonorsInput
+    interactions?: InteractionCreateNestedManyWithoutDonorInput
+    segmentMembers?: SegmentMemberCreateNestedManyWithoutDonorInput
+    tasks?: TaskCreateNestedManyWithoutDonorInput
+  }
+
+  export type DonorUncheckedCreateWithoutDonationsInput = {
+    id?: string
+    organizationId: string
+    firstName: string
+    lastName: string
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    zipCode?: string | null
+    donorPassword?: string | null
+    status?: $Enums.DonorStatus
+    retentionRisk?: $Enums.RetentionRisk
+    totalGifts?: number
+    totalAmount?: number
+    firstGiftDate?: Date | string | null
+    lastGiftDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    interactions?: InteractionUncheckedCreateNestedManyWithoutDonorInput
+    segmentMembers?: SegmentMemberUncheckedCreateNestedManyWithoutDonorInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutDonorInput
+  }
+
+  export type DonorCreateOrConnectWithoutDonationsInput = {
+    where: DonorWhereUniqueInput
     create: XOR<DonorCreateWithoutDonationsInput, DonorUncheckedCreateWithoutDonationsInput>
-    where?: DonorWhereInput
-  }
-
-  export type DonorUpdateToOneWithWhereWithoutDonationsInput = {
-    where?: DonorWhereInput
-    data: XOR<DonorUpdateWithoutDonationsInput, DonorUncheckedUpdateWithoutDonationsInput>
-  }
-
-  export type DonorUpdateWithoutDonationsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    city?: NullableStringFieldUpdateOperationsInput | string | null
-    state?: NullableStringFieldUpdateOperationsInput | string | null
-    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumDonorStatusFieldUpdateOperationsInput | $Enums.DonorStatus
-    retentionRisk?: EnumRetentionRiskFieldUpdateOperationsInput | $Enums.RetentionRisk
-    totalGifts?: IntFieldUpdateOperationsInput | number
-    totalAmount?: FloatFieldUpdateOperationsInput | number
-    firstGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    lastGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutDonorsNestedInput
-    interactions?: InteractionUpdateManyWithoutDonorNestedInput
-    tasks?: TaskUpdateManyWithoutDonorNestedInput
-    segmentMembers?: SegmentMemberUpdateManyWithoutDonorNestedInput
-  }
-
-  export type DonorUncheckedUpdateWithoutDonationsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    city?: NullableStringFieldUpdateOperationsInput | string | null
-    state?: NullableStringFieldUpdateOperationsInput | string | null
-    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumDonorStatusFieldUpdateOperationsInput | $Enums.DonorStatus
-    retentionRisk?: EnumRetentionRiskFieldUpdateOperationsInput | $Enums.RetentionRisk
-    totalGifts?: IntFieldUpdateOperationsInput | number
-    totalAmount?: FloatFieldUpdateOperationsInput | number
-    firstGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    lastGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    interactions?: InteractionUncheckedUpdateManyWithoutDonorNestedInput
-    tasks?: TaskUncheckedUpdateManyWithoutDonorNestedInput
-    segmentMembers?: SegmentMemberUncheckedUpdateManyWithoutDonorNestedInput
   }
 
   export type CampaignUpsertWithoutDonationsInput = {
@@ -24147,6 +24123,67 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type DonorUpsertWithoutDonationsInput = {
+    update: XOR<DonorUpdateWithoutDonationsInput, DonorUncheckedUpdateWithoutDonationsInput>
+    create: XOR<DonorCreateWithoutDonationsInput, DonorUncheckedCreateWithoutDonationsInput>
+    where?: DonorWhereInput
+  }
+
+  export type DonorUpdateToOneWithWhereWithoutDonationsInput = {
+    where?: DonorWhereInput
+    data: XOR<DonorUpdateWithoutDonationsInput, DonorUncheckedUpdateWithoutDonationsInput>
+  }
+
+  export type DonorUpdateWithoutDonationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    donorPassword?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDonorStatusFieldUpdateOperationsInput | $Enums.DonorStatus
+    retentionRisk?: EnumRetentionRiskFieldUpdateOperationsInput | $Enums.RetentionRisk
+    totalGifts?: IntFieldUpdateOperationsInput | number
+    totalAmount?: FloatFieldUpdateOperationsInput | number
+    firstGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutDonorsNestedInput
+    interactions?: InteractionUpdateManyWithoutDonorNestedInput
+    segmentMembers?: SegmentMemberUpdateManyWithoutDonorNestedInput
+    tasks?: TaskUpdateManyWithoutDonorNestedInput
+  }
+
+  export type DonorUncheckedUpdateWithoutDonationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    donorPassword?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDonorStatusFieldUpdateOperationsInput | $Enums.DonorStatus
+    retentionRisk?: EnumRetentionRiskFieldUpdateOperationsInput | $Enums.RetentionRisk
+    totalGifts?: IntFieldUpdateOperationsInput | number
+    totalAmount?: FloatFieldUpdateOperationsInput | number
+    firstGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    interactions?: InteractionUncheckedUpdateManyWithoutDonorNestedInput
+    segmentMembers?: SegmentMemberUncheckedUpdateManyWithoutDonorNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutDonorNestedInput
+  }
+
   export type DonorCreateWithoutInteractionsInput = {
     id?: string
     firstName: string
@@ -24157,6 +24194,7 @@ export namespace Prisma {
     city?: string | null
     state?: string | null
     zipCode?: string | null
+    donorPassword?: string | null
     status?: $Enums.DonorStatus
     retentionRisk?: $Enums.RetentionRisk
     totalGifts?: number
@@ -24165,10 +24203,10 @@ export namespace Prisma {
     lastGiftDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutDonorsInput
     donations?: DonationCreateNestedManyWithoutDonorInput
-    tasks?: TaskCreateNestedManyWithoutDonorInput
+    organization: OrganizationCreateNestedOneWithoutDonorsInput
     segmentMembers?: SegmentMemberCreateNestedManyWithoutDonorInput
+    tasks?: TaskCreateNestedManyWithoutDonorInput
   }
 
   export type DonorUncheckedCreateWithoutInteractionsInput = {
@@ -24182,6 +24220,7 @@ export namespace Prisma {
     city?: string | null
     state?: string | null
     zipCode?: string | null
+    donorPassword?: string | null
     status?: $Enums.DonorStatus
     retentionRisk?: $Enums.RetentionRisk
     totalGifts?: number
@@ -24191,8 +24230,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     donations?: DonationUncheckedCreateNestedManyWithoutDonorInput
-    tasks?: TaskUncheckedCreateNestedManyWithoutDonorInput
     segmentMembers?: SegmentMemberUncheckedCreateNestedManyWithoutDonorInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutDonorInput
   }
 
   export type DonorCreateOrConnectWithoutInteractionsInput = {
@@ -24221,6 +24260,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    donorPassword?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDonorStatusFieldUpdateOperationsInput | $Enums.DonorStatus
     retentionRisk?: EnumRetentionRiskFieldUpdateOperationsInput | $Enums.RetentionRisk
     totalGifts?: IntFieldUpdateOperationsInput | number
@@ -24229,10 +24269,10 @@ export namespace Prisma {
     lastGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutDonorsNestedInput
     donations?: DonationUpdateManyWithoutDonorNestedInput
-    tasks?: TaskUpdateManyWithoutDonorNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutDonorsNestedInput
     segmentMembers?: SegmentMemberUpdateManyWithoutDonorNestedInput
+    tasks?: TaskUpdateManyWithoutDonorNestedInput
   }
 
   export type DonorUncheckedUpdateWithoutInteractionsInput = {
@@ -24246,6 +24286,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    donorPassword?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDonorStatusFieldUpdateOperationsInput | $Enums.DonorStatus
     retentionRisk?: EnumRetentionRiskFieldUpdateOperationsInput | $Enums.RetentionRisk
     totalGifts?: IntFieldUpdateOperationsInput | number
@@ -24255,8 +24296,43 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     donations?: DonationUncheckedUpdateManyWithoutDonorNestedInput
-    tasks?: TaskUncheckedUpdateManyWithoutDonorNestedInput
     segmentMembers?: SegmentMemberUncheckedUpdateManyWithoutDonorNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutDonorNestedInput
+  }
+
+  export type UserCreateWithoutAssignedTasksInput = {
+    id?: string
+    email: string
+    password: string
+    firstName: string
+    lastName: string
+    role?: $Enums.UserRole
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    activityLogs?: ActivityLogCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    organization: OrganizationCreateNestedOneWithoutUsersInput
+    workflowExecutions?: WorkflowExecutionCreateNestedManyWithoutExecutedByInput
+  }
+
+  export type UserUncheckedCreateWithoutAssignedTasksInput = {
+    id?: string
+    email: string
+    password: string
+    firstName: string
+    lastName: string
+    role?: $Enums.UserRole
+    organizationId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    workflowExecutions?: WorkflowExecutionUncheckedCreateNestedManyWithoutExecutedByInput
+  }
+
+  export type UserCreateOrConnectWithoutAssignedTasksInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutAssignedTasksInput, UserUncheckedCreateWithoutAssignedTasksInput>
   }
 
   export type DonorCreateWithoutTasksInput = {
@@ -24269,6 +24345,7 @@ export namespace Prisma {
     city?: string | null
     state?: string | null
     zipCode?: string | null
+    donorPassword?: string | null
     status?: $Enums.DonorStatus
     retentionRisk?: $Enums.RetentionRisk
     totalGifts?: number
@@ -24277,8 +24354,8 @@ export namespace Prisma {
     lastGiftDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutDonorsInput
     donations?: DonationCreateNestedManyWithoutDonorInput
+    organization: OrganizationCreateNestedOneWithoutDonorsInput
     interactions?: InteractionCreateNestedManyWithoutDonorInput
     segmentMembers?: SegmentMemberCreateNestedManyWithoutDonorInput
   }
@@ -24294,6 +24371,7 @@ export namespace Prisma {
     city?: string | null
     state?: string | null
     zipCode?: string | null
+    donorPassword?: string | null
     status?: $Enums.DonorStatus
     retentionRisk?: $Enums.RetentionRisk
     totalGifts?: number
@@ -24312,39 +24390,45 @@ export namespace Prisma {
     create: XOR<DonorCreateWithoutTasksInput, DonorUncheckedCreateWithoutTasksInput>
   }
 
-  export type UserCreateWithoutAssignedTasksInput = {
-    id?: string
-    email: string
-    password: string
-    firstName: string
-    lastName: string
-    role?: $Enums.UserRole
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutUsersInput
-    sessions?: SessionCreateNestedManyWithoutUserInput
-    activityLogs?: ActivityLogCreateNestedManyWithoutUserInput
-    workflowExecutions?: WorkflowExecutionCreateNestedManyWithoutExecutedByInput
-  }
-
-  export type UserUncheckedCreateWithoutAssignedTasksInput = {
-    id?: string
-    email: string
-    password: string
-    firstName: string
-    lastName: string
-    role?: $Enums.UserRole
-    organizationId: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
-    activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutUserInput
-    workflowExecutions?: WorkflowExecutionUncheckedCreateNestedManyWithoutExecutedByInput
-  }
-
-  export type UserCreateOrConnectWithoutAssignedTasksInput = {
-    where: UserWhereUniqueInput
+  export type UserUpsertWithoutAssignedTasksInput = {
+    update: XOR<UserUpdateWithoutAssignedTasksInput, UserUncheckedUpdateWithoutAssignedTasksInput>
     create: XOR<UserCreateWithoutAssignedTasksInput, UserUncheckedCreateWithoutAssignedTasksInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutAssignedTasksInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutAssignedTasksInput, UserUncheckedUpdateWithoutAssignedTasksInput>
+  }
+
+  export type UserUpdateWithoutAssignedTasksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activityLogs?: ActivityLogUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutUsersNestedInput
+    workflowExecutions?: WorkflowExecutionUpdateManyWithoutExecutedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutAssignedTasksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    organizationId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activityLogs?: ActivityLogUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    workflowExecutions?: WorkflowExecutionUncheckedUpdateManyWithoutExecutedByNestedInput
   }
 
   export type DonorUpsertWithoutTasksInput = {
@@ -24368,6 +24452,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    donorPassword?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDonorStatusFieldUpdateOperationsInput | $Enums.DonorStatus
     retentionRisk?: EnumRetentionRiskFieldUpdateOperationsInput | $Enums.RetentionRisk
     totalGifts?: IntFieldUpdateOperationsInput | number
@@ -24376,8 +24461,8 @@ export namespace Prisma {
     lastGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutDonorsNestedInput
     donations?: DonationUpdateManyWithoutDonorNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutDonorsNestedInput
     interactions?: InteractionUpdateManyWithoutDonorNestedInput
     segmentMembers?: SegmentMemberUpdateManyWithoutDonorNestedInput
   }
@@ -24393,6 +24478,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    donorPassword?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDonorStatusFieldUpdateOperationsInput | $Enums.DonorStatus
     retentionRisk?: EnumRetentionRiskFieldUpdateOperationsInput | $Enums.RetentionRisk
     totalGifts?: IntFieldUpdateOperationsInput | number
@@ -24404,74 +24490,6 @@ export namespace Prisma {
     donations?: DonationUncheckedUpdateManyWithoutDonorNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutDonorNestedInput
     segmentMembers?: SegmentMemberUncheckedUpdateManyWithoutDonorNestedInput
-  }
-
-  export type UserUpsertWithoutAssignedTasksInput = {
-    update: XOR<UserUpdateWithoutAssignedTasksInput, UserUncheckedUpdateWithoutAssignedTasksInput>
-    create: XOR<UserCreateWithoutAssignedTasksInput, UserUncheckedCreateWithoutAssignedTasksInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutAssignedTasksInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutAssignedTasksInput, UserUncheckedUpdateWithoutAssignedTasksInput>
-  }
-
-  export type UserUpdateWithoutAssignedTasksInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutUsersNestedInput
-    sessions?: SessionUpdateManyWithoutUserNestedInput
-    activityLogs?: ActivityLogUpdateManyWithoutUserNestedInput
-    workflowExecutions?: WorkflowExecutionUpdateManyWithoutExecutedByNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutAssignedTasksInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    organizationId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
-    activityLogs?: ActivityLogUncheckedUpdateManyWithoutUserNestedInput
-    workflowExecutions?: WorkflowExecutionUncheckedUpdateManyWithoutExecutedByNestedInput
-  }
-
-  export type OrganizationCreateWithoutSegmentsInput = {
-    id?: string
-    name: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    users?: UserCreateNestedManyWithoutOrganizationInput
-    donors?: DonorCreateNestedManyWithoutOrganizationInput
-    campaigns?: CampaignCreateNestedManyWithoutOrganizationInput
-    workflows?: WorkflowCreateNestedManyWithoutOrganizationInput
-  }
-
-  export type OrganizationUncheckedCreateWithoutSegmentsInput = {
-    id?: string
-    name: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
-    donors?: DonorUncheckedCreateNestedManyWithoutOrganizationInput
-    campaigns?: CampaignUncheckedCreateNestedManyWithoutOrganizationInput
-    workflows?: WorkflowUncheckedCreateNestedManyWithoutOrganizationInput
-  }
-
-  export type OrganizationCreateOrConnectWithoutSegmentsInput = {
-    where: OrganizationWhereUniqueInput
-    create: XOR<OrganizationCreateWithoutSegmentsInput, OrganizationUncheckedCreateWithoutSegmentsInput>
   }
 
   export type SegmentMemberCreateWithoutSegmentInput = {
@@ -24496,6 +24514,33 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type OrganizationCreateWithoutSegmentsInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    campaigns?: CampaignCreateNestedManyWithoutOrganizationInput
+    donors?: DonorCreateNestedManyWithoutOrganizationInput
+    users?: UserCreateNestedManyWithoutOrganizationInput
+    workflows?: WorkflowCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationUncheckedCreateWithoutSegmentsInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    campaigns?: CampaignUncheckedCreateNestedManyWithoutOrganizationInput
+    donors?: DonorUncheckedCreateNestedManyWithoutOrganizationInput
+    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    workflows?: WorkflowUncheckedCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationCreateOrConnectWithoutSegmentsInput = {
+    where: OrganizationWhereUniqueInput
+    create: XOR<OrganizationCreateWithoutSegmentsInput, OrganizationUncheckedCreateWithoutSegmentsInput>
+  }
+
   export type WorkflowCreateWithoutSegmentInput = {
     id?: string
     name: string
@@ -24506,8 +24551,8 @@ export namespace Prisma {
     executionCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutWorkflowsInput
     executions?: WorkflowExecutionCreateNestedManyWithoutWorkflowInput
+    organization: OrganizationCreateNestedOneWithoutWorkflowsInput
   }
 
   export type WorkflowUncheckedCreateWithoutSegmentInput = {
@@ -24534,39 +24579,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type OrganizationUpsertWithoutSegmentsInput = {
-    update: XOR<OrganizationUpdateWithoutSegmentsInput, OrganizationUncheckedUpdateWithoutSegmentsInput>
-    create: XOR<OrganizationCreateWithoutSegmentsInput, OrganizationUncheckedCreateWithoutSegmentsInput>
-    where?: OrganizationWhereInput
-  }
-
-  export type OrganizationUpdateToOneWithWhereWithoutSegmentsInput = {
-    where?: OrganizationWhereInput
-    data: XOR<OrganizationUpdateWithoutSegmentsInput, OrganizationUncheckedUpdateWithoutSegmentsInput>
-  }
-
-  export type OrganizationUpdateWithoutSegmentsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    users?: UserUpdateManyWithoutOrganizationNestedInput
-    donors?: DonorUpdateManyWithoutOrganizationNestedInput
-    campaigns?: CampaignUpdateManyWithoutOrganizationNestedInput
-    workflows?: WorkflowUpdateManyWithoutOrganizationNestedInput
-  }
-
-  export type OrganizationUncheckedUpdateWithoutSegmentsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
-    donors?: DonorUncheckedUpdateManyWithoutOrganizationNestedInput
-    campaigns?: CampaignUncheckedUpdateManyWithoutOrganizationNestedInput
-    workflows?: WorkflowUncheckedUpdateManyWithoutOrganizationNestedInput
-  }
-
   export type SegmentMemberUpsertWithWhereUniqueWithoutSegmentInput = {
     where: SegmentMemberWhereUniqueInput
     update: XOR<SegmentMemberUpdateWithoutSegmentInput, SegmentMemberUncheckedUpdateWithoutSegmentInput>
@@ -24583,6 +24595,39 @@ export namespace Prisma {
     data: XOR<SegmentMemberUpdateManyMutationInput, SegmentMemberUncheckedUpdateManyWithoutSegmentInput>
   }
 
+  export type OrganizationUpsertWithoutSegmentsInput = {
+    update: XOR<OrganizationUpdateWithoutSegmentsInput, OrganizationUncheckedUpdateWithoutSegmentsInput>
+    create: XOR<OrganizationCreateWithoutSegmentsInput, OrganizationUncheckedCreateWithoutSegmentsInput>
+    where?: OrganizationWhereInput
+  }
+
+  export type OrganizationUpdateToOneWithWhereWithoutSegmentsInput = {
+    where?: OrganizationWhereInput
+    data: XOR<OrganizationUpdateWithoutSegmentsInput, OrganizationUncheckedUpdateWithoutSegmentsInput>
+  }
+
+  export type OrganizationUpdateWithoutSegmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaigns?: CampaignUpdateManyWithoutOrganizationNestedInput
+    donors?: DonorUpdateManyWithoutOrganizationNestedInput
+    users?: UserUpdateManyWithoutOrganizationNestedInput
+    workflows?: WorkflowUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type OrganizationUncheckedUpdateWithoutSegmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaigns?: CampaignUncheckedUpdateManyWithoutOrganizationNestedInput
+    donors?: DonorUncheckedUpdateManyWithoutOrganizationNestedInput
+    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    workflows?: WorkflowUncheckedUpdateManyWithoutOrganizationNestedInput
+  }
+
   export type WorkflowUpsertWithWhereUniqueWithoutSegmentInput = {
     where: WorkflowWhereUniqueInput
     update: XOR<WorkflowUpdateWithoutSegmentInput, WorkflowUncheckedUpdateWithoutSegmentInput>
@@ -24597,6 +24642,61 @@ export namespace Prisma {
   export type WorkflowUpdateManyWithWhereWithoutSegmentInput = {
     where: WorkflowScalarWhereInput
     data: XOR<WorkflowUpdateManyMutationInput, WorkflowUncheckedUpdateManyWithoutSegmentInput>
+  }
+
+  export type DonorCreateWithoutSegmentMembersInput = {
+    id?: string
+    firstName: string
+    lastName: string
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    zipCode?: string | null
+    donorPassword?: string | null
+    status?: $Enums.DonorStatus
+    retentionRisk?: $Enums.RetentionRisk
+    totalGifts?: number
+    totalAmount?: number
+    firstGiftDate?: Date | string | null
+    lastGiftDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    donations?: DonationCreateNestedManyWithoutDonorInput
+    organization: OrganizationCreateNestedOneWithoutDonorsInput
+    interactions?: InteractionCreateNestedManyWithoutDonorInput
+    tasks?: TaskCreateNestedManyWithoutDonorInput
+  }
+
+  export type DonorUncheckedCreateWithoutSegmentMembersInput = {
+    id?: string
+    organizationId: string
+    firstName: string
+    lastName: string
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    zipCode?: string | null
+    donorPassword?: string | null
+    status?: $Enums.DonorStatus
+    retentionRisk?: $Enums.RetentionRisk
+    totalGifts?: number
+    totalAmount?: number
+    firstGiftDate?: Date | string | null
+    lastGiftDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    donations?: DonationUncheckedCreateNestedManyWithoutDonorInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutDonorInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutDonorInput
+  }
+
+  export type DonorCreateOrConnectWithoutSegmentMembersInput = {
+    where: DonorWhereUniqueInput
+    create: XOR<DonorCreateWithoutSegmentMembersInput, DonorUncheckedCreateWithoutSegmentMembersInput>
   }
 
   export type SegmentCreateWithoutMembersInput = {
@@ -24630,57 +24730,65 @@ export namespace Prisma {
     create: XOR<SegmentCreateWithoutMembersInput, SegmentUncheckedCreateWithoutMembersInput>
   }
 
-  export type DonorCreateWithoutSegmentMembersInput = {
-    id?: string
-    firstName: string
-    lastName: string
-    email?: string | null
-    phone?: string | null
-    address?: string | null
-    city?: string | null
-    state?: string | null
-    zipCode?: string | null
-    status?: $Enums.DonorStatus
-    retentionRisk?: $Enums.RetentionRisk
-    totalGifts?: number
-    totalAmount?: number
-    firstGiftDate?: Date | string | null
-    lastGiftDate?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutDonorsInput
-    donations?: DonationCreateNestedManyWithoutDonorInput
-    interactions?: InteractionCreateNestedManyWithoutDonorInput
-    tasks?: TaskCreateNestedManyWithoutDonorInput
-  }
-
-  export type DonorUncheckedCreateWithoutSegmentMembersInput = {
-    id?: string
-    organizationId: string
-    firstName: string
-    lastName: string
-    email?: string | null
-    phone?: string | null
-    address?: string | null
-    city?: string | null
-    state?: string | null
-    zipCode?: string | null
-    status?: $Enums.DonorStatus
-    retentionRisk?: $Enums.RetentionRisk
-    totalGifts?: number
-    totalAmount?: number
-    firstGiftDate?: Date | string | null
-    lastGiftDate?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    donations?: DonationUncheckedCreateNestedManyWithoutDonorInput
-    interactions?: InteractionUncheckedCreateNestedManyWithoutDonorInput
-    tasks?: TaskUncheckedCreateNestedManyWithoutDonorInput
-  }
-
-  export type DonorCreateOrConnectWithoutSegmentMembersInput = {
-    where: DonorWhereUniqueInput
+  export type DonorUpsertWithoutSegmentMembersInput = {
+    update: XOR<DonorUpdateWithoutSegmentMembersInput, DonorUncheckedUpdateWithoutSegmentMembersInput>
     create: XOR<DonorCreateWithoutSegmentMembersInput, DonorUncheckedCreateWithoutSegmentMembersInput>
+    where?: DonorWhereInput
+  }
+
+  export type DonorUpdateToOneWithWhereWithoutSegmentMembersInput = {
+    where?: DonorWhereInput
+    data: XOR<DonorUpdateWithoutSegmentMembersInput, DonorUncheckedUpdateWithoutSegmentMembersInput>
+  }
+
+  export type DonorUpdateWithoutSegmentMembersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    donorPassword?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDonorStatusFieldUpdateOperationsInput | $Enums.DonorStatus
+    retentionRisk?: EnumRetentionRiskFieldUpdateOperationsInput | $Enums.RetentionRisk
+    totalGifts?: IntFieldUpdateOperationsInput | number
+    totalAmount?: FloatFieldUpdateOperationsInput | number
+    firstGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    donations?: DonationUpdateManyWithoutDonorNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutDonorsNestedInput
+    interactions?: InteractionUpdateManyWithoutDonorNestedInput
+    tasks?: TaskUpdateManyWithoutDonorNestedInput
+  }
+
+  export type DonorUncheckedUpdateWithoutSegmentMembersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    donorPassword?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDonorStatusFieldUpdateOperationsInput | $Enums.DonorStatus
+    retentionRisk?: EnumRetentionRiskFieldUpdateOperationsInput | $Enums.RetentionRisk
+    totalGifts?: IntFieldUpdateOperationsInput | number
+    totalAmount?: FloatFieldUpdateOperationsInput | number
+    firstGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    donations?: DonationUncheckedUpdateManyWithoutDonorNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutDonorNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutDonorNestedInput
   }
 
   export type SegmentUpsertWithoutMembersInput = {
@@ -24720,123 +24828,6 @@ export namespace Prisma {
     workflows?: WorkflowUncheckedUpdateManyWithoutSegmentNestedInput
   }
 
-  export type DonorUpsertWithoutSegmentMembersInput = {
-    update: XOR<DonorUpdateWithoutSegmentMembersInput, DonorUncheckedUpdateWithoutSegmentMembersInput>
-    create: XOR<DonorCreateWithoutSegmentMembersInput, DonorUncheckedCreateWithoutSegmentMembersInput>
-    where?: DonorWhereInput
-  }
-
-  export type DonorUpdateToOneWithWhereWithoutSegmentMembersInput = {
-    where?: DonorWhereInput
-    data: XOR<DonorUpdateWithoutSegmentMembersInput, DonorUncheckedUpdateWithoutSegmentMembersInput>
-  }
-
-  export type DonorUpdateWithoutSegmentMembersInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    city?: NullableStringFieldUpdateOperationsInput | string | null
-    state?: NullableStringFieldUpdateOperationsInput | string | null
-    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumDonorStatusFieldUpdateOperationsInput | $Enums.DonorStatus
-    retentionRisk?: EnumRetentionRiskFieldUpdateOperationsInput | $Enums.RetentionRisk
-    totalGifts?: IntFieldUpdateOperationsInput | number
-    totalAmount?: FloatFieldUpdateOperationsInput | number
-    firstGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    lastGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutDonorsNestedInput
-    donations?: DonationUpdateManyWithoutDonorNestedInput
-    interactions?: InteractionUpdateManyWithoutDonorNestedInput
-    tasks?: TaskUpdateManyWithoutDonorNestedInput
-  }
-
-  export type DonorUncheckedUpdateWithoutSegmentMembersInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    city?: NullableStringFieldUpdateOperationsInput | string | null
-    state?: NullableStringFieldUpdateOperationsInput | string | null
-    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumDonorStatusFieldUpdateOperationsInput | $Enums.DonorStatus
-    retentionRisk?: EnumRetentionRiskFieldUpdateOperationsInput | $Enums.RetentionRisk
-    totalGifts?: IntFieldUpdateOperationsInput | number
-    totalAmount?: FloatFieldUpdateOperationsInput | number
-    firstGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    lastGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    donations?: DonationUncheckedUpdateManyWithoutDonorNestedInput
-    interactions?: InteractionUncheckedUpdateManyWithoutDonorNestedInput
-    tasks?: TaskUncheckedUpdateManyWithoutDonorNestedInput
-  }
-
-  export type OrganizationCreateWithoutWorkflowsInput = {
-    id?: string
-    name: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    users?: UserCreateNestedManyWithoutOrganizationInput
-    donors?: DonorCreateNestedManyWithoutOrganizationInput
-    campaigns?: CampaignCreateNestedManyWithoutOrganizationInput
-    segments?: SegmentCreateNestedManyWithoutOrganizationInput
-  }
-
-  export type OrganizationUncheckedCreateWithoutWorkflowsInput = {
-    id?: string
-    name: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
-    donors?: DonorUncheckedCreateNestedManyWithoutOrganizationInput
-    campaigns?: CampaignUncheckedCreateNestedManyWithoutOrganizationInput
-    segments?: SegmentUncheckedCreateNestedManyWithoutOrganizationInput
-  }
-
-  export type OrganizationCreateOrConnectWithoutWorkflowsInput = {
-    where: OrganizationWhereUniqueInput
-    create: XOR<OrganizationCreateWithoutWorkflowsInput, OrganizationUncheckedCreateWithoutWorkflowsInput>
-  }
-
-  export type SegmentCreateWithoutWorkflowsInput = {
-    id?: string
-    name: string
-    description?: string | null
-    rules: JsonNullValueInput | InputJsonValue
-    memberCount?: number
-    lastCalculated?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutSegmentsInput
-    members?: SegmentMemberCreateNestedManyWithoutSegmentInput
-  }
-
-  export type SegmentUncheckedCreateWithoutWorkflowsInput = {
-    id?: string
-    organizationId: string
-    name: string
-    description?: string | null
-    rules: JsonNullValueInput | InputJsonValue
-    memberCount?: number
-    lastCalculated?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    members?: SegmentMemberUncheckedCreateNestedManyWithoutSegmentInput
-  }
-
-  export type SegmentCreateOrConnectWithoutWorkflowsInput = {
-    where: SegmentWhereUniqueInput
-    create: XOR<SegmentCreateWithoutWorkflowsInput, SegmentUncheckedCreateWithoutWorkflowsInput>
-  }
-
   export type WorkflowExecutionCreateWithoutWorkflowInput = {
     id?: string
     status: string
@@ -24867,6 +24858,80 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type OrganizationCreateWithoutWorkflowsInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    campaigns?: CampaignCreateNestedManyWithoutOrganizationInput
+    donors?: DonorCreateNestedManyWithoutOrganizationInput
+    segments?: SegmentCreateNestedManyWithoutOrganizationInput
+    users?: UserCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationUncheckedCreateWithoutWorkflowsInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    campaigns?: CampaignUncheckedCreateNestedManyWithoutOrganizationInput
+    donors?: DonorUncheckedCreateNestedManyWithoutOrganizationInput
+    segments?: SegmentUncheckedCreateNestedManyWithoutOrganizationInput
+    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationCreateOrConnectWithoutWorkflowsInput = {
+    where: OrganizationWhereUniqueInput
+    create: XOR<OrganizationCreateWithoutWorkflowsInput, OrganizationUncheckedCreateWithoutWorkflowsInput>
+  }
+
+  export type SegmentCreateWithoutWorkflowsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    rules: JsonNullValueInput | InputJsonValue
+    memberCount?: number
+    lastCalculated?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    members?: SegmentMemberCreateNestedManyWithoutSegmentInput
+    organization: OrganizationCreateNestedOneWithoutSegmentsInput
+  }
+
+  export type SegmentUncheckedCreateWithoutWorkflowsInput = {
+    id?: string
+    organizationId: string
+    name: string
+    description?: string | null
+    rules: JsonNullValueInput | InputJsonValue
+    memberCount?: number
+    lastCalculated?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    members?: SegmentMemberUncheckedCreateNestedManyWithoutSegmentInput
+  }
+
+  export type SegmentCreateOrConnectWithoutWorkflowsInput = {
+    where: SegmentWhereUniqueInput
+    create: XOR<SegmentCreateWithoutWorkflowsInput, SegmentUncheckedCreateWithoutWorkflowsInput>
+  }
+
+  export type WorkflowExecutionUpsertWithWhereUniqueWithoutWorkflowInput = {
+    where: WorkflowExecutionWhereUniqueInput
+    update: XOR<WorkflowExecutionUpdateWithoutWorkflowInput, WorkflowExecutionUncheckedUpdateWithoutWorkflowInput>
+    create: XOR<WorkflowExecutionCreateWithoutWorkflowInput, WorkflowExecutionUncheckedCreateWithoutWorkflowInput>
+  }
+
+  export type WorkflowExecutionUpdateWithWhereUniqueWithoutWorkflowInput = {
+    where: WorkflowExecutionWhereUniqueInput
+    data: XOR<WorkflowExecutionUpdateWithoutWorkflowInput, WorkflowExecutionUncheckedUpdateWithoutWorkflowInput>
+  }
+
+  export type WorkflowExecutionUpdateManyWithWhereWithoutWorkflowInput = {
+    where: WorkflowExecutionScalarWhereInput
+    data: XOR<WorkflowExecutionUpdateManyMutationInput, WorkflowExecutionUncheckedUpdateManyWithoutWorkflowInput>
+  }
+
   export type OrganizationUpsertWithoutWorkflowsInput = {
     update: XOR<OrganizationUpdateWithoutWorkflowsInput, OrganizationUncheckedUpdateWithoutWorkflowsInput>
     create: XOR<OrganizationCreateWithoutWorkflowsInput, OrganizationUncheckedCreateWithoutWorkflowsInput>
@@ -24883,10 +24948,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    users?: UserUpdateManyWithoutOrganizationNestedInput
-    donors?: DonorUpdateManyWithoutOrganizationNestedInput
     campaigns?: CampaignUpdateManyWithoutOrganizationNestedInput
+    donors?: DonorUpdateManyWithoutOrganizationNestedInput
     segments?: SegmentUpdateManyWithoutOrganizationNestedInput
+    users?: UserUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutWorkflowsInput = {
@@ -24894,10 +24959,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
-    donors?: DonorUncheckedUpdateManyWithoutOrganizationNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutOrganizationNestedInput
+    donors?: DonorUncheckedUpdateManyWithoutOrganizationNestedInput
     segments?: SegmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type SegmentUpsertWithoutWorkflowsInput = {
@@ -24920,8 +24985,8 @@ export namespace Prisma {
     lastCalculated?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutSegmentsNestedInput
     members?: SegmentMemberUpdateManyWithoutSegmentNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutSegmentsNestedInput
   }
 
   export type SegmentUncheckedUpdateWithoutWorkflowsInput = {
@@ -24937,20 +25002,39 @@ export namespace Prisma {
     members?: SegmentMemberUncheckedUpdateManyWithoutSegmentNestedInput
   }
 
-  export type WorkflowExecutionUpsertWithWhereUniqueWithoutWorkflowInput = {
-    where: WorkflowExecutionWhereUniqueInput
-    update: XOR<WorkflowExecutionUpdateWithoutWorkflowInput, WorkflowExecutionUncheckedUpdateWithoutWorkflowInput>
-    create: XOR<WorkflowExecutionCreateWithoutWorkflowInput, WorkflowExecutionUncheckedCreateWithoutWorkflowInput>
+  export type UserCreateWithoutWorkflowExecutionsInput = {
+    id?: string
+    email: string
+    password: string
+    firstName: string
+    lastName: string
+    role?: $Enums.UserRole
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    activityLogs?: ActivityLogCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssignedUserInput
+    organization: OrganizationCreateNestedOneWithoutUsersInput
   }
 
-  export type WorkflowExecutionUpdateWithWhereUniqueWithoutWorkflowInput = {
-    where: WorkflowExecutionWhereUniqueInput
-    data: XOR<WorkflowExecutionUpdateWithoutWorkflowInput, WorkflowExecutionUncheckedUpdateWithoutWorkflowInput>
+  export type UserUncheckedCreateWithoutWorkflowExecutionsInput = {
+    id?: string
+    email: string
+    password: string
+    firstName: string
+    lastName: string
+    role?: $Enums.UserRole
+    organizationId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedUserInput
   }
 
-  export type WorkflowExecutionUpdateManyWithWhereWithoutWorkflowInput = {
-    where: WorkflowExecutionScalarWhereInput
-    data: XOR<WorkflowExecutionUpdateManyMutationInput, WorkflowExecutionUncheckedUpdateManyWithoutWorkflowInput>
+  export type UserCreateOrConnectWithoutWorkflowExecutionsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutWorkflowExecutionsInput, UserUncheckedCreateWithoutWorkflowExecutionsInput>
   }
 
   export type WorkflowCreateWithoutExecutionsInput = {
@@ -24986,39 +25070,45 @@ export namespace Prisma {
     create: XOR<WorkflowCreateWithoutExecutionsInput, WorkflowUncheckedCreateWithoutExecutionsInput>
   }
 
-  export type UserCreateWithoutWorkflowExecutionsInput = {
-    id?: string
-    email: string
-    password: string
-    firstName: string
-    lastName: string
-    role?: $Enums.UserRole
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutUsersInput
-    sessions?: SessionCreateNestedManyWithoutUserInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedUserInput
-    activityLogs?: ActivityLogCreateNestedManyWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutWorkflowExecutionsInput = {
-    id?: string
-    email: string
-    password: string
-    firstName: string
-    lastName: string
-    role?: $Enums.UserRole
-    organizationId: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedUserInput
-    activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutWorkflowExecutionsInput = {
-    where: UserWhereUniqueInput
+  export type UserUpsertWithoutWorkflowExecutionsInput = {
+    update: XOR<UserUpdateWithoutWorkflowExecutionsInput, UserUncheckedUpdateWithoutWorkflowExecutionsInput>
     create: XOR<UserCreateWithoutWorkflowExecutionsInput, UserUncheckedCreateWithoutWorkflowExecutionsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutWorkflowExecutionsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutWorkflowExecutionsInput, UserUncheckedUpdateWithoutWorkflowExecutionsInput>
+  }
+
+  export type UserUpdateWithoutWorkflowExecutionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activityLogs?: ActivityLogUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssignedUserNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutUsersNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutWorkflowExecutionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    organizationId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activityLogs?: ActivityLogUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedUserNestedInput
   }
 
   export type WorkflowUpsertWithoutExecutionsInput = {
@@ -25060,47 +25150,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type UserUpsertWithoutWorkflowExecutionsInput = {
-    update: XOR<UserUpdateWithoutWorkflowExecutionsInput, UserUncheckedUpdateWithoutWorkflowExecutionsInput>
-    create: XOR<UserCreateWithoutWorkflowExecutionsInput, UserUncheckedCreateWithoutWorkflowExecutionsInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutWorkflowExecutionsInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutWorkflowExecutionsInput, UserUncheckedUpdateWithoutWorkflowExecutionsInput>
-  }
-
-  export type UserUpdateWithoutWorkflowExecutionsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutUsersNestedInput
-    sessions?: SessionUpdateManyWithoutUserNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedUserNestedInput
-    activityLogs?: ActivityLogUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutWorkflowExecutionsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    organizationId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedUserNestedInput
-    activityLogs?: ActivityLogUncheckedUpdateManyWithoutUserNestedInput
-  }
-
   export type UserCreateWithoutActivityLogsInput = {
     id?: string
     email: string
@@ -25110,9 +25159,9 @@ export namespace Prisma {
     role?: $Enums.UserRole
     createdAt?: Date | string
     updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutUsersInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     assignedTasks?: TaskCreateNestedManyWithoutAssignedUserInput
+    organization: OrganizationCreateNestedOneWithoutUsersInput
     workflowExecutions?: WorkflowExecutionCreateNestedManyWithoutExecutedByInput
   }
 
@@ -25156,9 +25205,9 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutUsersNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     assignedTasks?: TaskUpdateManyWithoutAssignedUserNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutUsersNestedInput
     workflowExecutions?: WorkflowExecutionUpdateManyWithoutExecutedByNestedInput
   }
 
@@ -25177,13 +25226,15 @@ export namespace Prisma {
     workflowExecutions?: WorkflowExecutionUncheckedUpdateManyWithoutExecutedByNestedInput
   }
 
-  export type UserCreateManyOrganizationInput = {
+  export type CampaignCreateManyOrganizationInput = {
     id?: string
-    email: string
-    password: string
-    firstName: string
-    lastName: string
-    role?: $Enums.UserRole
+    name: string
+    description?: string | null
+    goal?: number | null
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    type?: string | null
+    status?: $Enums.CampaignStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -25198,25 +25249,13 @@ export namespace Prisma {
     city?: string | null
     state?: string | null
     zipCode?: string | null
+    donorPassword?: string | null
     status?: $Enums.DonorStatus
     retentionRisk?: $Enums.RetentionRisk
     totalGifts?: number
     totalAmount?: number
     firstGiftDate?: Date | string | null
     lastGiftDate?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type CampaignCreateManyOrganizationInput = {
-    id?: string
-    name: string
-    description?: string | null
-    goal?: number | null
-    startDate?: Date | string | null
-    endDate?: Date | string | null
-    type?: string | null
-    status?: $Enums.CampaignStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -25232,6 +25271,17 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type UserCreateManyOrganizationInput = {
+    id?: string
+    email: string
+    password: string
+    firstName: string
+    lastName: string
+    role?: $Enums.UserRole
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type WorkflowCreateManyOrganizationInput = {
     id?: string
     segmentId?: string | null
@@ -25243,115 +25293,6 @@ export namespace Prisma {
     executionCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-  }
-
-  export type UserUpdateWithoutOrganizationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sessions?: SessionUpdateManyWithoutUserNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedUserNestedInput
-    activityLogs?: ActivityLogUpdateManyWithoutUserNestedInput
-    workflowExecutions?: WorkflowExecutionUpdateManyWithoutExecutedByNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutOrganizationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedUserNestedInput
-    activityLogs?: ActivityLogUncheckedUpdateManyWithoutUserNestedInput
-    workflowExecutions?: WorkflowExecutionUncheckedUpdateManyWithoutExecutedByNestedInput
-  }
-
-  export type UserUncheckedUpdateManyWithoutOrganizationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type DonorUpdateWithoutOrganizationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    city?: NullableStringFieldUpdateOperationsInput | string | null
-    state?: NullableStringFieldUpdateOperationsInput | string | null
-    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumDonorStatusFieldUpdateOperationsInput | $Enums.DonorStatus
-    retentionRisk?: EnumRetentionRiskFieldUpdateOperationsInput | $Enums.RetentionRisk
-    totalGifts?: IntFieldUpdateOperationsInput | number
-    totalAmount?: FloatFieldUpdateOperationsInput | number
-    firstGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    lastGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    donations?: DonationUpdateManyWithoutDonorNestedInput
-    interactions?: InteractionUpdateManyWithoutDonorNestedInput
-    tasks?: TaskUpdateManyWithoutDonorNestedInput
-    segmentMembers?: SegmentMemberUpdateManyWithoutDonorNestedInput
-  }
-
-  export type DonorUncheckedUpdateWithoutOrganizationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    city?: NullableStringFieldUpdateOperationsInput | string | null
-    state?: NullableStringFieldUpdateOperationsInput | string | null
-    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumDonorStatusFieldUpdateOperationsInput | $Enums.DonorStatus
-    retentionRisk?: EnumRetentionRiskFieldUpdateOperationsInput | $Enums.RetentionRisk
-    totalGifts?: IntFieldUpdateOperationsInput | number
-    totalAmount?: FloatFieldUpdateOperationsInput | number
-    firstGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    lastGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    donations?: DonationUncheckedUpdateManyWithoutDonorNestedInput
-    interactions?: InteractionUncheckedUpdateManyWithoutDonorNestedInput
-    tasks?: TaskUncheckedUpdateManyWithoutDonorNestedInput
-    segmentMembers?: SegmentMemberUncheckedUpdateManyWithoutDonorNestedInput
-  }
-
-  export type DonorUncheckedUpdateManyWithoutOrganizationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    city?: NullableStringFieldUpdateOperationsInput | string | null
-    state?: NullableStringFieldUpdateOperationsInput | string | null
-    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumDonorStatusFieldUpdateOperationsInput | $Enums.DonorStatus
-    retentionRisk?: EnumRetentionRiskFieldUpdateOperationsInput | $Enums.RetentionRisk
-    totalGifts?: IntFieldUpdateOperationsInput | number
-    totalAmount?: FloatFieldUpdateOperationsInput | number
-    firstGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    lastGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CampaignUpdateWithoutOrganizationInput = {
@@ -25395,6 +25336,77 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type DonorUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    donorPassword?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDonorStatusFieldUpdateOperationsInput | $Enums.DonorStatus
+    retentionRisk?: EnumRetentionRiskFieldUpdateOperationsInput | $Enums.RetentionRisk
+    totalGifts?: IntFieldUpdateOperationsInput | number
+    totalAmount?: FloatFieldUpdateOperationsInput | number
+    firstGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    donations?: DonationUpdateManyWithoutDonorNestedInput
+    interactions?: InteractionUpdateManyWithoutDonorNestedInput
+    segmentMembers?: SegmentMemberUpdateManyWithoutDonorNestedInput
+    tasks?: TaskUpdateManyWithoutDonorNestedInput
+  }
+
+  export type DonorUncheckedUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    donorPassword?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDonorStatusFieldUpdateOperationsInput | $Enums.DonorStatus
+    retentionRisk?: EnumRetentionRiskFieldUpdateOperationsInput | $Enums.RetentionRisk
+    totalGifts?: IntFieldUpdateOperationsInput | number
+    totalAmount?: FloatFieldUpdateOperationsInput | number
+    firstGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    donations?: DonationUncheckedUpdateManyWithoutDonorNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutDonorNestedInput
+    segmentMembers?: SegmentMemberUncheckedUpdateManyWithoutDonorNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutDonorNestedInput
+  }
+
+  export type DonorUncheckedUpdateManyWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    donorPassword?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDonorStatusFieldUpdateOperationsInput | $Enums.DonorStatus
+    retentionRisk?: EnumRetentionRiskFieldUpdateOperationsInput | $Enums.RetentionRisk
+    totalGifts?: IntFieldUpdateOperationsInput | number
+    totalAmount?: FloatFieldUpdateOperationsInput | number
+    firstGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastGiftDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type SegmentUpdateWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -25432,6 +25444,47 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type UserUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activityLogs?: ActivityLogUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssignedUserNestedInput
+    workflowExecutions?: WorkflowExecutionUpdateManyWithoutExecutedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activityLogs?: ActivityLogUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedUserNestedInput
+    workflowExecutions?: WorkflowExecutionUncheckedUpdateManyWithoutExecutedByNestedInput
+  }
+
+  export type UserUncheckedUpdateManyWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type WorkflowUpdateWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -25442,8 +25495,8 @@ export namespace Prisma {
     executionCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    segment?: SegmentUpdateOneWithoutWorkflowsNestedInput
     executions?: WorkflowExecutionUpdateManyWithoutWorkflowNestedInput
+    segment?: SegmentUpdateOneWithoutWorkflowsNestedInput
   }
 
   export type WorkflowUncheckedUpdateWithoutOrganizationInput = {
@@ -25473,6 +25526,15 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ActivityLogCreateManyUserInput = {
+    id?: string
+    action: string
+    entity: string
+    entityId: string
+    changes?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
   export type SessionCreateManyUserInput = {
     id?: string
     token: string
@@ -25493,15 +25555,6 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type ActivityLogCreateManyUserInput = {
-    id?: string
-    action: string
-    entity: string
-    entityId: string
-    changes?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-  }
-
   export type WorkflowExecutionCreateManyExecutedByInput = {
     id?: string
     workflowId: string
@@ -25510,6 +25563,33 @@ export namespace Prisma {
     startedAt?: Date | string
     completedAt?: Date | string | null
     error?: string | null
+  }
+
+  export type ActivityLogUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    entity?: StringFieldUpdateOperationsInput | string
+    entityId?: StringFieldUpdateOperationsInput | string
+    changes?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ActivityLogUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    entity?: StringFieldUpdateOperationsInput | string
+    entityId?: StringFieldUpdateOperationsInput | string
+    changes?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ActivityLogUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    entity?: StringFieldUpdateOperationsInput | string
+    entityId?: StringFieldUpdateOperationsInput | string
+    changes?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SessionUpdateWithoutUserInput = {
@@ -25572,33 +25652,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ActivityLogUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    action?: StringFieldUpdateOperationsInput | string
-    entity?: StringFieldUpdateOperationsInput | string
-    entityId?: StringFieldUpdateOperationsInput | string
-    changes?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ActivityLogUncheckedUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    action?: StringFieldUpdateOperationsInput | string
-    entity?: StringFieldUpdateOperationsInput | string
-    entityId?: StringFieldUpdateOperationsInput | string
-    changes?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ActivityLogUncheckedUpdateManyWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    action?: StringFieldUpdateOperationsInput | string
-    entity?: StringFieldUpdateOperationsInput | string
-    entityId?: StringFieldUpdateOperationsInput | string
-    changes?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type WorkflowExecutionUpdateWithoutExecutedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
@@ -25652,6 +25705,12 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type SegmentMemberCreateManyDonorInput = {
+    id?: string
+    segmentId: string
+    createdAt?: Date | string
+  }
+
   export type TaskCreateManyDonorInput = {
     id?: string
     assignedTo?: string | null
@@ -25663,12 +25722,6 @@ export namespace Prisma {
     completedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-  }
-
-  export type SegmentMemberCreateManyDonorInput = {
-    id?: string
-    segmentId: string
-    createdAt?: Date | string
   }
 
   export type DonationUpdateWithoutDonorInput = {
@@ -25740,6 +25793,24 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type SegmentMemberUpdateWithoutDonorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    segment?: SegmentUpdateOneRequiredWithoutMembersNestedInput
+  }
+
+  export type SegmentMemberUncheckedUpdateWithoutDonorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    segmentId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SegmentMemberUncheckedUpdateManyWithoutDonorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    segmentId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type TaskUpdateWithoutDonorInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
@@ -25777,24 +25848,6 @@ export namespace Prisma {
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type SegmentMemberUpdateWithoutDonorInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    segment?: SegmentUpdateOneRequiredWithoutMembersNestedInput
-  }
-
-  export type SegmentMemberUncheckedUpdateWithoutDonorInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    segmentId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type SegmentMemberUncheckedUpdateManyWithoutDonorInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    segmentId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type DonationCreateManyCampaignInput = {
@@ -25892,8 +25945,8 @@ export namespace Prisma {
     executionCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutWorkflowsNestedInput
     executions?: WorkflowExecutionUpdateManyWithoutWorkflowNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutWorkflowsNestedInput
   }
 
   export type WorkflowUncheckedUpdateWithoutSegmentInput = {

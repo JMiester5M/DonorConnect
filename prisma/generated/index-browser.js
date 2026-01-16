@@ -158,6 +158,7 @@ exports.Prisma.DonorScalarFieldEnum = {
   city: 'city',
   state: 'state',
   zipCode: 'zipCode',
+  donorPassword: 'donorPassword',
   status: 'status',
   retentionRisk: 'retentionRisk',
   totalGifts: 'totalGifts',
@@ -308,7 +309,8 @@ exports.UserRole = exports.$Enums.UserRole = {
   ADMIN: 'ADMIN',
   STAFF: 'STAFF',
   MARKETING: 'MARKETING',
-  READONLY: 'READONLY'
+  READONLY: 'READONLY',
+  DONOR: 'DONOR'
 };
 
 exports.DonorStatus = exports.$Enums.DonorStatus = {

@@ -35,8 +35,13 @@ export function LoginForm() {
         throw new Error(data.error || 'Login failed')
       }
 
-      // Redirect to the intended destination or dashboard
-      const redirectTo = searchParams.get('from') || '/dashboard'
+      // Redirect based on user role
+      let redirectTo = '/dashboard'
+      if (data.user && data.user.role === 'DONOR') {
+        redirectTo = '/profile'
+      } else if (searchParams.get('from')) {
+        redirectTo = searchParams.get('from')
+      }
       router.push(redirectTo)
       router.refresh()
     } catch (err) {
