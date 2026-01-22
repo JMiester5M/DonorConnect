@@ -25,6 +25,8 @@ export function DonorForm({ donor, onSubmit, onCancel }) {
       state: donor?.state || '',
       zipCode: donor?.zipCode || '',
       status: donor?.status || 'ACTIVE',
+      password: '',
+      confirmPassword: '',
     },
   })
 
@@ -41,6 +43,8 @@ export function DonorForm({ donor, onSubmit, onCancel }) {
         state: donor.state || '',
         zipCode: donor.zipCode || '',
         status: donor.status || 'ACTIVE',
+        password: '',
+        confirmPassword: '',
       })
     }
   }, [donor, form])
@@ -170,20 +174,39 @@ export function DonorForm({ donor, onSubmit, onCancel }) {
             )}
           />
 
-          {/* Password field for admin to set user password */}
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input type="password" placeholder="Set user password" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+
+          {/* Password and Confirm Password fields for admin to set user password */}
+          <div className="md:col-span-2 border-t pt-4 mt-2">
+            <h3 className="font-semibold mb-2">Set/Change Password</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input type="text" placeholder="Set user password" autoComplete="new-password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm Password</FormLabel>
+                    <FormControl>
+                      <Input type="text" placeholder="Confirm password" autoComplete="new-password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
 
         </div>
 
