@@ -13,6 +13,24 @@ import { CampaignStatusBadge } from '@/components/campaigns/campaign-status-badg
 import { useToast } from '@/lib/toast'
 
 export default function CampaignDetailPage({ params }) {
+    // Add userRole state
+    const [userRole, setUserRole] = useState(null)
+    useEffect(() => {
+      async function fetchUserRole() {
+        try {
+          const res = await fetch('/api/session')
+          if (res.ok) {
+            const data = await res.json()
+            setUserRole(data?.user?.role || null)
+          } else {
+            setUserRole(null)
+          }
+        } catch {
+          setUserRole(null)
+        }
+      }
+      fetchUserRole()
+    }, [])
   const router = useRouter()
   const [id, setId] = useState(null)
   const { campaign, loading, error, refetch } = useCampaign(id)
@@ -104,17 +122,25 @@ export default function CampaignDetailPage({ params }) {
           {campaign.type && <p className="text-gray-600">{campaign.type}</p>}
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => router.push('/campaigns')}>
+          <Button
+            variant="outline"
+            onClick={() => router.push(userRole === 'DONOR' ? '/donorcampaigns' : '/campaigns')}
+          >
             Back
           </Button>
-          <Button onClick={() => setEditing(true)}>Edit</Button>
-          <Button 
-            variant="destructive" 
-            onClick={() => setShowDeleteConfirm(true)}
-            disabled={deleting}
-          >
-            Delete
-          </Button>
+            {/* Only show Edit/Delete for non-donor roles */}
+            {userRole && userRole !== 'DONOR' && (
+              <>
+                <Button onClick={() => setEditing(true)}>Edit</Button>
+                <Button 
+                  variant="destructive" 
+                  onClick={() => setShowDeleteConfirm(true)}
+                  disabled={deleting}
+                >
+                  Delete
+                </Button>
+              </>
+            )}
         </div>
       </div>
 

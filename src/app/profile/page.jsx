@@ -182,12 +182,7 @@ export default function ProfilePage() {
             {/* Admin-only: Show donor user password */}
             <AdminDonorPassword password={donor.password} />
           </div>
-          <div className="flex gap-4 mt-4 sm:mt-0">
-            <Button variant="ghost" size="sm" className="text-base" onClick={() => setEditing((v) => !v)}>
-              <Edit2 className="h-5 w-5 mr-2" />
-              {editing ? 'Close' : 'Edit'}
-            </Button>
-          </div>
+          {/* Removed edit donor button for donor view */}
         </div>
       </div>
 
@@ -224,7 +219,6 @@ export default function ProfilePage() {
       <Tabs defaultValue="donations" className="w-full">
         <TabsList>
           <TabsTrigger value="donations">Donations</TabsTrigger>
-          <TabsTrigger value="interactions">Interactions</TabsTrigger>
         </TabsList>
         <TabsContent value="donations">
           <Card>
@@ -261,43 +255,6 @@ export default function ProfilePage() {
                     </TableBody>
                   </Table>
                 </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-        <TabsContent value="interactions">
-          <Card>
-            <CardHeader>
-              <CardTitle>Interactions</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {donor.interactions && donor.interactions.length > 0 ? (
-                <div className="rounded-md border overflow-x-auto">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Date</TableHead>
-                        <TableHead>Type</TableHead>
-                        <TableHead>Subject</TableHead>
-                        <TableHead>Notes</TableHead>
-                        <TableHead>Created By</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {donor.interactions.map((interaction) => (
-                        <TableRow key={interaction.id}>
-                          <TableCell>{formatDate(interaction.date)}</TableCell>
-                          <TableCell>{interaction.type.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</TableCell>
-                          <TableCell>{interaction.subject || '—'}</TableCell>
-                          <TableCell className="text-sm text-muted-foreground">{interaction.notes ? interaction.notes.substring(0, 40) + (interaction.notes.length > 40 ? '...' : '') : '—'}</TableCell>
-                          <TableCell>{interaction.createdById || '—'}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              ) : (
-                <p className="text-sm text-muted-foreground">No interactions found.</p>
               )}
             </CardContent>
           </Card>

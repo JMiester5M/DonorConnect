@@ -1,12 +1,13 @@
 // Business logic for donor operations
 import { prisma } from '../db'
+import { hashPassword } from '../password'
 
 const msPerDay = 1000 * 60 * 60 * 24
 
 const sanitizeDonorInput = (input = {}, isUpdate = false) => {
   const allowed = isUpdate 
-    ? ['firstName', 'lastName', 'email', 'phone', 'address', 'city', 'state', 'zipCode', 'status']
-    : ['organizationId', 'firstName', 'lastName', 'email', 'phone', 'address', 'city', 'state', 'zipCode', 'status', 'retentionRisk']
+    ? ['firstName', 'lastName', 'email', 'phone', 'address', 'city', 'state', 'zipCode', 'status', 'donorPassword']
+    : ['organizationId', 'firstName', 'lastName', 'email', 'phone', 'address', 'city', 'state', 'zipCode', 'status', 'retentionRisk', 'donorPassword']
   return allowed.reduce((acc, key) => {
     if (input[key] !== undefined) {
       const value = typeof input[key] === 'string' ? input[key].trim() : input[key]
@@ -69,8 +70,10 @@ export async function getDonor({ id, organizationId }) {
 
   const metrics = await calculateDonorMetrics(donor.id)
 
-  return { ...donor, ...metrics }
+  return { ...donor, interactions: donor.interactions ?? [], ...metrics }
 }
+
+
 
 /**
  * Create a new donor
@@ -82,12 +85,43 @@ export async function createDonor(donorData) {
     throw new Error('organizationId is required to create a donor')
   }
 
-  const data = sanitizeDonorInput(donorData)
+  let data = { ...donorData }
+  let hashedPassword = null
+  if (data.password) {
+    hashedPassword = await hashPassword(data.password)
+    data.donorPassword = hashedPassword
+    delete data.password
+    if (data.confirmPassword) delete data.confirmPassword
+  }
+  data = sanitizeDonorInput(data)
   const donor = await prisma.donor.create({ data })
+  // Create corresponding user for donor login
+  if (hashedPassword && donor.email) {
+    await prisma.user.upsert({
+      where: { email: donor.email },
+      update: {
+        password: hashedPassword,
+        role: 'DONOR',
+        organizationId: donor.organizationId,
+        firstName: donor.firstName,
+        lastName: donor.lastName,
+      },
+      create: {
+        email: donor.email,
+        password: hashedPassword,
+        role: 'DONOR',
+        organizationId: donor.organizationId,
+        firstName: donor.firstName,
+        lastName: donor.lastName,
+      },
+    })
+  }
   const metrics = await updateDonorMetrics(donor.id)
 
   return { ...donor, ...metrics }
 }
+
+
 
 /**
  * Update an existing donor
@@ -102,12 +136,19 @@ export async function updateDonor({ id, organizationId, data }) {
   const existing = await prisma.donor.findFirst({ where: { id, organizationId } })
   if (!existing) return null
 
-  const sanitized = sanitizeDonorInput(data, true)
-  const updated = await prisma.donor.update({ where: { id }, data: sanitized })
-  const metrics = await updateDonorMetrics(id)
+  let updateData = { ...data }
+  if (updateData.password) {
+    updateData.donorPassword = await hashPassword(updateData.password)
+    delete updateData.password
+    if (updateData.confirmPassword) delete updateData.confirmPassword
+  }
+  const sanitized = sanitizeDonorInput(updateData, true)
+  const updatedDonor = await prisma.donor.update({ where: { id }, data: sanitized })
+  const updatedMetrics = await updateDonorMetrics(id)
 
-  return { ...updated, ...metrics }
+  return { ...updatedDonor, ...updatedMetrics }
 }
+
 
 /**
  * Delete a donor

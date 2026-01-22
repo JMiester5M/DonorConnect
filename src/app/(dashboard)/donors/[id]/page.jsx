@@ -16,9 +16,15 @@ import { Edit2, Trash2 } from 'lucide-react'
 
 // Donor detail page
 export default function DonorDetailPage({ params }) {
-  const router = useRouter()
   const [id, setId] = useState(null)
   const { donor, loading, error, refetch } = useDonor(id)
+  // Debug: log donor object to verify field names and data
+  useEffect(() => {
+    if (donor) {
+      console.log('Donor object:', donor)
+    }
+  }, [donor])
+  const router = useRouter()
   const [editing, setEditing] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const [actionError, setActionError] = useState('')
@@ -68,6 +74,7 @@ export default function DonorDetailPage({ params }) {
 
   const handleUpdate = async (payload) => {
     setActionError('')
+    console.log('PATCH payload:', payload)
     try {
       const res = await fetch(`/api/donors/${id}`, {
         method: 'PATCH',
@@ -115,16 +122,7 @@ export default function DonorDetailPage({ params }) {
   if (error) return <p className="text-destructive">{error}</p>
   if (!donor) return <p>Donor not found</p>
 
-  // Admin-only password display component
-  // Admin-only password display component (now uses donor prop)
-  function AdminDonorPassword({ password }) {
-    if (!password) return null
-    return (
-      <div className="mt-1 text-xs text-muted-foreground">
-        <span className="font-semibold">password:</span> {password}
-      </div>
-    )
-  }
+
 
   return (
     <div className="space-y-6">
@@ -137,8 +135,7 @@ export default function DonorDetailPage({ params }) {
             <DonorStatusBadge status={donor.status} />
             <RetentionRiskBadge risk={donor.retentionRisk} />
           </div>
-          {/* Admin-only: Show donor user password */}
-          <AdminDonorPassword password={donor.password} />
+
         </div>
         <div className="flex gap-2">
           <Button variant="ghost" size="sm" onClick={() => setEditing((v) => !v)}>
@@ -193,7 +190,6 @@ export default function DonorDetailPage({ params }) {
       <Tabs defaultValue="donations" className="w-full">
         <TabsList>
           <TabsTrigger value="donations">Donations</TabsTrigger>
-          <TabsTrigger value="interactions">Interactions</TabsTrigger>
         </TabsList>
         <TabsContent value="donations">
           <Card>
@@ -230,43 +226,6 @@ export default function DonorDetailPage({ params }) {
                     </TableBody>
                   </Table>
                 </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-        <TabsContent value="interactions">
-          <Card>
-            <CardHeader>
-              <CardTitle>Interactions</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {donor.interactions && donor.interactions.length > 0 ? (
-                <div className="rounded-md border overflow-x-auto">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Date</TableHead>
-                        <TableHead>Type</TableHead>
-                        <TableHead>Subject</TableHead>
-                        <TableHead>Notes</TableHead>
-                        <TableHead>Created By</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {donor.interactions.map((interaction) => (
-                        <TableRow key={interaction.id}>
-                          <TableCell>{formatDate(interaction.date)}</TableCell>
-                          <TableCell>{interaction.type.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</TableCell>
-                          <TableCell>{interaction.subject || '—'}</TableCell>
-                          <TableCell className="text-sm text-muted-foreground">{interaction.notes ? interaction.notes.substring(0, 40) + (interaction.notes.length > 40 ? '...' : '') : '—'}</TableCell>
-                          <TableCell>{interaction.createdById || '—'}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              ) : (
-                <p className="text-sm text-muted-foreground">No interactions found.</p>
               )}
             </CardContent>
           </Card>

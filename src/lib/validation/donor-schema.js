@@ -18,8 +18,8 @@ export const createDonorSchema = z
 		zipCode: z.string().max(20).optional().or(z.literal('')),
 		status: DonorStatusEnum.default('ACTIVE'),
 		retentionRisk: RetentionRiskEnum.default('UNKNOWN'),
-		password: z.string().optional(),
-		confirmPassword: z.string().optional(),
+		password: z.string().min(1, 'Password is required'),
+		confirmPassword: z.string().min(1, 'Confirm password is required'),
 	})
 	.refine((data) => {
 		// Only check if password is set (for add or admin edit)

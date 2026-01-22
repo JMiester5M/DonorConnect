@@ -4,7 +4,7 @@
  * Donor Form Component
  */
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@/components/ui/button'
@@ -13,6 +13,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { createDonorSchema } from '@/lib/validation/donor-schema'
 
 export function DonorForm({ donor, onSubmit, onCancel }) {
+  const [showPasswordError, setShowPasswordError] = useState(false)
   const form = useForm({
     resolver: zodResolver(createDonorSchema),
     defaultValues: {
@@ -25,8 +26,8 @@ export function DonorForm({ donor, onSubmit, onCancel }) {
       state: donor?.state || '',
       zipCode: donor?.zipCode || '',
       status: donor?.status || 'ACTIVE',
-      password: '',
-      confirmPassword: '',
+      password: donor ? '' : undefined,
+      confirmPassword: donor ? '' : undefined,
     },
   })
 
@@ -50,14 +51,30 @@ export function DonorForm({ donor, onSubmit, onCancel }) {
   }, [donor, form])
 
   const handleSubmit = async (data) => {
+    let payload = { ...data }
+    // Always send password fields for creation, only filter for updates
+    if (!donor) {
+      // Creating new donor: always send password fields
+    } else {
+      // Updating donor: only send password fields if non-empty
+      if (!payload.password) delete payload.password
+      if (!payload.confirmPassword) delete payload.confirmPassword
+    }
     try {
-      await onSubmit?.(data)
+      await onSubmit?.(payload)
     } catch (error) {
       form.setError('root', { message: error?.message || 'Failed to save donor' })
     }
   }
 
   const inputLikeClasses = 'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+
+  // Show overlay if confirmPassword error is present
+  useEffect(() => {
+    if (form.formState.errors.confirmPassword?.message === 'Passwords do not match') {
+      setShowPasswordError(true)
+    }
+  }, [form.formState.errors.confirmPassword])
 
   return (
     <Form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
@@ -182,11 +199,12 @@ export function DonorForm({ donor, onSubmit, onCancel }) {
               <FormField
                 control={form.control}
                 name="password"
+                rules={{ required: 'Password is required' }}
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input type="text" placeholder="Set user password" autoComplete="new-password" {...field} />
+                      <Input type="text" placeholder="Set user password" autoComplete="new-password" required {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -195,11 +213,12 @@ export function DonorForm({ donor, onSubmit, onCancel }) {
               <FormField
                 control={form.control}
                 name="confirmPassword"
+                rules={{ required: 'Confirm password is required' }}
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Confirm Password</FormLabel>
                     <FormControl>
-                      <Input type="text" placeholder="Confirm password" autoComplete="new-password" {...field} />
+                      <Input type="text" placeholder="Confirm password" autoComplete="new-password" required {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -210,6 +229,19 @@ export function DonorForm({ donor, onSubmit, onCancel }) {
 
         </div>
 
+        {/* Overlay for password mismatch error */}
+        {showPasswordError && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40"
+            onClick={() => setShowPasswordError(false)}
+            style={{ cursor: 'pointer' }}
+          >
+            <div className="bg-white rounded-lg shadow-lg px-8 py-6 text-center max-w-xs mx-auto">
+              <p className="text-lg font-semibold text-red-600 mb-2">Passwords do not match</p>
+              <p className="text-sm text-gray-600">Click anywhere to dismiss</p>
+            </div>
+          </div>
+        )}
         {form.formState.errors.root?.message && (
           <p className="text-sm text-destructive">{form.formState.errors.root.message}</p>
         )}

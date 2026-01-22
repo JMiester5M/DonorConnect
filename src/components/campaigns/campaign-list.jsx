@@ -60,7 +60,7 @@ export function CampaignList({ campaigns, onEdit, onDelete }) {
             <TableHead>Goal</TableHead>
             <TableHead>Start Date</TableHead>
             <TableHead>End Date</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            {/* Removed Actions column for donor view */}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -74,31 +74,7 @@ export function CampaignList({ campaigns, onEdit, onDelete }) {
               <TableCell>{formatCurrency(campaign.goal)}</TableCell>
               <TableCell>{formatDate(campaign.startDate)}</TableCell>
               <TableCell>{formatDate(campaign.endDate)}</TableCell>
-              <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
-                <div className="flex gap-2 justify-end">
-                  <Button 
-                    variant="ghost" 
-                    size="sm"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      handleEdit(campaign)
-                    }}
-                  >
-                    <Edit2 className="h-4 w-4" />
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm"
-                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      setDeleteConfirm(campaign)
-                    }}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </TableCell>
+              {/* Removed edit and delete campaign buttons for donor view */}
             </TableRow>
           ))}
         </TableBody>
