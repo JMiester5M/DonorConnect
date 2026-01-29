@@ -1,121 +1,20 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/Rgnq8kxT)
-# DonorConnect - Learning Project
 
-> **🎯 Educational Project**: A complete donor retention platform starter code designed to teach modern full-stack development with Next.js 16, PostgreSQL, and modern React patterns.
+# DonorConnect
 
-## 🚀 What You'll Build
 
-A production-ready donor retention platform that helps nonprofits solve the critical "first-to-second gift" conversion problem. You'll implement:
+## 🚀 What is DonorConnect?
 
-- **Multi-tenant donor management** with advanced segmentation
-- **Campaign tracking** with donation recording and analytics
-- **Automated workflows** for donor engagement
-- **Session-based authentication** with role-based access
-- **Real-time dashboard** with interactive data tables
-- **Advanced form handling** with validation and error states
+DonorConnect is a modern, multi-tenant donor retention platform for nonprofits, built with Next.js 16, PostgreSQL, and Prisma 7. It features:
 
-## 📚 Learning Objectives
+- Multi-tenant donor management and segmentation
+- Campaign tracking, donation recording, and analytics
+- Automated workflows for donor engagement
+- Session-based authentication with role-based access (INSTRUCTOR, ADMIN, STAFF, etc.)
+- Real-time dashboard with interactive data tables
+- Advanced form handling with validation and error states
+- Evidence and Reflection pages (INSTRUCTOR-only)
+- Downloadable wireframe and project documentation
 
-This project teaches you modern full-stack web development through hands-on implementation. By completing this project, you will master:
-
-### 🔐 Authentication & Security
-- **Session-based authentication** with HTTP-only cookies (no JWT complexity)
-- **Password hashing** with bcrypt and salt rounds
-- **Route protection** using Next.js 16 middleware
-- **Multi-tenant data isolation** with organization-based filtering
-- **Session management** with automatic cleanup and validation
-
-### 🛠 API Development
-- **RESTful API design** with Next.js App Router
-- **CRUD operations** with proper HTTP methods and status codes
-- **Request/response validation** using Zod schemas
-- **Error handling** with structured error responses
-- **Database integration** with Prisma ORM and PostgreSQL
-- **Multi-tenant architecture** with organization-scoped data
-
-### 🎨 Modern React Patterns
-- **React Hook Form** for complex form state management
-- **Custom hooks** for data fetching and state management
-- **Server/client components** with Next.js 16 App Router
-- **Compound components** for reusable UI patterns
-- **Error boundaries** and loading states
-- **Real-time updates** with optimistic UI patterns
-
-### 🗄️ Database & Data Modeling
-- **Relational database design** with proper normalization
-- **Prisma schema definition** with relationships and constraints
-- **Database migrations** and version control
-- **Seed data** for realistic development and testing
-- **Performance optimization** with proper indexing
-- **Data aggregation** for analytics and reporting
-
-### 🧪 Testing & Quality Assurance
-- **Unit testing** with Vitest and React Testing Library
-- **Integration testing** for API routes and database operations
-- **End-to-end testing** with Playwright
-- **Mock service workers** (MSW) for API testing
-- **Test-driven development** workflow
-
-## 🛤️ Implementation Path
-
-This project uses **TODO-driven development** where each file contains comprehensive implementation guidance:
-
-### Phase 1: Foundation Setup ✅
-- Environment configuration and database setup
-- Prisma schema understanding and seed data exploration
-- shadcn/ui component library familiarization
-
-### Phase 2: Authentication System
-- Implement session-based authentication (`/src/lib/auth.js`, `/src/lib/session.js`)
-- Build login/register forms (`/src/app/(auth)/`)
-- Add route protection middleware (`/src/middleware.js`)
-
-### Phase 3: API Development  
-- Convert TODO API routes to working endpoints (`/src/app/api/`)
-- Implement validation schemas (`/src/lib/validation/`)
-- Add business logic functions (`/src/lib/api/`)
-
-### Phase 4: Dashboard UI
-- Build dashboard pages (`/src/app/(dashboard)/`)
-- Implement data tables and forms
-- Add navigation and user interfaces
-
-### Phase 5: Advanced Features
-- Create donor segmentation builder
-- Implement workflow automation
-- Add task management system
-
-### Phase 6: Testing & Polish
-- Write comprehensive tests
-- Performance optimization
-- Documentation and deployment
-
-## 💡 Learning Features
-
-### 📝 TODO-Driven Development
-Every implementation file includes:
-- **Clear function signatures** with expected parameters
-- **Detailed TODO comments** explaining each step
-- **Example usage** showing how components connect
-- **Implementation hints** for complex logic
-- **Testing suggestions** for validation
-
-### 🔍 Code Examples Throughout
-```javascript
-// Example from src/lib/api/donors.js
-export async function createDonor(data, organizationId) {
-  // TODO: Validate data using createDonorSchema
-  // TODO: Check for duplicate email within organization
-  // TODO: Create donor with Prisma
-  // TODO: Return created donor with calculated metrics
-}
-```
-
-### 🎯 Incremental Complexity
-- Start with simple CRUD operations
-- Progress to complex relationships and validation
-- Advance to real-time features and optimization
-- Master testing and deployment patterns
 
 ## 🚀 Quick Start
 
@@ -167,12 +66,34 @@ export async function createDonor(data, organizationId) {
    
    🎉 Open [http://localhost:3000](http://localhost:3000) and start coding!
 
+
 ### 🔑 Test Login Credentials
 
 After seeding, log in with these credentials to explore the existing data:
 
 - **Email:** `admin@hopefoundation.org`
 - **Password:** `password123`
+- **Email:** `instructor@example.com` (for INSTRUCTOR role)
+## 🧑‍💻 Key Features
+
+- **Role-based Navigation:** Only INSTRUCTOR users see Evidence and Reflection pages in the navigation and can access them.
+- **Wireframe Download:** On the Evidence page, INSTRUCTORs can download the project wireframe PNG from the Direct Links section.
+- **Modern UI:** Responsive, professional design using Tailwind CSS and shadcn/ui components.
+- **Session-aware Navigation:** User info and logout button display consistently across all pages.
+## 📥 Wireframe Download
+
+To download the project wireframe (INSTRUCTOR only):
+
+1. Log in as an INSTRUCTOR.
+2. Go to the Evidence page via the navigation bar.
+3. In the Direct Links section, click the Download button next to "Wireframe".
+4. The PNG file will download from the public directory.
+
+> If you want to update the wireframe, replace the PNG file in the `public/` folder.
+## 📝 Reflection & Evidence Pages
+
+- **Evidence Page:** Shows project artifacts, links, and downloadable wireframe. Only visible to INSTRUCTORs.
+- **Reflection Page:** Summarizes learning, challenges, and AI usage. Only visible to INSTRUCTORs.
 
 > **💡 Tip**: Use `npx prisma studio` to explore the database visually while developing.
 
@@ -234,20 +155,6 @@ donor-connect/
     │   ├── handlers/            # TODO: MSW mock handlers
     │   └── lib/                 # TODO: Unit tests for utilities
 ```
-
-### 🎯 Implementation Status
-
-| Module | Status | Files | Description |
-|--------|--------|-------|-------------|
-| **Configuration** | ✅ Complete | 5 files | Ready-to-use configs for all tools |
-| **Database Schema** | ✅ Complete | schema.prisma | Full nonprofit domain model |
-| **Seed Data** | ✅ Complete | seed.js | 75 donors, 200+ donations, realistic data |
-| **UI Components** | ✅ Complete | 10 components | shadcn/ui foundation ready |
-| **Authentication** | 🔄 TODO | 8 files | Session-based auth implementation |
-| **API Routes** | 🔄 TODO | 15+ files | RESTful endpoints with validation |
-| **Dashboard Pages** | 🔄 TODO | 12 files | React pages with forms and tables |
-| **Business Logic** | 🔄 TODO | 8 files | Data processing and validation |
-| **Testing Suite** | 🔄 TODO | 20+ files | Unit, integration, and E2E tests |
 
 ## 🛠 Development Workflow
 
@@ -574,7 +481,8 @@ Major Gifts Initiative  → $35,200 raised (active)
 - **Client generation** eliminates manual SQL
 - **Rich relationship handling** for complex domains
 
-## 📖 Additional Resources
+
+## 📖 Additional Resources & Documentation
 
 ### **Project Documentation**
 - **[CLAUDE.md](CLAUDE.md)** - Comprehensive architecture and development patterns
@@ -637,17 +545,19 @@ NEXT_PUBLIC_APP_URL="http://localhost:3000"
 
 ## 📄 License
 
-This educational project is released under the **ISC License** - feel free to use it for learning, teaching, or building your own nonprofit tools!
+
+This project is released under the **ISC License** — use it for your nonprofit or as a foundation for your own donor management tools.
 
 ---
 
-## 🎉 Ready to Start?
 
-1. **Set up your development environment** (database, dependencies)
-2. **Explore the seed data** with `npx prisma studio`  
-3. **Start with authentication** - implement login/logout first
-4. **Build incrementally** - one feature at a time
-5. **Test frequently** - write tests as you build features
-6. **Ask questions** - use GitHub Issues for help
+
+## 🎉 Get Started
+
+1. Set up your development environment (database, dependencies)
+2. Explore the seed data with `npx prisma studio`
+3. Start the app with `pnpm dev` and log in with the provided credentials
+4. Build and extend features as needed for your nonprofit
+5. Test frequently and deploy with confidence
 
 **Happy coding! 🚀** Build something amazing for the nonprofit sector!
