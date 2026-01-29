@@ -38,7 +38,7 @@ export default async function DashboardLayout({ children }) {
           <div className="flex h-16 items-center justify-between">
             {/* Logo and main nav */}
             <div className="flex items-center gap-8">
-              <h1 className="text-xl font-bold text-gray-900">DonorConnect</h1>
+              <Link href="/" className="text-xl font-bold text-blue-700 hover:underline">DonorConnect</Link>
               <div className="hidden md:flex gap-1">
                 {navigation.map((item) => {
                   const Icon = item.icon

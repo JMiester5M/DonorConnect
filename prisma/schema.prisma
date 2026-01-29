@@ -261,6 +261,7 @@ enum UserRole {
   MARKETING
   READONLY
   DONOR
+  INSTRUCTOR
 }
 
 enum DonorStatus {

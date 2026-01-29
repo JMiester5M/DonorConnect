@@ -310,7 +310,8 @@ exports.UserRole = exports.$Enums.UserRole = {
   STAFF: 'STAFF',
   MARKETING: 'MARKETING',
   READONLY: 'READONLY',
-  DONOR: 'DONOR'
+  DONOR: 'DONOR',
+  INSTRUCTOR: 'INSTRUCTOR'
 };
 
 exports.DonorStatus = exports.$Enums.DonorStatus = {
